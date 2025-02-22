@@ -10,7 +10,7 @@
 import { html, fixture, expect } from '@open-wc/testing';
 import '@carbon/web-components/es/components/accordion/index.js';
 
-describe('cds-accordion', function () {
+describe('cds-accordion', () => {
   it('should render with minimum attributes', async () => {
     const el = await fixture(html`<cds-accordion></cds-accordion>`);
 

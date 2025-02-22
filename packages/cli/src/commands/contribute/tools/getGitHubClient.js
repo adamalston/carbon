@@ -5,8 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-/* eslint-disable no-console */
-
 'use strict';
 
 const Octokit = require('@octokit/rest');
@@ -65,6 +63,7 @@ async function getGitHubClient() {
     await octokit.users.getAuthenticated();
     return octokit;
   } catch (error) {
+    console.error(error);
     throw new Error('Invalid GitHub token');
   }
 }

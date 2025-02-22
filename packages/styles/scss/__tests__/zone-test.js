@@ -42,7 +42,7 @@ describe('zone', () => {
     const buttonTokens = get('tokens');
     for (const [token, { values }] of Object.entries(buttonTokens.value)) {
       for (const { theme, value } of values) {
-        const match = themes.find(([_id, themeMap]) => {
+        const match = themes.find(([, themeMap]) => {
           return isEqual(themeMap, theme);
         });
 
@@ -57,7 +57,7 @@ describe('zone', () => {
     for (const rule of stylesheet.rules) {
       // For each selector, we check that every button token that we have
       // defined for this theme is emitted in CSS with the expected value
-      const [_prefix, theme] = rule.selectors[0].split('--');
+      const [, theme] = rule.selectors[0].split('--');
       const tokens = tokensByTheme.get(theme);
       const includesComponentTokens = Array.from(tokens.entries()).every(
         ([token, value]) => {

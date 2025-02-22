@@ -103,7 +103,10 @@ function wrapFocusWithoutSentinels({
     ['blur', 'focusout', 'focusin', 'focus'].includes(event.type) &&
     __DEV__
   ) {
+    /*
+    TODO: Add missing ESLint definition.
     // eslint-disable-next-line react-hooks/rules-of-hooks
+    */
     useEffect(() => {
       throw new Error(
         `Error: wrapFocusWithoutSentinels(...) called in unsupported ${event.type} event.\n\nCall wrapFocusWithoutSentinels(...) from onKeyDown instead.`

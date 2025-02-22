@@ -15,8 +15,9 @@ css
 # Config files
 .npmrc
 
-# Cache folders
+# Caches
 .cache
+.eslintcache
 .parcel-cache
 
 # Logs
@@ -62,6 +63,6 @@ blob-report
 # Local token
 .env
 
-# nx local buiild cache
+# nx local build cache
 .nx/cache
 .nx/workspace-data

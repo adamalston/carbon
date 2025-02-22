@@ -21,6 +21,7 @@ const warning = __DEV__
           return args[index++];
         });
 
+        // eslint-disable-next-line no-console
         console.warn('Warning: ' + message);
       }
     }

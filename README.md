@@ -343,3 +343,53 @@ specification. Contributions of any kind welcome!
 ## 📝 License
 
 Licensed under the [Apache 2.0 License](/LICENSE).
+
+```sh
+git checkout main package.json yarn.lock
+yarn install
+yarn add eslint
+yarn dedupe
+```
+
+I wrote a script to rename `.js` files to `.jsx` when they contain JSX syntax.
+The alternative was to manually rename hundreds of files. Explanation of the
+script:
+
+- `yarn run lint 2>&1`: Lint and redirect both standard output and error into
+  the pipeline.
+- `grep -B 1 "Parsing error: Unexpected token <"`: Print each matching error
+  line along with the line before it which should be the file path.
+- `grep "\.js$"`: Ensure that only file paths with a `.js` extension are
+  processed.
+- `sort -u`: Remove duplicate file entries.
+- The `while read -r file; do … done` loop: For each file found, check if the
+  file contains `<` immediately followed by a letter (indicating a React
+  component) and, if so, rename it from `.js` to `.jsx`.
+
+```sh
+yarn run lint 2>&1 |
+  grep -B 1 "Parsing error: Unexpected token <" |
+  grep "\.js$" |
+  sort -u |
+  while read -r file; do
+    if grep -q '<[a-zA-Z]' "$file"; then
+      mv "$file" "${file%.js}.jsx"
+      echo "Renamed $file to ${file%.js}.jsx"
+    fi
+  done
+```
+
+---
+
+I added the following explicit rules because they are not in the recommended
+config but there were directives in the project indicating that they should be
+enforced by default.
+
+```json
+{
+  "no-console": "error",
+  "no-template-curly-in-string": "error",
+  "prefer-arrow-callback": "error",
+  "require-atomic-updates": "error"
+}
+```

@@ -20,7 +20,10 @@ export function useOutsideClick(ref, callback) {
   // treated as a constant as it will be false when executed in a Node.js
   // environment and true when executed in the browser
   if (canUseDOM) {
+    /*
+    TODO: Add missing ESLint definition.
     // eslint-disable-next-line react-hooks/rules-of-hooks
+    */
     useEvent(window, 'click', (event) => {
       if (ref.current && !ref.current.contains(event.target)) {
         savedCallback.current(event);

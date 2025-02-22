@@ -81,6 +81,7 @@ const output = (options = defaultOptions) => {
         const defaultAsset = icon.assets.find(
           (asset) => asset.size === defaultSize
         );
+        // eslint-disable-next-line require-atomic-updates
         icon.output = await Promise.all(
           sizes.map(async (size) => {
             const asset = icon.assets.find((asset) => asset.size === size);
@@ -190,9 +191,7 @@ async function parse(svg, name) {
   try {
     return convert(root.content[0]);
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.log(error);
-    // eslint-disable-next-line no-console
     console.log(`Error parsing icon with name: ${name}`);
   }
 }

@@ -12,7 +12,10 @@ export function useNoInteractiveChildren(
   message = 'component should have no interactive child nodes'
 ) {
   if (__DEV__) {
+    /*
+    TODO: Add missing ESLint definition.
     // eslint-disable-next-line react-hooks/rules-of-hooks
+    */
     useEffect(() => {
       const node = ref.current ? getInteractiveContent(ref.current) : false;
 
@@ -30,7 +33,10 @@ export function useInteractiveChildrenNeedDescription(
   message = `interactive child node(s) should have an \`aria-describedby\` property`
 ) {
   if (__DEV__) {
+    /*
+    TODO: Add missing ESLint definition.
     // eslint-disable-next-line react-hooks/rules-of-hooks
+    */
     useEffect(() => {
       const node = ref.current ? getInteractiveContent(ref.current) : false;
 

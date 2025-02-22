@@ -53,7 +53,7 @@ export default function rollupPluginDistIcons({
       const __dirname = path.dirname(fileURLToPath(import.meta.url));
       const require = createRequire(import.meta.url);
 
-      const svg = require(id); // eslint-disable-line global-require
+      const svg = require(id);
 
       const code = [
         `import { svg } from 'lit'`,

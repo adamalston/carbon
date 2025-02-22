@@ -9,7 +9,6 @@
 
 import { dirname, relative, resolve } from 'path';
 import { fileURLToPath } from 'url';
-import replaceExtension from 'replace-ext';
 
 export function resourceJSPaths(babel) {
   const t = babel.types;

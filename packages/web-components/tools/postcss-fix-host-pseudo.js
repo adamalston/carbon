@@ -54,9 +54,9 @@ const rePseudoElements = new RegExp(`::?(${pseudoElementNames.join('|')})`);
  * }
  * ```
  */
-// eslint-disable-next-line prefer-arrow-callback
 export default postcss.plugin(
   'fix-host-pseudo',
+  // eslint-disable-next-line prefer-arrow-callback
   function postCssPluginFixHostPseudo() {
     return function fixHostPseudo(css) {
       css.walkRules(async (rule) => {
@@ -67,7 +67,6 @@ export default postcss.plugin(
                 pseudo.nodes.length !== 1 ||
                 pseudo.first.type !== 'selector'
               ) {
-                // eslint-disable-next-line no-console
                 console.warn(
                   'Found :host() with more than one child or with a non-selector child. Skipping...'
                 );

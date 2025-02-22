@@ -95,7 +95,7 @@ export const ArrowDown = {
 
 export const Delete = {
   key: 'Delete',
-  which: 8 || 46,
-  keyCode: 8 || 46,
+  which: 8,
+  keyCode: 8,
   code: 'ArrowDecimal',
 };

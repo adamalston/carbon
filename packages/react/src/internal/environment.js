@@ -12,8 +12,14 @@
  */
 export const canUseDOM = !!(
   typeof window !== 'undefined' &&
+  /*
+  TODO: Add missing ESLint definition.
   // eslint-disable-next-line ssr-friendly/no-dom-globals-in-module-scope
+  */
   window.document &&
+  /*
+  TODO: Add missing ESLint definition.
   // eslint-disable-next-line ssr-friendly/no-dom-globals-in-module-scope
+  */
   window.document.createElement
 );

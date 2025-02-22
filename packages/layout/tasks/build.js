@@ -5,8 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-/* eslint-disable no-console */
-
 'use strict';
 
 require('core-js/features/array/flat-map');
@@ -141,7 +139,7 @@ function buildModulesTokenFile(tokenScale, group) {
     ];
   });
 
-  const variables = values.flatMap(([_name, _shorthand, _id, assignment]) => {
+  const variables = values.flatMap(([, , , assignment]) => {
     const comment = t.Comment(`/ @type Number
 / @access public
 / @group @carbon/layout`);
@@ -155,7 +153,7 @@ function buildModulesTokenFile(tokenScale, group) {
     t.Assignment({
       id: t.Identifier(group),
       init: t.SassMap({
-        properties: values.map(([name, _shorthand, id]) => {
+        properties: values.map(([name, , id]) => {
           return t.SassMapProperty({
             key: id,
             value: t.SassValue(`$${name}`),

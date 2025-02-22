@@ -1,5 +1,8 @@
 // @ts-check
-/* eslint-disable jsdoc/check-tag-names */
+/*
+TODO: Add missing ESLint definition.
+/* eslint-disable jsdoc/check-tag-names *\/
+*/
 /**
  * Copyright IBM Corp. 2016, 2023
  *
