@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { render } from '@testing-library/react';
-import FormLabel from '../FormLabel';
+import FormLabel from '.';
 
 describe('FormLabel', () => {
   it('should support a custom `className` prop on the outermost element', () => {
