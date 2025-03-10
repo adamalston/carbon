@@ -121,7 +121,7 @@ export function Toggletip<E extends ElementType = 'span'>({
   });
   const actions = {
     toggle: () => {
-      setOpen(!open);
+      setOpen((prev) => !prev);
     },
     close: () => {
       setOpen(false);

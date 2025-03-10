@@ -244,14 +244,14 @@ export const ClickableTile = React.forwardRef<
 
   function handleOnClick(evt: MouseEvent) {
     evt?.persist?.();
-    setIsSelected(!isSelected);
+    setIsSelected((prev) => !prev);
     onClick(evt);
   }
 
   function handleOnKeyDown(evt: KeyboardEvent) {
     evt?.persist?.();
     if (matches(evt, [keys.Enter, keys.Space])) {
-      setIsSelected(!isSelected);
+      setIsSelected((prev) => !prev);
     }
     onKeyDown(evt);
   }
@@ -505,7 +505,7 @@ export const SelectableTile = React.forwardRef<
     ) {
       return;
     }
-    setIsSelected(!isSelected);
+    setIsSelected((prev) => !prev);
     clickHandler(evt);
     onChange(evt, isSelected, id);
   }
@@ -514,7 +514,7 @@ export const SelectableTile = React.forwardRef<
     evt?.persist?.();
     if (matches(evt, [keys.Enter, keys.Space])) {
       evt.preventDefault();
-      setIsSelected(!isSelected);
+      setIsSelected((prev) => !prev);
       onChange(evt, isSelected, id);
     }
     keyDownHandler(evt);
@@ -816,7 +816,7 @@ export const ExpandableTile = React.forwardRef<
 
   function handleClick(evt: MouseEvent) {
     evt?.persist?.();
-    setIsExpanded(!isExpanded);
+    setIsExpanded((prev) => !prev);
     setMaxHeight();
   }
 

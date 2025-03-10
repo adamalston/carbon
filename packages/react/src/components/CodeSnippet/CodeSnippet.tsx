@@ -433,7 +433,7 @@ function CodeSnippet({
           size="sm"
           className={`${prefix}--snippet-btn--expand`}
           disabled={disabled}
-          onClick={() => setExpandedCode(!expandedCode)}>
+          onClick={() => setExpandedCode((prev) => !prev)}>
           <span className={`${prefix}--snippet-btn--text`}>
             {expandCodeBtnText}
           </span>

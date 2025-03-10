@@ -126,7 +126,7 @@ const DefinitionTooltip: React.FC<DefinitionTooltipProps> = ({
         onMouseDown={(event) => {
           // We use onMouseDown rather than onClick to make sure this triggers
           // before onFocus.
-          if (event.button === 0) setOpen(!isOpen);
+          if (event.button === 0) setOpen((prev) => !prev);
         }}
         onKeyDown={onKeyDown}
         type="button">

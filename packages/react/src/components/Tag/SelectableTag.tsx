@@ -104,7 +104,7 @@ const SelectableTag = <T extends React.ElementType>({
   );
 
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
-    setSelectedTag(!selectedTag);
+    setSelectedTag((prev) => !prev);
     onChange?.(!selectedTag);
     onClick?.(e);
   };

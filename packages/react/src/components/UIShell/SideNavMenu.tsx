@@ -116,7 +116,7 @@ const SideNavMenu = React.forwardRef<HTMLElement, SideNavMenuProps>(
           aria-expanded={isExpanded}
           className={`${prefix}--side-nav__submenu`}
           onClick={() => {
-            setIsExpanded(!isExpanded);
+            setIsExpanded((prev) => !prev);
           }}
           ref={ref as Ref<HTMLButtonElement>}
           type="button"

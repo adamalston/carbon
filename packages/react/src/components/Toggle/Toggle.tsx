@@ -125,7 +125,7 @@ export function Toggle({
 
   function handleClick(e) {
     if (!readOnly) {
-      setChecked(!checked);
+      setChecked((prev) => !prev);
     }
     if (onClick) {
       onClick(e);

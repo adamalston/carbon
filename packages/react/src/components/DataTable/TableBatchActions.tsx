@@ -127,7 +127,7 @@ const TableBatchActions: TableBatchActionsComponent = ({
   return (
     <div
       onScroll={() => {
-        setIsScrolling(!isScrolling);
+        setIsScrolling((prev) => !prev);
       }}
       aria-hidden={!shouldShowBatchActions}
       className={batchActionsClasses}

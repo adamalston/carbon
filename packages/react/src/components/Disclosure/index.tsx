@@ -14,7 +14,7 @@ function useDisclosure(id) {
     'aria-controls': id,
     'aria-expanded': open,
     onClick() {
-      setOpen(!open);
+      setOpen((prev) => !prev);
     },
   };
   const contentProps = {

@@ -199,7 +199,7 @@ const TreeNode = React.forwardRef<HTMLElement, TreeNodeProps>(
       if (!enableTreeviewControllable) {
         onToggle?.(event, { id, isExpanded: !expanded, label, value });
       }
-      setExpanded(!expanded);
+      setExpanded((prev) => !prev);
     }
     function handleClick(event: React.MouseEvent) {
       event.stopPropagation();
