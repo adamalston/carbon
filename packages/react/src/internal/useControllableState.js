@@ -43,17 +43,20 @@ export function useControllableState({
   }
 
   function setState(stateOrUpdater) {
-    const value =
+    // Use the current prop value when controlled, or the internal state when
+    // uncontrolled
+    const currentValue = controlled.current ? value : state;
+    const newValue =
       typeof stateOrUpdater === 'function'
-        ? stateOrUpdater(state)
+        ? stateOrUpdater(currentValue)
         : stateOrUpdater;
 
     if (controlled.current === false) {
-      internalSetState(value);
+      internalSetState(newValue);
     }
 
     if (onChange) {
-      onChange(value);
+      onChange(newValue);
     }
   }
 
