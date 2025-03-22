@@ -344,3 +344,5 @@ specification. Contributions of any kind welcome!
 ## 📝 License
 
 Licensed under the [Apache 2.0 License](/LICENSE).
+
+Delete packages/react/src/components/CodeSnippet/**tests**/CodeSnippet
