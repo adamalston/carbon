@@ -1,16 +1,23 @@
+/**
+ * Copyright IBM Corp. 2021, 2025
+ *
+ * This source code is licensed under the Apache-2.0 license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 import React, {
-  useRef,
-  useEffect,
-  useState,
-  type MouseEvent,
-  type KeyboardEvent,
-  type HTMLAttributes,
-  type ReactNode,
-  type ReactElement,
-  type RefObject,
-  type MutableRefObject,
-  useMemo,
+  cloneElement,
   isValidElement,
+  useEffect,
+  useRef,
+  useState,
+  type HTMLAttributes,
+  type KeyboardEvent,
+  type MouseEvent,
+  type MutableRefObject,
+  type ReactElement,
+  type ReactNode,
+  type RefObject,
 } from 'react';
 import { isElement } from 'react-is';
 import PropTypes from 'prop-types';
@@ -32,6 +39,7 @@ import { useFeatureFlag } from '../FeatureFlags';
 import { composeEventHandlers } from '../../tools/events';
 import deprecate from '../../prop-types/deprecate';
 import { unstable__Dialog as Dialog } from '../Dialog/index';
+import { AILabel } from '../AILabel';
 
 export interface ModalBodyProps extends HTMLAttributes<HTMLDivElement> {
   /** Specify the content to be placed in the ModalBody. */
@@ -436,19 +444,12 @@ const ComposedModal = React.forwardRef<HTMLDivElement, ComposedModalProps>(
     }, [open, selectorPrimaryFocus, isOpen]);
 
     // AILabel is always size `sm`
-    let normalizedDecorator = React.isValidElement(slug ?? decorator)
-      ? (slug ?? decorator)
-      : null;
-    if (
-      normalizedDecorator &&
-      normalizedDecorator['type']?.displayName === 'AILabel'
-    ) {
-      normalizedDecorator = React.cloneElement(
-        normalizedDecorator as React.ReactElement<any>,
-        {
-          size: 'sm',
-        }
-      );
+    const candidate = slug ?? decorator;
+    let normalizedDecorator = isValidElement(candidate) ? candidate : null;
+    if (normalizedDecorator?.type === AILabel) {
+      normalizedDecorator = cloneElement(normalizedDecorator as ReactElement, {
+        size: 'sm',
+      });
     }
 
     const modalBody = enableDialogElement ? (

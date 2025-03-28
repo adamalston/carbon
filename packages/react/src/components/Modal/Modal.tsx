@@ -7,9 +7,12 @@
 
 import PropTypes, { type Validator } from 'prop-types';
 import React, {
+  cloneElement,
+  isValidElement,
   useEffect,
   useRef,
   useState,
+  type ReactElement,
   type ReactNode,
   type Ref,
 } from 'react';
@@ -38,7 +41,7 @@ import { useFeatureFlag } from '../FeatureFlags';
 import { composeEventHandlers } from '../../tools/events';
 import deprecate from '../../prop-types/deprecate';
 import { unstable__Dialog as Dialog } from '../Dialog/index';
-import { enable } from '@carbon/feature-flags';
+import { AILabel } from '../AILabel';
 
 export const ModalSizes = ['xs', 'sm', 'md', 'lg'] as const;
 
@@ -487,19 +490,12 @@ const Modal = React.forwardRef(function Modal(
   }, []);
 
   // AILabel always size `sm`
-  let normalizedDecorator = React.isValidElement(slug ?? decorator)
-    ? (slug ?? decorator)
-    : null;
-  if (
-    normalizedDecorator &&
-    normalizedDecorator['type']?.displayName === 'AILabel'
-  ) {
-    normalizedDecorator = React.cloneElement(
-      normalizedDecorator as React.ReactElement<any>,
-      {
-        size: 'sm',
-      }
-    );
+  const candidate = slug ?? decorator;
+  let normalizedDecorator = isValidElement(candidate) ? candidate : null;
+  if (normalizedDecorator?.type === AILabel) {
+    normalizedDecorator = cloneElement(normalizedDecorator as ReactElement, {
+      size: 'sm',
+    });
   }
 
   const modalButton = (

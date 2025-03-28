@@ -344,3 +344,14 @@ specification. Contributions of any kind welcome!
 ## 📝 License
 
 Licensed under the [Apache 2.0 License](/LICENSE).
+
+Reference commits:
+https://github.com/adamalston/carbon/compare/efbce4e304e03bb520a138f31ed317be47d32246...675239c749de1992e007bd7e5414338d2a3cab4c
+
+The old code compared the display name of the decorator element (i.e.,
+`normalizedDecorator['type']?.displayName === 'SomeComponentName'`), which is
+fragile because it relies on the display name not changing. The updated code
+uses a direct type comparison (i.e.,
+`normalizedDecorator?.type === SomeComponent`), which is more robust because it
+compares the actual component references rather than a mutable string. These
+changes make the component type checks more reliable.

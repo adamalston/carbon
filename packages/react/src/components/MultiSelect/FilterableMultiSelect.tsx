@@ -19,19 +19,21 @@ import Downshift, {
 import isEqual from 'react-fast-compare';
 import PropTypes from 'prop-types';
 import React, {
+  cloneElement,
+  isValidElement,
   useContext,
-  useState,
-  useRef,
   useEffect,
-  ReactNode,
-  FunctionComponent,
-  ForwardedRef,
-  type FocusEvent,
-  type KeyboardEvent,
-  type MouseEvent,
-  ReactElement,
   useLayoutEffect,
   useMemo,
+  useRef,
+  useState,
+  type FocusEvent,
+  type ForwardedRef,
+  type FunctionComponent,
+  type KeyboardEvent,
+  type MouseEvent,
+  type ReactElement,
+  type ReactNode,
 } from 'react';
 import { defaultFilterItems } from '../ComboBox/tools/filter';
 import {
@@ -57,6 +59,7 @@ import {
   autoUpdate,
 } from '@floating-ui/react';
 import { TranslateWithId } from '../../types/common';
+import { AILabel } from '../AILabel';
 
 const {
   InputBlur,
@@ -695,19 +698,12 @@ const FilterableMultiSelect = React.forwardRef(function FilterableMultiSelect<
   }
 
   // AILabel always size `mini`
-  let normalizedDecorator = React.isValidElement(slug ?? decorator)
-    ? (slug ?? decorator)
-    : null;
-  if (
-    normalizedDecorator &&
-    normalizedDecorator['type']?.displayName === 'AILabel'
-  ) {
-    normalizedDecorator = React.cloneElement(
-      normalizedDecorator as React.ReactElement<any>,
-      {
-        size: 'mini',
-      }
-    );
+  const candidate = slug ?? decorator;
+  let normalizedDecorator = isValidElement(candidate) ? candidate : null;
+  if (normalizedDecorator?.type === AILabel) {
+    normalizedDecorator = cloneElement(normalizedDecorator as ReactElement, {
+      size: 'mini',
+    });
   }
 
   const className = cx(

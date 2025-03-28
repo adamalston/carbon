@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2016, 2023
+ * Copyright IBM Corp. 2016, 2025
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -8,13 +8,21 @@
 import { Calendar, WarningFilled, WarningAltFilled } from '@carbon/icons-react';
 import cx from 'classnames';
 import PropTypes, { ReactElementLike, ReactNodeArray } from 'prop-types';
-import React, { ForwardedRef, ReactNode, useContext } from 'react';
+import React, {
+  cloneElement,
+  isValidElement,
+  useContext,
+  type ForwardedRef,
+  type ReactElement,
+  type ReactNode,
+} from 'react';
 import { usePrefix } from '../../internal/usePrefix';
 import { FormContext } from '../FluidForm';
 import { useId } from '../../internal/useId';
 import { ReactAttr } from '../../types/common';
 import { Text } from '../Text';
 import deprecate from '../../prop-types/deprecate';
+import { AILabel } from '../AILabel';
 
 type ExcludedAttributes = 'value' | 'onChange' | 'locale' | 'children';
 export type ReactNodeLike =
@@ -225,19 +233,12 @@ const DatePickerInput = React.forwardRef(function DatePickerInput(
   const input = <input {...inputProps} />;
 
   // AILabel always size `mini`
-  let normalizedDecorator = React.isValidElement(slug ?? decorator)
-    ? (slug ?? decorator)
-    : null;
-  if (
-    normalizedDecorator &&
-    normalizedDecorator['type']?.displayName === 'AILabel'
-  ) {
-    normalizedDecorator = React.cloneElement(
-      normalizedDecorator as React.ReactElement<any>,
-      {
-        size: 'mini',
-      }
-    );
+  const candidate = slug ?? decorator;
+  let normalizedDecorator = isValidElement(candidate) ? candidate : null;
+  if (normalizedDecorator?.type === AILabel) {
+    normalizedDecorator = cloneElement(normalizedDecorator as ReactElement, {
+      size: 'mini',
+    });
   }
 
   return (

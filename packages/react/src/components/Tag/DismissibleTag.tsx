@@ -6,7 +6,15 @@
  */
 
 import PropTypes from 'prop-types';
-import React, { useLayoutEffect, useState, ReactNode, useRef } from 'react';
+import React, {
+  cloneElement,
+  isValidElement,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type ReactElement,
+  type ReactNode,
+} from 'react';
 import classNames from 'classnames';
 import { useId } from '../../internal/useId';
 import { usePrefix } from '../../internal/usePrefix';
@@ -17,6 +25,7 @@ import { Close } from '@carbon/icons-react';
 import { Tooltip } from '../Tooltip';
 import { Text } from '../Text';
 import { isEllipsisActive } from './isEllipsisActive';
+import { AILabel } from '../AILabel';
 
 export interface DismissibleTagBaseProps {
   /**
@@ -121,20 +130,13 @@ const DismissibleTag = <T extends React.ElementType>({
     }
   };
 
-  let normalizedDecorator = React.isValidElement(slug ?? decorator)
-    ? (slug ?? decorator)
-    : null;
-  if (
-    normalizedDecorator &&
-    normalizedDecorator['type']?.displayName === 'AILabel'
-  ) {
-    normalizedDecorator = React.cloneElement(
-      normalizedDecorator as React.ReactElement<any>,
-      {
-        size: 'sm',
-        kind: 'inline',
-      }
-    );
+  const candidate = slug ?? decorator;
+  let normalizedDecorator = isValidElement(candidate) ? candidate : null;
+  if (normalizedDecorator?.type === AILabel) {
+    normalizedDecorator = cloneElement(normalizedDecorator as ReactElement, {
+      size: 'sm',
+      kind: 'inline',
+    });
   }
 
   const tooltipClasses = classNames(

@@ -16,13 +16,15 @@ import {
 import isEqual from 'react-fast-compare';
 import PropTypes from 'prop-types';
 import React, {
-  ForwardedRef,
-  useContext,
-  useState,
-  useMemo,
-  ReactNode,
-  useLayoutEffect,
+  cloneElement,
   isValidElement,
+  useContext,
+  useLayoutEffect,
+  useMemo,
+  useState,
+  type ForwardedRef,
+  type ReactElement,
+  type ReactNode,
 } from 'react';
 import ListBox, {
   ListBoxSize,
@@ -55,6 +57,7 @@ import {
   autoUpdate,
 } from '@floating-ui/react';
 import { useFeatureFlag } from '../FeatureFlags';
+import { AILabel } from '../AILabel';
 
 const {
   ItemClick,
@@ -698,19 +701,12 @@ const MultiSelect = React.forwardRef(
       : {};
 
     // AILabel always size `mini`
-    let normalizedDecorator = React.isValidElement(slug ?? decorator)
-      ? (slug ?? decorator)
-      : null;
-    if (
-      normalizedDecorator &&
-      normalizedDecorator['type']?.displayName === 'AILabel'
-    ) {
-      normalizedDecorator = React.cloneElement(
-        normalizedDecorator as React.ReactElement<any>,
-        {
-          size: 'mini',
-        }
-      );
+    const candidate = slug ?? decorator;
+    let normalizedDecorator = isValidElement(candidate) ? candidate : null;
+    if (normalizedDecorator?.type === AILabel) {
+      normalizedDecorator = cloneElement(normalizedDecorator as ReactElement, {
+        size: 'mini',
+      });
     }
 
     const itemsSelectedText =

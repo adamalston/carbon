@@ -1,17 +1,23 @@
 /**
- * Copyright IBM Corp. 2016, 2023
+ * Copyright IBM Corp. 2016, 2025
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
  */
 
 import PropTypes from 'prop-types';
-import React, { ReactElement, ReactNode } from 'react';
+import React, {
+  cloneElement,
+  isValidElement,
+  type ReactElement,
+  type ReactNode,
+} from 'react';
 import cx from 'classnames';
 import deprecate from '../../prop-types/deprecate';
 import { usePrefix } from '../../internal/usePrefix';
 import { WarningFilled, WarningAltFilled } from '@carbon/icons-react';
 import { useId } from '../../internal/useId';
+import { AILabel } from '../AILabel';
 
 export interface CheckboxGroupProps {
   children?: ReactNode;
@@ -81,20 +87,14 @@ const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
   });
 
   // AILabel always size `mini`
-  let normalizedDecorator = React.isValidElement(slug ?? decorator)
-    ? (slug ?? decorator)
-    : null;
-  if (
-    normalizedDecorator &&
-    normalizedDecorator['type']?.displayName === 'AILabel'
-  ) {
-    normalizedDecorator = React.cloneElement(
-      normalizedDecorator as React.ReactElement<any>,
-      {
-        size: 'mini',
-        kind: 'default',
-      }
-    );
+  const candidate = slug ?? decorator;
+  let normalizedDecorator = isValidElement(candidate) ? candidate : null;
+
+  if (normalizedDecorator?.type === AILabel) {
+    normalizedDecorator = cloneElement(normalizedDecorator as ReactElement, {
+      size: 'mini',
+      kind: 'default',
+    });
   }
 
   return (

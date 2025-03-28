@@ -1,18 +1,25 @@
 /**
- * Copyright IBM Corp. 2016, 2023
+ * Copyright IBM Corp. 2016, 2025
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
  */
 
 import PropTypes from 'prop-types';
-import React, { ReactElement, ReactNode, useRef } from 'react';
+import React, {
+  cloneElement,
+  isValidElement,
+  useRef,
+  type ReactElement,
+  type ReactNode,
+} from 'react';
 import classNames from 'classnames';
 import { Text } from '../Text';
 import deprecate from '../../prop-types/deprecate';
 import { usePrefix } from '../../internal/usePrefix';
 import { useId } from '../../internal/useId';
 import mergeRefs from '../../tools/mergeRefs';
+import { AILabel } from '../AILabel';
 
 type ExcludedAttributes = 'onChange';
 
@@ -151,23 +158,16 @@ const RadioButton = React.forwardRef<HTMLInputElement, RadioButtonProps>(
 
     const inputRef = useRef<HTMLInputElement>(null);
 
-    let normalizedDecorator = React.isValidElement(slug ?? decorator)
-      ? (slug ?? decorator)
-      : null;
-    if (
-      normalizedDecorator &&
-      normalizedDecorator['type']?.displayName === 'AILabel'
-    ) {
+    const candidate = slug ?? decorator;
+    let normalizedDecorator = isValidElement(candidate) ? candidate : null;
+    if (normalizedDecorator?.type === AILabel) {
       const size =
         (normalizedDecorator as ReactElement).props?.['kind'] === 'inline'
           ? 'md'
           : 'mini';
-      normalizedDecorator = React.cloneElement(
-        normalizedDecorator as React.ReactElement<any>,
-        {
-          size,
-        }
-      );
+      normalizedDecorator = cloneElement(normalizedDecorator as ReactElement, {
+        size,
+      });
     }
 
     return (

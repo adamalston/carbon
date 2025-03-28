@@ -6,14 +6,17 @@
  */
 
 import React, {
+  cloneElement,
+  isValidElement,
   useEffect,
   useRef,
   useState,
-  type ReactNode,
-  type MouseEvent,
-  type KeyboardEvent,
-  type HTMLAttributes,
   type ChangeEvent,
+  type HTMLAttributes,
+  type KeyboardEvent,
+  type MouseEvent,
+  type ReactElement,
+  type ReactNode,
 } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
@@ -39,6 +42,7 @@ import { useMergedRefs } from '../../internal/useMergedRefs';
 import { useFeatureFlag } from '../FeatureFlags';
 import { useId } from '../../internal/useId';
 import { Text } from '../Text';
+import { AILabel } from '../AILabel';
 
 export interface TileProps extends HTMLAttributes<HTMLDivElement> {
   children?: ReactNode;
@@ -537,20 +541,13 @@ export const SelectableTile = React.forwardRef<
 
   // AILabel is always size `xs`
   const decoratorRef = useRef<HTMLInputElement>(null);
-  let normalizedDecorator = React.isValidElement(slug ?? decorator)
-    ? (slug ?? decorator)
-    : null;
-  if (
-    normalizedDecorator &&
-    normalizedDecorator['type']?.displayName === 'AILabel'
-  ) {
-    normalizedDecorator = React.cloneElement(
-      normalizedDecorator as React.ReactElement<any>,
-      {
-        size: 'xs',
-        ref: decoratorRef,
-      }
-    );
+  const candidate = slug ?? decorator;
+  let normalizedDecorator = isValidElement(candidate) ? candidate : null;
+  if (normalizedDecorator?.type === AILabel) {
+    normalizedDecorator = cloneElement(normalizedDecorator as ReactElement, {
+      size: 'xs',
+      ref: decoratorRef,
+    });
   }
 
   return (
@@ -937,19 +934,12 @@ export const ExpandableTile = React.forwardRef<
   const belowTheFoldId = useId('expandable-tile-interactive');
 
   // AILabel is always size `xs`
-  let normalizedDecorator = React.isValidElement(slug ?? decorator)
-    ? (slug ?? decorator)
-    : null;
-  if (
-    normalizedDecorator &&
-    normalizedDecorator['type']?.displayName === 'AILabel'
-  ) {
-    normalizedDecorator = React.cloneElement(
-      normalizedDecorator as React.ReactElement<any>,
-      {
-        size: 'xs',
-      }
-    );
+  const candidate = slug ?? decorator;
+  let normalizedDecorator = isValidElement(candidate) ? candidate : null;
+  if (normalizedDecorator?.type === AILabel) {
+    normalizedDecorator = cloneElement(normalizedDecorator as ReactElement, {
+      size: 'xs',
+    });
   }
 
   return interactive ? (
