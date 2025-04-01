@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2016, 2023
+ * Copyright IBM Corp. 2016, 2025
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -32,7 +32,7 @@
 // used via the `useReactId` function. If the user is running React 17 or
 // lower, `useCompatibleId` is used.
 
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState, version } from 'react';
 import setupGetInstanceId from '../tools/setupGetInstanceId';
 import { canUseDOM } from './environment';
 import { useIdPrefix } from './useIdPrefix';
@@ -53,16 +53,17 @@ const defaultId = 'id';
 /**
  * Generate a unique ID for React <=17 with an optional prefix prepended to it.
  * This is an internal utility, not intended for public usage.
- * @param {string} [prefix]
- * @returns {string}
+ *
+ * @param [prefix] - Prefix for the id.
+ * @returns A unique id string, or `null` during the initial render.
  */
-export function useCompatibleId(prefix = defaultId) {
+export const useCompatibleId = (prefix = defaultId) => {
   const contextPrefix = useIdPrefix();
 
   const [id, setId] = useState(() => {
     if (serverHandoffCompleted) {
       return `${
-        contextPrefix ? `${contextPrefix}-` : ``
+        contextPrefix ? `${contextPrefix}-` : ''
       }${prefix}-${instanceId()}`;
     }
     return null;
@@ -71,47 +72,51 @@ export function useCompatibleId(prefix = defaultId) {
   useIsomorphicLayoutEffect(() => {
     if (id === null) {
       setId(
-        `${contextPrefix ? `${contextPrefix}-` : ``}${prefix}-${instanceId()}`
+        `${contextPrefix ? `${contextPrefix}-` : ''}${prefix}-${instanceId()}`
       );
     }
   }, [instanceId]);
 
   useEffect(() => {
-    if (serverHandoffCompleted === false) {
+    if (!serverHandoffCompleted) {
       serverHandoffCompleted = true;
     }
   }, []);
 
   return id;
-}
+};
 
 /**
  * Generate a unique ID for React >=18 with an optional prefix prepended to it.
  * This is an internal utility, not intended for public usage.
- * @param {string} [prefix]
- * @returns {string}
+ *
+ * @param [prefix] Prefix for the id.
+ * @returns A unique id string.
  */
-function useReactId(prefix = defaultId) {
+const useReactId = (prefix = defaultId) => {
   const contextPrefix = useIdPrefix();
-  return `${
-    contextPrefix ? `${contextPrefix}-` : ``
-  }${prefix}-${_React.useId()}`;
-}
+  return `${contextPrefix ? `${contextPrefix}-` : ''}${prefix}-${_React.useId()}`;
+};
+
+/** Whether the React version is 18 or higher. */
+const isReact18OrHigher =
+  typeof version === 'string' && parseInt(version.split('.')[0]) >= 18;
 
 /**
  * Uses React 18's built-in `useId()` when available, or falls back to a
  * slightly less performant (requiring a double render) implementation for
  * earlier React versions.
  */
-export const useId = _React.useId ? useReactId : useCompatibleId;
+export const useId = isReact18OrHigher ? useReactId : useCompatibleId;
 
 /**
- * Generate a unique id if a given `id` is not provided
+ * Generate a unique id if a given `id` is not provided.
  * This is an internal utility, not intended for public usage.
- * @param {string|undefined} id
- * @returns {string}
+ *
+ * @param [id] The provided id.
+ * @returns The provided id if available, otherwise a generated unique id.
  */
-export function useFallbackId(id) {
+export const useFallbackId = (id?: string) => {
   const fallback = useId();
   return id ?? fallback;
-}
+};
