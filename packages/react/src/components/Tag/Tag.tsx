@@ -6,7 +6,15 @@
  */
 
 import PropTypes from 'prop-types';
-import React, { useLayoutEffect, useState, ReactNode, useRef } from 'react';
+import React, {
+  useLayoutEffect,
+  useRef,
+  useState,
+  type ComponentProps,
+  type ElementType,
+  type FC,
+  type ReactNode,
+} from 'react';
 import classNames from 'classnames';
 import { Close } from '@carbon/icons-react';
 import { useId } from '../../internal/useId';
@@ -20,9 +28,10 @@ import {
   PolymorphicComponentPropWithRef,
   PolymorphicRef,
 } from '../../internal/PolymorphicProps';
-import { SelectableTagBaseProps, SelectableTagProps } from './SelectableTag';
+import { SelectableTagBaseProps } from './SelectableTag';
 import { OperationalTagBaseProps } from './OperationalTag';
 import { DismissibleTagBaseProps } from './DismissibleTag';
+import { elementTypeValidator, getTypedObjectKeys } from '../../internal';
 
 export const TYPES = {
   red: 'Red',
@@ -303,11 +312,13 @@ const Tag: TagComponent = React.forwardRef(
   }
 );
 
-(Tag as React.FC).propTypes = {
+(Tag as FC<TagBaseProps>).propTypes = {
   /**
    * Provide an alternative tag or component to use instead of the default
    * wrapping element
    */
+  // TODO: Is there supposed to be an `as` prop in `TagBaseProps`?
+  // @ts-expect-error - There is no `as` prop in `TagBaseProps`.
   as: PropTypes.elementType,
 
   /**
@@ -354,13 +365,13 @@ const Tag: TagComponent = React.forwardRef(
   /**
    * A component used to render an icon.
    */
-  renderIcon: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
+  renderIcon: elementTypeValidator,
 
   /**
    * Specify the size of the Tag. Currently supports either `sm`,
    * `md` (default) or `lg` sizes.
    */
-  size: PropTypes.oneOf(Object.keys(SIZES)),
+  size: PropTypes.oneOf(getTypedObjectKeys(SIZES)),
 
   /**
    * **Experimental:** Provide a `Slug` component to be rendered inside the `Tag` component
@@ -381,8 +392,8 @@ const Tag: TagComponent = React.forwardRef(
   /**
    * Specify the type of the `Tag`
    */
-  type: PropTypes.oneOf(Object.keys(TYPES)),
+  type: PropTypes.oneOf(getTypedObjectKeys(TYPES)),
 };
 
-export const types = Object.keys(TYPES);
+export const types = getTypedObjectKeys(TYPES);
 export default Tag;

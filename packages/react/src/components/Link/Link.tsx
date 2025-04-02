@@ -11,8 +11,9 @@ import React, {
   AnchorHTMLAttributes,
   AriaAttributes,
   ComponentType,
-  ElementType,
   HTMLAttributeAnchorTarget,
+  type ElementType,
+  type FC,
 } from 'react';
 import { usePrefix } from '../../internal/usePrefix';
 import { PolymorphicProps } from '../../types/common';
@@ -20,6 +21,7 @@ import {
   PolymorphicComponentPropWithRef,
   PolymorphicRef,
 } from '../../internal/PolymorphicProps';
+import { elementTypeValidator } from '../../internal';
 
 export interface LinkBaseProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   /**
@@ -53,7 +55,7 @@ export interface LinkBaseProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   /**
    * A component used to render an icon.
    */
-  renderIcon?: ComponentType;
+  renderIcon?: ElementType;
 
   /**
    * Specify the size of the Link. Currently supports either `sm`, 'md' (default) or 'lg` as an option.
@@ -133,12 +135,14 @@ const Link: LinkComponent = React.forwardRef(
   }
 );
 
-(Link as React.FC).displayName = 'Link';
-(Link as React.FC).propTypes = {
+(Link as FC<LinkBaseProps>).displayName = 'Link';
+(Link as FC<LinkBaseProps>).propTypes = {
   /**
    * Provide a custom element or component to render the top-level node for the
    * component.
    */
+  // TODO: Is there supposed to be an `as` prop in `LinkBaseProps`?
+  // @ts-expect-error - There is no `as` prop in `LinkBaseProps`.
   as: PropTypes.elementType,
 
   /**
@@ -169,7 +173,7 @@ const Link: LinkComponent = React.forwardRef(
   /**
    * A component used to render an icon.
    */
-  renderIcon: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
+  renderIcon: elementTypeValidator,
 
   /**
    * Specify the size of the Link. Currently supports either `sm`, 'md' (default) or 'lg` as an option.

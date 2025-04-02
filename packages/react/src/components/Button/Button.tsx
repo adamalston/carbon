@@ -6,7 +6,7 @@
  */
 
 import PropTypes from 'prop-types';
-import React, { useRef } from 'react';
+import React, { useRef, type FC } from 'react';
 import { IconButton, IconButtonKind, IconButtonKinds } from '../IconButton';
 import { composeEventHandlers } from '../../tools/events';
 import { PolymorphicProps } from '../../types/common';
@@ -16,6 +16,7 @@ import {
   PolymorphicComponentPropWithRef,
   PolymorphicRef,
 } from '../../internal/PolymorphicProps';
+import { elementTypeValidator } from '../../internal';
 
 export const ButtonKinds = [
   'primary',
@@ -238,12 +239,14 @@ const Button: ButtonComponent = React.forwardRef(
   }
 );
 
-(Button as React.FC).displayName = 'Button';
-(Button as React.FC).propTypes = {
+(Button as FC<ButtonBaseProps>).displayName = 'Button';
+(Button as FC<ButtonBaseProps>).propTypes = {
   /**
    * Specify how the button itself should be rendered.
    * Make sure to apply all props to the root node and render children appropriately
    */
+  // TODO: Is there supposed to be an `as` prop in `ButtonBaseProps`?
+  // @ts-expect-error - There is no `as` prop in `ButtonBaseProps`.
   as: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.string,
@@ -368,7 +371,7 @@ const Button: ButtonComponent = React.forwardRef(
   /**
    * A component used to render an icon.
    */
-  renderIcon: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
+  renderIcon: elementTypeValidator,
 
   /**
    * Optional prop to specify the role of the Button
@@ -419,4 +422,4 @@ const Button: ButtonComponent = React.forwardRef(
   type: PropTypes.oneOf(['button', 'reset', 'submit']),
 };
 
-export default Button as ButtonComponent;
+export default Button;

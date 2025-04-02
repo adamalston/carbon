@@ -24,6 +24,7 @@ import { Tooltip } from '../Tooltip';
 import { Text } from '../Text';
 import { isEllipsisActive } from './isEllipsisActive';
 import mergeRefs from '../../tools/mergeRefs';
+import { getTypedObjectKeys } from '../../internal';
 
 const TYPES = {
   red: 'Red',
@@ -185,7 +186,7 @@ OperationalTag.propTypes = {
    * Specify the size of the Tag. Currently supports either `sm`,
    * `md` (default) or `lg` sizes.
    */
-  size: PropTypes.oneOf(Object.keys(SIZES)),
+  size: PropTypes.oneOf(getTypedObjectKeys(SIZES)),
 
   /**
    * Provide text to be rendered inside of a the tag.
@@ -195,8 +196,8 @@ OperationalTag.propTypes = {
   /**
    * Specify the type of the `Tag`
    */
-  type: PropTypes.oneOf(Object.keys(TYPES)),
+  type: PropTypes.oneOf(getTypedObjectKeys(TYPES)),
 };
 
-export const types = Object.keys(TYPES);
+export const types = getTypedObjectKeys(TYPES);
 export default OperationalTag;

@@ -65,7 +65,7 @@ Annotation.propTypes = {
   /**
    * The story to be rendered with this annotation.
    */
-  type: PropTypes.oneOf(Object.keys(types)),
+  type: PropTypes.oneOf(getTypedObjectKeys(types)),
 };
 
 export { Annotation };

@@ -7,7 +7,13 @@
 
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type FC,
+} from 'react';
 import { Popover, PopoverAlignment, PopoverContent } from '../Popover';
 import { keys, match } from '../../internal/keyboard';
 import { useDelayedState } from '../../internal/useDelayedState';
@@ -297,7 +303,7 @@ const Tooltip: TooltipComponent = React.forwardRef(
   }
 );
 
-(Tooltip as React.FC).propTypes = {
+(Tooltip as FC<TooltipBaseProps>).propTypes = {
   /**
    * Specify how the trigger should align with the tooltip
    */
@@ -332,6 +338,8 @@ const Tooltip: TooltipComponent = React.forwardRef(
   /**
    * Pass in the child to which the tooltip will be applied
    */
+  // TODO: Is there supposed to be an `children` prop in `TooltipBaseProps`?
+  // @ts-expect-error - There is no `children` prop in `TooltipBaseProps`.
   children: PropTypes.node,
 
   /**

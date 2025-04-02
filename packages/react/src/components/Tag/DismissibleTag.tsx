@@ -17,6 +17,7 @@ import { Close } from '@carbon/icons-react';
 import { Tooltip } from '../Tooltip';
 import { Text } from '../Text';
 import { isEllipsisActive } from './isEllipsisActive';
+import { getTypedObjectKeys } from '../../internal';
 
 export interface DismissibleTagBaseProps {
   /**
@@ -227,7 +228,7 @@ DismissibleTag.propTypes = {
    * Specify the size of the Tag. Currently supports either `sm`,
    * `md` (default) or `lg` sizes.
    */
-  size: PropTypes.oneOf(Object.keys(SIZES)),
+  size: PropTypes.oneOf(getTypedObjectKeys(SIZES)),
 
   /**
    * **Experimental:** Provide a `Slug` component to be rendered inside the `DismissibleTag` component
@@ -255,8 +256,10 @@ DismissibleTag.propTypes = {
   /**
    * Specify the type of the `Tag`
    */
-  type: PropTypes.oneOf(Object.keys(TYPES)),
+  type: PropTypes.oneOf(getTypedObjectKeys(TYPES)),
 };
 
-export const types = Object.keys(TYPES);
+// TODO: Why is this variable exported from here? `TYPES` is from a different
+// file.
+export const types = getTypedObjectKeys(TYPES);
 export default DismissibleTag;

@@ -451,19 +451,7 @@ Map {
       "rel": Object {
         "type": "string",
       },
-      "renderIcon": Object {
-        "args": Array [
-          Array [
-            Object {
-              "type": "func",
-            },
-            Object {
-              "type": "object",
-            },
-          ],
-        ],
-        "type": "oneOfType",
-      },
+      "renderIcon": [Function],
       "role": Object {
         "type": "string",
       },
@@ -4617,19 +4605,7 @@ Map {
       "inline": Object {
         "type": "bool",
       },
-      "renderIcon": Object {
-        "args": Array [
-          Array [
-            Object {
-              "type": "func",
-            },
-            Object {
-              "type": "object",
-            },
-          ],
-        ],
-        "type": "oneOfType",
-      },
+      "renderIcon": [Function],
       "size": Object {
         "args": Array [
           Array [
@@ -8376,19 +8352,7 @@ Map {
         "type": "string",
       },
       "onClose": [Function],
-      "renderIcon": Object {
-        "args": Array [
-          Array [
-            Object {
-              "type": "func",
-            },
-            Object {
-              "type": "object",
-            },
-          ],
-        ],
-        "type": "oneOfType",
-      },
+      "renderIcon": [Function],
       "size": Object {
         "args": Array [
           Array [

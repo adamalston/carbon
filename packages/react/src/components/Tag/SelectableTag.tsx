@@ -15,6 +15,7 @@ import Tag, { SIZES } from './Tag';
 import { Tooltip } from '../Tooltip';
 import { Text } from '../Text';
 import { isEllipsisActive } from './isEllipsisActive';
+import { getTypedObjectKeys } from '../../internal';
 
 export interface SelectableTagBaseProps {
   /**
@@ -192,7 +193,7 @@ SelectableTag.propTypes = {
    * Specify the size of the Tag. Currently supports either `sm`,
    * `md` (default) or `lg` sizes.
    */
-  size: PropTypes.oneOf(Object.keys(SIZES)),
+  size: PropTypes.oneOf(getTypedObjectKeys(SIZES)),
 
   /**
    * Provide text to be rendered inside of a the tag.
