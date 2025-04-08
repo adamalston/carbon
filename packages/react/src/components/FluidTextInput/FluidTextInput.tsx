@@ -103,7 +103,7 @@ export interface FluidTextInputProps {
 }
 
 const FluidTextInput = React.forwardRef<HTMLInputElement, FluidTextInputProps>(
-  function FluidTextInput({ className, isPassword, ...other }, ref) {
+  ({ className, isPassword, ...other }, ref) => {
     const prefix = usePrefix();
     const classNames = classnames(className, {
       [`${prefix}--text-input--fluid`]: !isPassword,

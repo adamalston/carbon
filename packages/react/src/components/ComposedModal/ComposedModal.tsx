@@ -57,7 +57,7 @@ export interface ModalBodyProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const ModalBody = React.forwardRef<HTMLDivElement, ModalBodyProps>(
-  function ModalBody(
+  (
     {
       className: customClassName,
       children,
@@ -66,7 +66,7 @@ export const ModalBody = React.forwardRef<HTMLDivElement, ModalBodyProps>(
       ...rest
     },
     ref
-  ) {
+  ) => {
     const prefix = usePrefix();
     const contentRef = useRef<HTMLDivElement>(null);
     const [isScrollable, setIsScrollable] = useState(false);
@@ -235,7 +235,7 @@ export interface ComposedModalProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const ComposedModal = React.forwardRef<HTMLDivElement, ComposedModalProps>(
-  function ComposedModal(
+  (
     {
       ['aria-labelledby']: ariaLabelledBy,
       ['aria-label']: ariaLabel,
@@ -257,7 +257,7 @@ const ComposedModal = React.forwardRef<HTMLDivElement, ComposedModalProps>(
       ...rest
     },
     ref
-  ) {
+  ) => {
     const prefix = usePrefix();
     const [isOpen, setIsOpen] = useState<boolean>(!!open);
     const [wasOpen, setWasOpen] = useState<boolean>(!!open);

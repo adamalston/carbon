@@ -80,7 +80,7 @@ export type OverflowMenuItemComponent = ForwardRefReturn<
 >;
 
 const OverflowMenuItem: OverflowMenuItemComponent = React.forwardRef(
-  function OverflowMenuItem(
+  (
     {
       className,
       closeMenu,
@@ -99,7 +99,7 @@ const OverflowMenuItem: OverflowMenuItemComponent = React.forwardRef(
       ...rest
     },
     ref
-  ) {
+  ) => {
     const prefix = usePrefix();
 
     function setTabFocus(evt) {

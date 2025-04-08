@@ -325,7 +325,7 @@ export interface PaginationNavProps
 }
 
 const PaginationNav = React.forwardRef<HTMLElement, PaginationNavProps>(
-  function PaginationNav(
+  (
     {
       className,
       onChange = () => {},
@@ -339,7 +339,7 @@ const PaginationNav = React.forwardRef<HTMLElement, PaginationNavProps>(
       ...rest
     },
     ref
-  ) {
+  ) => {
     const smMediaQuery = `(max-width: ${breakpoints.sm.width})`;
     const isSm = useMatchMedia(smMediaQuery);
 

@@ -47,7 +47,7 @@ type TimePickerSelectComponent = ForwardRefReturn<
 >;
 
 const TimePickerSelect: TimePickerSelectComponent = React.forwardRef(
-  function TimePickerSelect(
+  (
     {
       ['aria-label']: ariaLabel = 'open list of options',
       children,
@@ -57,7 +57,7 @@ const TimePickerSelect: TimePickerSelectComponent = React.forwardRef(
       ...rest
     },
     ref
-  ) {
+  ) => {
     const prefix = usePrefix();
 
     const selectClasses = cx({

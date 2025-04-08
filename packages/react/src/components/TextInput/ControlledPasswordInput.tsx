@@ -126,7 +126,7 @@ export interface ControlledPasswordInputProps
 }
 
 const ControlledPasswordInput = React.forwardRef(
-  function ControlledPasswordInput(
+  (
     {
       labelText,
       className,
@@ -152,7 +152,7 @@ const ControlledPasswordInput = React.forwardRef(
       ...other
     }: ControlledPasswordInputProps,
     ref
-  ) {
+  ) => {
     const prefix = usePrefix();
     const controlledPasswordInstanceId = useId();
     if (process.env.NODE_ENV !== 'production') {

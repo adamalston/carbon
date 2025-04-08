@@ -42,7 +42,7 @@ export interface HeaderMenuItemComponent {
 }
 
 const HeaderMenuItem: HeaderMenuItemComponent = forwardRef(
-  function HeaderMenuItemRenderFunction<E extends ElementType = 'a'>(
+  <E extends ElementType = 'a'>(
     {
       className,
       isActive,
@@ -54,7 +54,7 @@ const HeaderMenuItem: HeaderMenuItemComponent = forwardRef(
       ...rest
     }: HeaderMenuItemProps<E>,
     ref: ForwardedRef<ElementType>
-  ) {
+  ) => {
     const prefix = usePrefix();
     if (isCurrentPage) {
       isActive = isCurrentPage;

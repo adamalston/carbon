@@ -88,7 +88,7 @@ export type SwitcherItemProps =
   | SwitcherItemWithAriaLabelledBy;
 
 const SwitcherItem = forwardRef<ElementType, SwitcherItemProps>(
-  function SwitcherItem(props, forwardRef) {
+  (props, forwardRef) => {
     const {
       'aria-label': ariaLabel,
       'aria-labelledby': ariaLabelledBy,

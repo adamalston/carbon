@@ -76,7 +76,7 @@ export interface InlineCheckboxProps {
 }
 
 const InlineCheckbox = React.forwardRef<HTMLInputElement, InlineCheckboxProps>(
-  function InlineCheckbox(props, forwardRef) {
+  (props, forwardRef) => {
     const {
       ['aria-label']: ariaLabel,
       ariaLabel: deprecatedAriaLabel,

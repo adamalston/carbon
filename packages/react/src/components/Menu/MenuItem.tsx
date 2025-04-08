@@ -87,7 +87,7 @@ export interface MenuItemProps extends LiHTMLAttributes<HTMLLIElement> {
 }
 
 export const MenuItem = forwardRef<HTMLLIElement, MenuItemProps>(
-  function MenuItem(
+  (
     {
       children,
       className,
@@ -100,7 +100,7 @@ export const MenuItem = forwardRef<HTMLLIElement, MenuItemProps>(
       ...rest
     },
     forwardRef
-  ) {
+  ) => {
     const [submenuOpen, setSubmenuOpen] = useState(false);
     const [rtl, setRtl] = useState(false);
 
@@ -435,7 +435,7 @@ export interface MenuItemGroupProps extends ComponentProps<'ul'> {
 }
 
 export const MenuItemGroup = forwardRef<HTMLLIElement, MenuItemGroupProps>(
-  function MenuItemGroup({ children, className, label, ...rest }, forwardRef) {
+  ({ children, className, label, ...rest }, forwardRef) => {
     const prefix = usePrefix();
 
     const classNames = cx(className, `${prefix}--menu-item-group`);
@@ -609,7 +609,7 @@ export interface MenuItemDividerProps extends ComponentProps<'li'> {
 }
 
 export const MenuItemDivider = forwardRef<HTMLLIElement, MenuItemDividerProps>(
-  function MenuItemDivider({ className, ...rest }, forwardRef) {
+  ({ className, ...rest }, forwardRef) => {
     const prefix = usePrefix();
 
     const classNames = cx(className, `${prefix}--menu-item-divider`);

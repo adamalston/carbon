@@ -77,7 +77,7 @@ export interface FluidSelectProps {
 }
 
 const FluidSelect = React.forwardRef<HTMLSelectElement, FluidSelectProps>(
-  function FluidSelect({ className, children, ...other }, ref) {
+  ({ className, children, ...other }, ref) => {
     const prefix = usePrefix();
     const classNames = classnames(`${prefix}--select--fluid`, className);
 

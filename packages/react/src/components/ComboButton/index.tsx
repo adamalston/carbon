@@ -98,7 +98,7 @@ interface ComboButtonProps extends TranslateWithId<TranslationKey> {
 }
 
 const ComboButton = React.forwardRef<HTMLDivElement, ComboButtonProps>(
-  function ComboButton(
+  (
     {
       children,
       className,
@@ -112,7 +112,7 @@ const ComboButton = React.forwardRef<HTMLDivElement, ComboButtonProps>(
       ...rest
     },
     forwardRef
-  ) {
+  ) => {
     // feature flag utilized to separate out only the dynamic styles from @floating-ui
     // flag is turned on when collision detection (ie. flip, hide) logic is not desired
     const enableOnlyFloatingStyles = useFeatureFlag(

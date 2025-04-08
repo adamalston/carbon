@@ -198,7 +198,7 @@ export interface ModalFooterProps {
 }
 
 export const ModalFooter = React.forwardRef<HTMLElement, ModalFooterProps>(
-  function ModalFooter(
+  (
     {
       children,
       className: customClassName,
@@ -220,7 +220,7 @@ export const ModalFooter = React.forwardRef<HTMLElement, ModalFooterProps>(
       ...rest
     },
     ref
-  ) {
+  ) => {
     const prefix = usePrefix();
 
     const footerClass = cx(

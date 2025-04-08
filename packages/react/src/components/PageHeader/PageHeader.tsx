@@ -30,7 +30,7 @@ interface PageHeaderProps {
   className?: string;
 }
 const PageHeader = React.forwardRef<HTMLDivElement, PageHeaderProps>(
-  function PageHeader({ className, children, ...other }: PageHeaderProps, ref) {
+  ({ className, children, ...other }: PageHeaderProps, ref) => {
     const prefix = usePrefix();
     const classNames = classnames(
       {

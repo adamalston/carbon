@@ -205,7 +205,7 @@ export interface NumberInputProps
 }
 
 const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
-  function NumberInput(props: NumberInputProps, forwardRef) {
+  (props: NumberInputProps, forwardRef) => {
     const {
       allowEmpty = false,
       className: customClassName,

@@ -1647,10 +1647,7 @@ export interface TabPanelProps extends DivAttributes {
 }
 
 const TabPanel = React.forwardRef<HTMLDivElement, TabPanelProps>(
-  function TabPanel(
-    { children, className: customClassName, ...rest },
-    forwardRef
-  ) {
+  ({ children, className: customClassName, ...rest }, forwardRef) => {
     const prefix = usePrefix();
     const panel = useRef<HTMLDivElement>(null);
     const ref = useMergedRefs([forwardRef, panel]);

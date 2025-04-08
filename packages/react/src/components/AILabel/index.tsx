@@ -146,7 +146,7 @@ export interface AILabelProps {
 }
 
 export const AILabel = React.forwardRef<HTMLDivElement, AILabelProps>(
-  function AILabel(
+  (
     {
       aiText = 'AI',
       aiTextLabel,
@@ -165,7 +165,7 @@ export const AILabel = React.forwardRef<HTMLDivElement, AILabelProps>(
       ...rest
     },
     ref
-  ) {
+  ) => {
     const prefix = usePrefix();
     const id = useId('AILabel');
 

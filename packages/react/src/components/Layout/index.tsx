@@ -144,10 +144,10 @@ export interface LayoutConstraintProps extends HTMLAttributes<HTMLElement> {
 }
 
 const LayoutConstraint = React.forwardRef<ReactNode, LayoutConstraintProps>(
-  function Layout(
+  (
     { as: BaseComponent = 'div', children, className, density, size, ...rest },
     forwardRef
-  ) {
+  ) => {
     const prefix = usePrefix();
 
     const classes = cx(

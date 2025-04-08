@@ -89,7 +89,7 @@ export interface MenuButtonProps extends ComponentProps<'div'> {
 }
 
 const MenuButton = forwardRef<HTMLDivElement, MenuButtonProps>(
-  function MenuButton(
+  (
     {
       children,
       className,
@@ -103,7 +103,7 @@ const MenuButton = forwardRef<HTMLDivElement, MenuButtonProps>(
       ...rest
     },
     forwardRef
-  ) {
+  ) => {
     // feature flag utilized to separate out only the dynamic styles from @floating-ui
     // flag is turned on when collision detection (ie. flip, hide) logic is not desired
     const enableOnlyFloatingStyles = useFeatureFlag(

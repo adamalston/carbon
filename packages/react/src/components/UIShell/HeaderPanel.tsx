@@ -54,7 +54,7 @@ export interface HeaderPanelProps {
 
 const noopFn = () => {};
 const HeaderPanel: React.FC<HeaderPanelProps> = React.forwardRef(
-  function HeaderPanel(
+  (
     {
       children,
       className: customClassName,
@@ -65,7 +65,7 @@ const HeaderPanel: React.FC<HeaderPanelProps> = React.forwardRef(
       ...rest
     },
     ref: ForwardedRef<HTMLDivElement>
-  ) {
+  ) => {
     const prefix = usePrefix();
     const headerPanelReference = useRef<HTMLDivElement>(null);
     const headerPanelRef = useMergedRefs([headerPanelReference, ref]);

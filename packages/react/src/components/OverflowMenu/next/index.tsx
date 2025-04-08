@@ -93,7 +93,7 @@ interface OverflowMenuProps {
 }
 
 const OverflowMenu = React.forwardRef<HTMLDivElement, OverflowMenuProps>(
-  function OverflowMenu(
+  (
     {
       autoAlign = false,
       children,
@@ -107,7 +107,7 @@ const OverflowMenu = React.forwardRef<HTMLDivElement, OverflowMenuProps>(
       ...rest
     },
     forwardRef
-  ) {
+  ) => {
     const enableFloatingStyles =
       useFeatureFlag('enable-v12-dynamic-floating-styles') || autoAlign;
 

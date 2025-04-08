@@ -77,7 +77,7 @@ export interface ModalHeaderProps extends DivProps {
 }
 
 export const ModalHeader = React.forwardRef<HTMLDivElement, ModalHeaderProps>(
-  function ModalHeader(
+  (
     {
       buttonOnClick,
       children,
@@ -93,7 +93,7 @@ export const ModalHeader = React.forwardRef<HTMLDivElement, ModalHeaderProps>(
       ...rest
     },
     ref
-  ) {
+  ) => {
     const prefix = usePrefix();
 
     function handleCloseButtonClick(evt: MouseEvent) {

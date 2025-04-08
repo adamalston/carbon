@@ -57,7 +57,7 @@ export interface ChatButtonProps
 }
 
 const ChatButton = React.forwardRef<HTMLButtonElement, ChatButtonProps>(
-  function ChatButton(
+  (
     {
       className,
       children,
@@ -70,7 +70,7 @@ const ChatButton = React.forwardRef<HTMLButtonElement, ChatButtonProps>(
       ...other
     }: ChatButtonProps,
     ref
-  ) {
+  ) => {
     const prefix = usePrefix();
     const classNames = classnames(className, {
       [`${prefix}--chat-btn`]: true,

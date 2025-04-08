@@ -47,10 +47,7 @@ export interface ListBoxTriggerProps
  */
 
 const ListBoxTrigger = React.forwardRef<HTMLButtonElement, ListBoxTriggerProps>(
-  function ListBoxTrigger(
-    { isOpen, translateWithId: t = defaultTranslateWithId, ...rest },
-    ref
-  ) {
+  ({ isOpen, translateWithId: t = defaultTranslateWithId, ...rest }, ref) => {
     const prefix = usePrefix();
     const className = cx({
       [`${prefix}--list-box__menu-icon`]: true,
