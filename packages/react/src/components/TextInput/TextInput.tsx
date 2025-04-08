@@ -12,6 +12,7 @@ import React, {
   useState,
   useEffect,
   useRef,
+  forwardRef,
 } from 'react';
 import classNames from 'classnames';
 import { useNormalizedInputProps } from '../../internal/useNormalizedInputProps';
@@ -159,8 +160,8 @@ export interface TextInputProps
   warnText?: ReactNode;
 }
 
-const TextInput = React.forwardRef(function TextInput(
-  {
+const TextInput = forwardRef<unknown, TextInputProps>((props, ref) => {
+  const {
     className,
     decorator,
     disabled = false,
@@ -184,9 +185,7 @@ const TextInput = React.forwardRef(function TextInput(
     maxCount,
     slug,
     ...rest
-  }: TextInputProps,
-  ref
-) {
+  } = props;
   const prefix = usePrefix();
 
   const { defaultValue, value } = rest;

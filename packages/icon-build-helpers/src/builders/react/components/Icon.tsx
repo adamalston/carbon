@@ -6,7 +6,7 @@
  */
 import { getAttributes } from '@carbon/icon-helpers';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { forwardRef, type ReactSVGElement, type SVGProps } from 'react';
 
 export interface IconProps
   extends Omit<React.SVGProps<React.ReactSVGElement>, 'ref' | 'tabIndex'> {
@@ -19,48 +19,46 @@ export interface IconProps
   title?: string | undefined;
 }
 
-const Icon = React.forwardRef(function Icon(
-  {
+const Icon = forwardRef<ReactSVGElement, IconProps>((props, ref) => {
+  const {
     className,
     children,
     tabIndex,
     xmlns = 'http://www.w3.org/2000/svg',
     preserveAspectRatio = 'xMidYMid meet',
     ...rest
-  }: IconProps,
-  ref: React.ForwardedRef<React.ReactSVGElement>
-) {
+  } = props;
   const { tabindex, ...attrs } = getAttributes({
     ...rest,
     tabindex: tabIndex,
   });
-  const props: React.SVGProps<React.ReactSVGElement> = attrs;
+  const svgProps: SVGProps<ReactSVGElement> = attrs;
 
   if (className) {
-    props.className = className;
+    svgProps.className = className;
   }
 
   if (tabindex !== undefined && tabindex !== null) {
     if (typeof tabindex === 'number') {
-      props.tabIndex = tabindex;
+      svgProps.tabIndex = tabindex;
     } else {
-      props.tabIndex = Number(tabIndex);
+      svgProps.tabIndex = Number(tabIndex);
     }
   }
 
   if (ref) {
-    props.ref = ref;
+    svgProps.ref = ref;
   }
 
   if (xmlns) {
-    props.xmlns = xmlns;
+    svgProps.xmlns = xmlns;
   }
 
   if (preserveAspectRatio) {
-    props.preserveAspectRatio = preserveAspectRatio;
+    svgProps.preserveAspectRatio = preserveAspectRatio;
   }
 
-  return React.createElement('svg', props, children);
+  return React.createElement('svg', svgProps, children);
 });
 
 Icon.displayName = 'Icon';

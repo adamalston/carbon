@@ -7,7 +7,12 @@
 
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import React, { type MouseEventHandler, useRef, ReactNode } from 'react';
+import React, {
+  forwardRef,
+  useRef,
+  type MouseEventHandler,
+  type ReactNode,
+} from 'react';
 import {
   ArrowUp as Arrow,
   ArrowsVertical as Arrows,
@@ -128,146 +133,146 @@ export interface TableHeaderProps
    * Specify which direction we are currently sorting by, should be one of DESC,
    * NONE, or ASC.
    */
-  sortDirection?: string;
+  sortDirection?: DataTableSortState;
 }
 
-const TableHeader = React.forwardRef(function TableHeader(
-  {
-    className: headerClassName,
-    children,
-    colSpan,
-    decorator,
-    isSortable = false,
-    isSortHeader,
-    onClick,
-    scope = defaultScope,
-    sortDirection,
-    translateWithId: t = translateWithId,
-    slug,
-    id,
-    ...rest
-  }: TableHeaderProps,
-  ref: React.Ref<HTMLTableCellElement>
-) {
-  const prefix = usePrefix();
-  const uniqueId = useId('table-sort');
+const TableHeader = forwardRef<HTMLTableCellElement, TableHeaderProps>(
+  (props, ref) => {
+    const {
+      className: headerClassName,
+      children,
+      colSpan,
+      decorator,
+      isSortable = false,
+      isSortHeader,
+      onClick,
+      scope = defaultScope,
+      sortDirection,
+      translateWithId: t = translateWithId,
+      slug,
+      id,
+      ...rest
+    } = props;
+    const prefix = usePrefix();
+    const uniqueId = useId('table-sort');
 
-  // AILabel is always size `mini`
-  const AILableRef = useRef<HTMLInputElement>(null);
+    // AILabel is always size `mini`
+    const AILableRef = useRef<HTMLInputElement>(null);
 
-  let colHasAILabel;
-  let normalizedDecorator = React.isValidElement(slug ?? decorator)
-    ? (slug ?? decorator)
-    : null;
-  if (
-    normalizedDecorator &&
-    normalizedDecorator['type']?.displayName === 'AILabel'
-  ) {
-    colHasAILabel = true;
-    normalizedDecorator = React.cloneElement(
-      normalizedDecorator as React.ReactElement<any>,
-      {
-        size: 'mini',
-        ref: AILableRef,
+    let colHasAILabel;
+    let normalizedDecorator = React.isValidElement(slug ?? decorator)
+      ? (slug ?? decorator)
+      : null;
+    if (
+      normalizedDecorator &&
+      normalizedDecorator['type']?.displayName === 'AILabel'
+    ) {
+      colHasAILabel = true;
+      normalizedDecorator = React.cloneElement(
+        normalizedDecorator as React.ReactElement<any>,
+        {
+          size: 'mini',
+          ref: AILableRef,
+        }
+      );
+    }
+
+    const headerLabelClassNames = classNames({
+      [`${prefix}--table-header-label`]: true,
+      [`${prefix}--table-header-label--slug ${prefix}--table-header-label--ai-label`]:
+        colHasAILabel,
+      [`${prefix}--table-header-label--decorator`]: decorator,
+    });
+
+    if (!isSortable) {
+      return (
+        <th
+          {...rest}
+          id={id}
+          className={headerClassName}
+          scope={scope}
+          colSpan={colSpan}
+          ref={ref}>
+          {children ? (
+            <div className={headerLabelClassNames}>
+              {children}
+              <div className={`${prefix}--table-header-label--decorator-inner`}>
+                {normalizedDecorator}
+              </div>
+            </div>
+          ) : null}
+        </th>
+      );
+    }
+
+    const className = cx(headerClassName, {
+      [`${prefix}--table-sort`]: true,
+      [`${prefix}--table-sort--active`]:
+        isSortHeader && sortDirection !== sortStates.NONE,
+      [`${prefix}--table-sort--descending`]:
+        isSortHeader && sortDirection === sortStates.DESC,
+    });
+    const ariaSort =
+      !isSortHeader || !sortDirection ? 'none' : sortDirections[sortDirection];
+    const sortDescription =
+      t &&
+      t('carbon.table.header.icon.description', {
+        header: children,
+        sortDirection,
+        isSortHeader,
+        sortStates,
+      });
+
+    const headerClasses = cx(headerClassName, `${prefix}--table-sort__header`, {
+      [`${prefix}--table-sort__header--ai-label`]: colHasAILabel,
+      [`${prefix}--table-sort__header--decorator`]: decorator,
+    });
+
+    const handleClick = (evt) => {
+      if (
+        colHasAILabel &&
+        AILableRef.current &&
+        AILableRef.current.contains(evt.target)
+      ) {
+        return;
+      } else if (onClick) {
+        return onClick(evt);
       }
-    );
-  }
+    };
 
-  const headerLabelClassNames = classNames({
-    [`${prefix}--table-header-label`]: true,
-    [`${prefix}--table-header-label--slug ${prefix}--table-header-label--ai-label`]:
-      colHasAILabel,
-    [`${prefix}--table-header-label--decorator`]: decorator,
-  });
-
-  if (!isSortable) {
     return (
       <th
-        {...rest}
         id={id}
-        className={headerClassName}
-        scope={scope}
+        aria-sort={ariaSort}
+        className={headerClasses}
         colSpan={colSpan}
-        ref={ref}>
-        {children ? (
-          <div className={headerLabelClassNames}>
-            {children}
+        ref={ref}
+        scope={scope}>
+        <div className={`${prefix}--table-sort__description`} id={uniqueId}>
+          {sortDescription}
+        </div>
+        <button
+          type="button"
+          aria-describedby={uniqueId}
+          className={className}
+          onClick={handleClick}
+          {...rest}>
+          <span className={`${prefix}--table-sort__flex`}>
+            <div className={`${prefix}--table-header-label`}>{children}</div>
+            <Arrow size={20} className={`${prefix}--table-sort__icon`} />
+            <Arrows
+              size={20}
+              className={`${prefix}--table-sort__icon-unsorted`}
+            />
             <div className={`${prefix}--table-header-label--decorator-inner`}>
               {normalizedDecorator}
             </div>
-          </div>
-        ) : null}
+          </span>
+        </button>
       </th>
     );
   }
-
-  const className = cx(headerClassName, {
-    [`${prefix}--table-sort`]: true,
-    [`${prefix}--table-sort--active`]:
-      isSortHeader && sortDirection !== sortStates.NONE,
-    [`${prefix}--table-sort--descending`]:
-      isSortHeader && sortDirection === sortStates.DESC,
-  });
-  const ariaSort =
-    !isSortHeader || !sortDirection ? 'none' : sortDirections[sortDirection];
-  const sortDescription =
-    t &&
-    t('carbon.table.header.icon.description', {
-      header: children,
-      sortDirection,
-      isSortHeader,
-      sortStates,
-    });
-
-  const headerClasses = cx(headerClassName, `${prefix}--table-sort__header`, {
-    [`${prefix}--table-sort__header--ai-label`]: colHasAILabel,
-    [`${prefix}--table-sort__header--decorator`]: decorator,
-  });
-
-  const handleClick = (evt) => {
-    if (
-      colHasAILabel &&
-      AILableRef.current &&
-      AILableRef.current.contains(evt.target)
-    ) {
-      return;
-    } else if (onClick) {
-      return onClick(evt);
-    }
-  };
-
-  return (
-    <th
-      id={id}
-      aria-sort={ariaSort}
-      className={headerClasses}
-      colSpan={colSpan}
-      ref={ref}
-      scope={scope}>
-      <div className={`${prefix}--table-sort__description`} id={uniqueId}>
-        {sortDescription}
-      </div>
-      <button
-        type="button"
-        aria-describedby={uniqueId}
-        className={className}
-        onClick={handleClick}
-        {...rest}>
-        <span className={`${prefix}--table-sort__flex`}>
-          <div className={`${prefix}--table-header-label`}>{children}</div>
-          <Arrow size={20} className={`${prefix}--table-sort__icon`} />
-          <Arrows
-            size={20}
-            className={`${prefix}--table-sort__icon-unsorted`}
-          />
-          <div className={`${prefix}--table-header-label--decorator-inner`}>
-            {normalizedDecorator}
-          </div>
-        </span>
-      </button>
-    </th>
-  );
-});
+);
 
 TableHeader.propTypes = {
   /**

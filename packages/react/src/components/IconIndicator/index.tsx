@@ -6,7 +6,7 @@
  */
 
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { forwardRef } from 'react';
 import cx from 'classnames';
 import { usePrefix } from '../../internal/usePrefix';
 import {
@@ -78,35 +78,35 @@ export interface IconIndicatorProps {
   size?: 16 | 20;
 }
 
-export const IconIndicator = React.forwardRef(function IconIndicatorContent(
-  {
-    className: customClassName,
-    kind,
-    label,
-    size = 16,
-    ...rest
-  }: IconIndicatorProps,
-  ref: React.Ref<HTMLDivElement>
-) {
-  const prefix = usePrefix();
-  const classNames = cx(`${prefix}--icon-indicator`, customClassName, {
-    [`${prefix}--icon-indicator--20`]: size == 20,
-  });
+export const IconIndicator = forwardRef<HTMLDivElement, IconIndicatorProps>(
+  (props, ref) => {
+    const {
+      className: customClassName,
+      kind,
+      label,
+      size = 16,
+      ...rest
+    } = props;
+    const prefix = usePrefix();
+    const classNames = cx(`${prefix}--icon-indicator`, customClassName, {
+      [`${prefix}--icon-indicator--20`]: size == 20,
+    });
 
-  const IconForKind = iconTypes[kind];
-  if (!IconForKind) {
-    return null;
+    const IconForKind = iconTypes[kind];
+    if (!IconForKind) {
+      return null;
+    }
+    return (
+      <div className={classNames} ref={ref}>
+        <IconForKind
+          size={size}
+          className={`${prefix}--icon-indicator--${kind}`}
+        />
+        {label}
+      </div>
+    );
   }
-  return (
-    <div className={classNames} ref={ref}>
-      <IconForKind
-        size={size}
-        className={`${prefix}--icon-indicator--${kind}`}
-      />
-      {label}
-    </div>
-  );
-});
+);
 
 IconIndicator.propTypes = {
   /**

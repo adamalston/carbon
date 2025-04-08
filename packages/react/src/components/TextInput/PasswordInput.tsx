@@ -6,6 +6,7 @@
  */
 
 import React, {
+  forwardRef,
   InputHTMLAttributes,
   ReactNode,
   useContext,
@@ -175,8 +176,8 @@ export interface PasswordInputProps
   warnText?: ReactNode;
 }
 
-const PasswordInput = React.forwardRef(function PasswordInput(
-  {
+const PasswordInput = forwardRef<unknown, PasswordInputProps>((props, ref) => {
+  const {
     className,
     disabled = false,
     helperText,
@@ -201,9 +202,8 @@ const PasswordInput = React.forwardRef(function PasswordInput(
     warn = false,
     warnText,
     ...rest
-  }: PasswordInputProps,
-  ref
-) {
+  } = props;
+
   const [inputType, setInputType] = useState(type);
   const prefix = usePrefix();
   const normalizedProps = useNormalizedInputProps({

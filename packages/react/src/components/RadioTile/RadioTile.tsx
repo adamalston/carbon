@@ -12,7 +12,7 @@ import {
 } from '@carbon/icons-react';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { keys, matches } from '../../internal/keyboard';
 import { useFallbackId } from '../../internal/useId';
 import { usePrefix } from '../../internal/usePrefix';
@@ -105,8 +105,8 @@ export interface RadioTileProps {
   required?: boolean;
 }
 
-const RadioTile = React.forwardRef(function RadioTile(
-  {
+const RadioTile = forwardRef<HTMLInputElement, RadioTileProps>((props, ref) => {
+  const {
     children,
     className: customClassName,
     decorator,
@@ -122,9 +122,7 @@ const RadioTile = React.forwardRef(function RadioTile(
     slug,
     required,
     ...rest
-  }: RadioTileProps,
-  ref: React.Ref<HTMLInputElement>
-) {
+  } = props;
   const prefix = usePrefix();
   const inputId = useFallbackId(id);
   const className = cx(

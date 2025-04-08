@@ -10,6 +10,7 @@ import React, {
   ChangeEventHandler,
   ComponentPropsWithRef,
   ForwardedRef,
+  forwardRef,
   ReactNode,
   useContext,
   useRef,
@@ -139,8 +140,8 @@ export interface SelectProps
   warnText?: ReactNode;
 }
 
-const Select = React.forwardRef(function Select(
-  {
+const Select = forwardRef<HTMLSelectElement, SelectProps>((props, ref) => {
+  const {
     className,
     decorator,
     id,
@@ -163,9 +164,7 @@ const Select = React.forwardRef(function Select(
     onChange,
     slug,
     ...other
-  }: SelectProps,
-  ref: ForwardedRef<HTMLSelectElement>
-) {
+  } = props;
   const prefix = usePrefix();
   const { isFluid } = useContext(FormContext);
   const [isFocused, setIsFocused] = useState(false);

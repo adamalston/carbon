@@ -7,6 +7,7 @@
 
 import PropTypes, { type Validator } from 'prop-types';
 import React, {
+  forwardRef,
   useEffect,
   useRef,
   useState,
@@ -231,8 +232,8 @@ export interface ModalProps extends ReactAttr<HTMLDivElement> {
   slug?: ReactNode;
 }
 
-const Modal = React.forwardRef(function Modal(
-  {
+const Modal = forwardRef<HTMLDivElement, ModalProps>((props, ref) => {
+  const {
     'aria-label': ariaLabelProp,
     children,
     className,
@@ -266,9 +267,7 @@ const Modal = React.forwardRef(function Modal(
     onLoadingSuccess = noopFn,
     slug,
     ...rest
-  }: ModalProps,
-  ref: React.LegacyRef<HTMLDivElement>
-) {
+  } = props;
   const prefix = usePrefix();
   const button = useRef<HTMLButtonElement>(null);
   const secondaryButton = useRef<HTMLButtonElement>(null);

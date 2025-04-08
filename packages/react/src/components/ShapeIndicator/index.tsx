@@ -6,7 +6,7 @@
  */
 
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { forwardRef } from 'react';
 import cx from 'classnames';
 import { usePrefix } from '../../internal/usePrefix';
 import {
@@ -95,35 +95,35 @@ export interface ShapeIndicatorProps {
   textSize?: 12 | 14;
 }
 
-export const ShapeIndicator = React.forwardRef(function ShapeIndicatorContent(
-  {
-    className: customClassName,
-    kind,
-    label,
-    textSize = 12,
-    ...rest
-  }: ShapeIndicatorProps,
-  ref: React.Ref<HTMLDivElement>
-) {
-  const prefix = usePrefix();
-  const classNames = cx(`${prefix}--shape-indicator`, customClassName, {
-    [`${prefix}--shape-indicator--14`]: textSize == 14,
-  });
+export const ShapeIndicator = forwardRef<HTMLDivElement, ShapeIndicatorProps>(
+  (props, ref) => {
+    const {
+      className: customClassName,
+      kind,
+      label,
+      textSize = 12,
+      ...rest
+    } = props;
+    const prefix = usePrefix();
+    const classNames = cx(`${prefix}--shape-indicator`, customClassName, {
+      [`${prefix}--shape-indicator--14`]: textSize == 14,
+    });
 
-  const ShapeForKind = shapeTypes[kind];
-  if (!ShapeForKind) {
-    return null;
+    const ShapeForKind = shapeTypes[kind];
+    if (!ShapeForKind) {
+      return null;
+    }
+    return (
+      <div className={classNames} ref={ref}>
+        <ShapeForKind
+          size={16}
+          className={`${prefix}--shape-indicator--${kind}`}
+        />
+        {label}
+      </div>
+    );
   }
-  return (
-    <div className={classNames} ref={ref}>
-      <ShapeForKind
-        size={16}
-        className={`${prefix}--shape-indicator--${kind}`}
-      />
-      {label}
-    </div>
-  );
-});
+);
 
 ShapeIndicator.propTypes = {
   /**

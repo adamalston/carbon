@@ -6,7 +6,7 @@
  */
 
 import PropTypes from 'prop-types';
-import React, { ForwardedRef, ReactNode } from 'react';
+import React, { forwardRef, type ReactNode } from 'react';
 import { ButtonSize } from '../Button';
 import classNames from 'classnames';
 import { Tooltip } from '../Tooltip';
@@ -176,8 +176,8 @@ export interface IconButtonProps
   wrapperClasses?: string;
 }
 
-const IconButton = React.forwardRef(function IconButton(
-  {
+const IconButton = forwardRef<unknown, IconButtonProps>((props, ref) => {
+  const {
     align,
     autoAlign = false,
     badgeCount,
@@ -196,9 +196,7 @@ const IconButton = React.forwardRef(function IconButton(
     size,
     isSelected,
     ...rest
-  }: IconButtonProps,
-  ref: ForwardedRef<unknown> // TODO: this is unknown on Button, so should it be here as well?
-) {
+  } = props;
   const prefix = usePrefix();
 
   const tooltipClasses = classNames(wrapperClasses, `${prefix}--icon-tooltip`, {

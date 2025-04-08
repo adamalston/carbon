@@ -6,14 +6,14 @@
  */
 
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 import classNames from 'classnames';
 import { IconButton } from '../IconButton';
 import { usePrefix } from '../../internal/usePrefix';
 
 const noopFn = () => {};
 
-const IconSwitch = React.forwardRef(function Switch(props, tabRef) {
+const IconSwitch = forwardRef((props, tabRef) => {
   const {
     align,
     children,

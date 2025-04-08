@@ -6,7 +6,7 @@
  */
 
 import PropTypes from 'prop-types';
-import React, { type ElementType } from 'react';
+import React, { forwardRef, type ElementType } from 'react';
 import type { PolymorphicProps } from '../../types/common';
 
 type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
@@ -68,13 +68,12 @@ Section.propTypes = {
 
 type HeadingProps = JSX.IntrinsicElements[`h${HeadingLevel}`];
 
-export const Heading = React.forwardRef(function Heading(
-  props: HeadingProps,
-  ref: React.Ref<HTMLHeadingElement>
-) {
-  const HeadingIntrinsic = `h${React.useContext(HeadingContext)}` as const;
-  return <HeadingIntrinsic ref={ref} {...props} />;
-});
+export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
+  (props, ref) => {
+    const HeadingIntrinsic = `h${React.useContext(HeadingContext)}` as const;
+    return <HeadingIntrinsic ref={ref} {...props} />;
+  }
+);
 
 Heading.propTypes = {
   /**

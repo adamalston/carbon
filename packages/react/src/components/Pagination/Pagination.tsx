@@ -8,7 +8,7 @@
 import { CaretRight, CaretLeft } from '@carbon/icons-react';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import React, { useState, useRef } from 'react';
+import React, { forwardRef, useRef, useState } from 'react';
 import Select from '../Select';
 import SelectItem from '../SelectItem';
 import { useFallbackId } from '../../internal/useId';
@@ -165,8 +165,8 @@ function getPageSize(pageSizes, pageSize) {
   return pageSizes[0].value;
 }
 
-const Pagination = React.forwardRef(function Pagination(
-  {
+const Pagination = forwardRef<HTMLDivElement, PaginationProps>((props, ref) => {
+  const {
     backwardText = 'Previous page',
     className: customClassName = '',
     disabled = false,
@@ -190,9 +190,7 @@ const Pagination = React.forwardRef(function Pagination(
     size = 'md',
     totalItems,
     ...rest
-  }: PaginationProps,
-  ref: React.Ref<HTMLDivElement>
-) {
+  } = props;
   const prefix = usePrefix();
   const inputId = useFallbackId(id?.toString());
   const backBtnRef = useRef<HTMLButtonElement>(null);

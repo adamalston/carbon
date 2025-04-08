@@ -8,7 +8,7 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import deprecateValuesWithin from '../../prop-types/deprecateValuesWithin';
-import React from 'react';
+import React, { forwardRef } from 'react';
 
 import { usePrefix } from '../../internal/usePrefix';
 import {
@@ -25,28 +25,29 @@ import deprecate from '../../prop-types/deprecate';
 
 export type AILabelContentProps = React.HTMLAttributes<HTMLSpanElement>;
 
-export const AILabelContent = React.forwardRef(function AILabelContent(
-  { className, children, ...rest }: AILabelContentProps,
-  ref
-) {
-  const prefix = usePrefix();
+// TODO: Why is this component a `forwardRef`? The `ref` is not used anywhere.
+export const AILabelContent = forwardRef<unknown, AILabelContentProps>(
+  (props) => {
+    const { className, children, ...rest } = props;
+    const prefix = usePrefix();
 
-  const hasAILabelActions = React.Children.toArray(children).some((child) => {
-    const item = child as any;
-    item.type?.displayName === 'AILabelActions';
-  });
+    const hasAILabelActions = React.Children.toArray(children).some((child) => {
+      const item = child as any;
+      item.type?.displayName === 'AILabelActions';
+    });
 
-  const aiLabelContentClasses = cx(className, {
-    [`${prefix}--ai-label-content`]: true,
-    [`${prefix}--ai-label-content--with-actions`]: hasAILabelActions,
-  });
+    const aiLabelContentClasses = cx(className, {
+      [`${prefix}--ai-label-content`]: true,
+      [`${prefix}--ai-label-content--with-actions`]: hasAILabelActions,
+    });
 
-  return (
-    <ToggletipContent className={aiLabelContentClasses}>
-      {children}
-    </ToggletipContent>
-  );
-});
+    return (
+      <ToggletipContent className={aiLabelContentClasses}>
+        {children}
+      </ToggletipContent>
+    );
+  }
+);
 
 AILabelContent.displayName = 'AILabelContent';
 AILabelContent.propTypes = {
@@ -63,22 +64,23 @@ AILabelContent.propTypes = {
 
 export type AILabelActionsProps = React.HTMLAttributes<HTMLSpanElement>;
 
-export const AILabelActions = React.forwardRef(function AILabelActions(
-  { className, children, ...rest }: AILabelActionsProps,
-  ref
-) {
-  const prefix = usePrefix();
+// TODO: Why is this component a `forwardRef`? The `ref` is not used anywhere.
+export const AILabelActions = forwardRef<unknown, AILabelActionsProps>(
+  (props) => {
+    const { className, children, ...rest } = props;
+    const prefix = usePrefix();
 
-  const aiLabelActionsClasses = cx(className, {
-    [`${prefix}--ai-label-actions`]: true,
-  });
+    const aiLabelActionsClasses = cx(className, {
+      [`${prefix}--ai-label-actions`]: true,
+    });
 
-  return (
-    <ToggletipActions className={aiLabelActionsClasses}>
-      {children}
-    </ToggletipActions>
-  );
-});
+    return (
+      <ToggletipActions className={aiLabelActionsClasses}>
+        {children}
+      </ToggletipActions>
+    );
+  }
+);
 
 AILabelActions.displayName = 'AILabelActions';
 AILabelActions.propTypes = {

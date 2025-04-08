@@ -7,14 +7,14 @@
 
 import PropTypes from 'prop-types';
 import React, {
+  forwardRef,
+  useCallback,
   useContext,
   useEffect,
-  useRef,
   useImperativeHandle,
-  useCallback,
+  useRef,
   useState,
-  ForwardedRef,
-  ReactNode,
+  type ReactNode,
 } from 'react';
 import cx from 'classnames';
 import flatpickr from 'flatpickr';
@@ -401,8 +401,8 @@ export interface DatePickerProps {
   warnText?: ReactNode;
 }
 
-const DatePicker = React.forwardRef(function DatePicker(
-  {
+const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>((props, ref) => {
+  const {
     allowInput,
     appendTo,
     children,
@@ -429,9 +429,7 @@ const DatePicker = React.forwardRef(function DatePicker(
     value,
     parseDate: parseDateProp,
     ...rest
-  }: DatePickerProps,
-  ref: ForwardedRef<HTMLDivElement>
-) {
+  } = props;
   const prefix = usePrefix();
   const { isFluid } = useContext(FormContext);
   const [hasInput, setHasInput] = useState(false);

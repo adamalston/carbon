@@ -5,13 +5,20 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React, { ReactSVGElement, useRef } from 'react';
+import React, {
+  forwardRef,
+  ReactSVGElement,
+  useRef,
+  type ForwardRefExoticComponent,
+  type RefAttributes,
+} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { CheckmarkFilled, ErrorFilled } from '@carbon/icons-react';
 import { useId } from '../../internal/useId';
 import { usePrefix } from '../../internal/usePrefix';
 import useIsomorphicEffect from '../../internal/useIsomorphicEffect';
+import type { JSX } from 'react/jsx-runtime';
 
 export interface ProgressBarProps {
   /**
@@ -113,24 +120,22 @@ function ProgressBar({
     [`${prefix}--visually-hidden`]: hideLabel,
   });
 
-  let StatusIcon: React.ForwardRefExoticComponent<
-    React.RefAttributes<ReactSVGElement> & { className?: string }
+  let StatusIcon: ForwardRefExoticComponent<
+    { className?: string } & RefAttributes<ReactSVGElement>
   > | null = null;
 
   if (isError) {
-    StatusIcon = React.forwardRef(function ErrorFilled16(
-      props,
-      ref: React.Ref<ReactSVGElement>
-    ) {
-      return <ErrorFilled ref={ref} size={16} {...props} />;
-    });
+    StatusIcon = forwardRef<ReactSVGElement, { className?: string }>(
+      ({ className }, ref) => {
+        return <ErrorFilled ref={ref} size={16} className={className} />;
+      }
+    );
   } else if (isFinished) {
-    StatusIcon = React.forwardRef(function CheckmarkFilled16(
-      props,
-      ref: React.Ref<ReactSVGElement>
-    ) {
-      return <CheckmarkFilled ref={ref} size={16} {...props} />;
-    });
+    StatusIcon = forwardRef<ReactSVGElement, { className?: string }>(
+      ({ className }, ref) => {
+        return <CheckmarkFilled ref={ref} size={16} className={className} />;
+      }
+    );
   }
 
   const ref = useRef<HTMLDivElement>(null);

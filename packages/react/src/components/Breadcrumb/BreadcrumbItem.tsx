@@ -6,7 +6,7 @@
  */
 
 import PropTypes from 'prop-types';
-import React, { AriaAttributes, PropsWithChildren } from 'react';
+import React, { forwardRef, type AriaAttributes } from 'react';
 import cx from 'classnames';
 import Link from '../Link';
 import { OverflowMenuHorizontal } from '@carbon/icons-react';
@@ -34,8 +34,8 @@ export interface BreadcrumbItemProps
   isCurrentPage?: boolean;
 }
 
-const BreadcrumbItem: ForwardRefReturn<HTMLLIElement, BreadcrumbItemProps> =
-  React.forwardRef(function BreadcrumbItem(
+const BreadcrumbItem = forwardRef<HTMLLIElement, BreadcrumbItemProps>(
+  (
     {
       'aria-current': ariaCurrent,
       children,
@@ -43,9 +43,9 @@ const BreadcrumbItem: ForwardRefReturn<HTMLLIElement, BreadcrumbItemProps> =
       href,
       isCurrentPage,
       ...rest
-    }: PropsWithChildren<BreadcrumbItemProps>,
-    ref: React.Ref<HTMLLIElement>
-  ) {
+    },
+    ref
+  ) => {
     const prefix = usePrefix();
     const className = cx({
       [`${prefix}--breadcrumb-item`]: true,
@@ -102,7 +102,8 @@ const BreadcrumbItem: ForwardRefReturn<HTMLLIElement, BreadcrumbItemProps> =
         })}
       </li>
     );
-  });
+  }
+);
 
 BreadcrumbItem.displayName = 'BreadcrumbItem';
 

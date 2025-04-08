@@ -8,20 +8,21 @@
 export * as PropTypes from './ListBoxPropTypes';
 export * from './ListBoxPropTypes';
 
-import ListBoxInternal, {
-  ListBoxComponent as ListBoxPartialComponent,
-} from './ListBox';
+import ListBoxInternal from './ListBox';
 import ListBoxField, { ListBoxFieldComponent } from './ListBoxField';
-import ListBoxMenu, { ListBoxMenuComponent } from './ListBoxMenu';
+import ListBoxMenu from './ListBoxMenu';
 import ListBoxMenuIcon, { ListBoxMenuIconComponent } from './ListBoxMenuIcon';
 import ListBoxMenuItem, { ListBoxMenuItemComponent } from './ListBoxMenuItem';
 import ListBoxSelection, {
   ListBoxSelectionComponent,
 } from './ListBoxSelection';
 
-export interface ListBoxComponent extends ListBoxPartialComponent {
+type ListBoxType = typeof ListBoxInternal;
+type ListBoxMenuType = typeof ListBoxMenu;
+
+export interface ListBoxComponent extends ListBoxType {
   readonly Field: ListBoxFieldComponent;
-  readonly Menu: ListBoxMenuComponent;
+  readonly Menu: ListBoxMenuType;
   readonly MenuIcon: ListBoxMenuIconComponent;
   readonly MenuItem: ListBoxMenuItemComponent;
   readonly Selection: ListBoxSelectionComponent;

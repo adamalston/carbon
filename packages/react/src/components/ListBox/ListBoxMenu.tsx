@@ -23,32 +23,27 @@ export interface ListBoxMenuProps
   id: string;
 }
 
-export type ListBoxMenuComponent = ForwardRefReturn<
-  HTMLUListElement,
-  ListBoxMenuProps
->;
-
 /**
  * `ListBoxMenu` is a simple container node that isolates the `list-box__menu`
  * class into a single component. It is also being used to validate given
  * `children` components.
  */
-const ListBoxMenu: ListBoxMenuComponent = React.forwardRef(function ListBoxMenu(
-  { children, id, ...rest }: ListBoxMenuProps,
-  ref: ForwardedRef<HTMLUListElement>
-) {
-  const prefix = usePrefix();
-  return (
-    <ul
-      ref={ref}
-      id={id}
-      className={`${prefix}--list-box__menu`}
-      role="listbox"
-      {...rest}>
-      {children}
-    </ul>
-  );
-});
+const ListBoxMenu = React.forwardRef<HTMLUListElement, ListBoxMenuProps>(
+  (props, ref) => {
+    const { children, id, ...rest } = props;
+    const prefix = usePrefix();
+    return (
+      <ul
+        ref={ref}
+        id={id}
+        className={`${prefix}--list-box__menu`}
+        role="listbox"
+        {...rest}>
+        {children}
+      </ul>
+    );
+  }
+);
 
 ListBoxMenu.displayName = 'ListBoxMenu';
 ListBoxMenu.propTypes = {

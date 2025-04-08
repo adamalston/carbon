@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React from 'react';
+import React, { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { usePrefix } from '../../internal/usePrefix';
@@ -19,11 +19,8 @@ export interface ButtonSetProps extends React.HTMLAttributes<HTMLDivElement> {
   stacked?: boolean;
 }
 
-const ButtonSet: ForwardRefReturn<HTMLDivElement, ButtonSetProps> =
-  React.forwardRef(function ButtonSet(
-    { children, className, stacked, ...rest }: ButtonSetProps,
-    ref: React.Ref<HTMLDivElement>
-  ) {
+const ButtonSet = forwardRef<HTMLDivElement, ButtonSetProps>(
+  ({ children, className, stacked, ...rest }, ref) => {
     const prefix = usePrefix();
     const buttonSetClasses = classNames(className, `${prefix}--btn-set`, {
       [`${prefix}--btn-set--stacked`]: stacked,
@@ -33,7 +30,8 @@ const ButtonSet: ForwardRefReturn<HTMLDivElement, ButtonSetProps> =
         {children}
       </div>
     );
-  });
+  }
+);
 
 ButtonSet.displayName = 'ButtonSet';
 ButtonSet.propTypes = {

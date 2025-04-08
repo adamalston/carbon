@@ -6,7 +6,12 @@
  */
 
 import cx from 'classnames';
-import React, { type KeyboardEvent, type MouseEvent, useContext } from 'react';
+import React, {
+  forwardRef,
+  useContext,
+  type KeyboardEvent,
+  type MouseEvent,
+} from 'react';
 import PropTypes from 'prop-types';
 import deprecate from '../../prop-types/deprecate';
 import { ListBoxType, ListBoxSize } from './ListBoxPropTypes';
@@ -90,14 +95,14 @@ export interface ListBoxProps
   warnTextId?: string;
 }
 
-export type ListBoxComponent = ForwardRefReturn<HTMLDivElement, ListBoxProps>;
+// export type ListBoxComponent = ForwardRefReturn<HTMLDivElement, ListBoxProps>;
 
 /**
  * `ListBox` is a generic container component that handles creating the
  * container class name in response to certain props.
  */
-const ListBox: ListBoxComponent = React.forwardRef(function ListBox(
-  {
+const ListBox = forwardRef<HTMLDivElement, ListBoxProps>((props, ref) => {
+  const {
     children,
     className: containerClassName,
     disabled = false,
@@ -112,9 +117,7 @@ const ListBox: ListBoxComponent = React.forwardRef(function ListBox(
     light,
     isOpen,
     ...rest
-  }: ListBoxProps,
-  ref: React.LegacyRef<HTMLDivElement>
-) {
+  } = props;
   const prefix = usePrefix();
   const { isFluid } = useContext(FormContext);
   const showWarning = !invalid && warn;

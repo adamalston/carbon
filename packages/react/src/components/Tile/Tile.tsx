@@ -6,6 +6,7 @@
  */
 
 import React, {
+  forwardRef,
   useEffect,
   useRef,
   useState,
@@ -205,100 +206,98 @@ export interface ClickableTileProps extends HTMLAttributes<HTMLAnchorElement> {
   slug?: boolean;
 }
 
-export const ClickableTile = React.forwardRef<
-  HTMLAnchorElement,
-  ClickableTileProps
->(function ClickableTile(
-  {
-    children,
-    className,
-    clicked = false,
-    decorator,
-    disabled,
-    href,
-    light,
-    onClick = () => {},
-    onKeyDown = () => {},
-    renderIcon: Icon,
-    hasRoundedCorners,
-    slug,
-    ...rest
-  },
-  ref
-) {
-  const prefix = usePrefix();
-  const classes = cx(
-    `${prefix}--tile`,
-    `${prefix}--tile--clickable`,
-    {
-      [`${prefix}--tile--is-clicked`]: clicked,
-      [`${prefix}--tile--light`]: light,
-      [`${prefix}--tile--slug`]: slug,
-      [`${prefix}--tile--slug-rounded`]: slug && hasRoundedCorners,
-      [`${prefix}--tile--decorator`]: decorator,
-      [`${prefix}--tile--decorator-rounded`]: decorator && hasRoundedCorners,
-    },
-    className
-  );
+export const ClickableTile = forwardRef<HTMLAnchorElement, ClickableTileProps>(
+  (props, ref) => {
+    const {
+      children,
+      className,
+      clicked = false,
+      decorator,
+      disabled,
+      href,
+      light,
+      onClick = () => {},
+      onKeyDown = () => {},
+      renderIcon,
+      hasRoundedCorners,
+      slug,
+      ...rest
+    } = props;
+    const prefix = usePrefix();
+    const classes = cx(
+      `${prefix}--tile`,
+      `${prefix}--tile--clickable`,
+      {
+        [`${prefix}--tile--is-clicked`]: clicked,
+        [`${prefix}--tile--light`]: light,
+        [`${prefix}--tile--slug`]: slug,
+        [`${prefix}--tile--slug-rounded`]: slug && hasRoundedCorners,
+        [`${prefix}--tile--decorator`]: decorator,
+        [`${prefix}--tile--decorator-rounded`]: decorator && hasRoundedCorners,
+      },
+      className
+    );
 
-  const [isSelected, setIsSelected] = useState(clicked);
+    const [isSelected, setIsSelected] = useState(clicked);
 
-  function handleOnClick(evt: MouseEvent) {
-    evt?.persist?.();
-    setIsSelected(!isSelected);
-    onClick(evt);
-  }
-
-  function handleOnKeyDown(evt: KeyboardEvent) {
-    evt?.persist?.();
-    if (matches(evt, [keys.Enter, keys.Space])) {
+    function handleOnClick(evt: MouseEvent) {
+      evt?.persist?.();
       setIsSelected(!isSelected);
+      onClick(evt);
     }
-    onKeyDown(evt);
+
+    function handleOnKeyDown(evt: KeyboardEvent) {
+      evt?.persist?.();
+      if (matches(evt, [keys.Enter, keys.Space])) {
+        setIsSelected(!isSelected);
+      }
+      onKeyDown(evt);
+    }
+
+    let Icon = props.renderIcon;
+    const v12DefaultIcons = useFeatureFlag('enable-v12-tile-default-icons');
+    if (v12DefaultIcons) {
+      if (!Icon) {
+        Icon = ArrowRight;
+      }
+
+      if (disabled) {
+        Icon = Error;
+      }
+    }
+
+    const iconClasses = cx({
+      [`${prefix}--tile--icon`]:
+        !v12DefaultIcons || (v12DefaultIcons && !disabled),
+      [`${prefix}--tile--disabled-icon`]: v12DefaultIcons && disabled,
+    });
+
+    return (
+      <Link
+        className={classes}
+        href={href}
+        tabIndex={!href && !disabled ? 0 : undefined}
+        onClick={!disabled ? handleOnClick : undefined}
+        onKeyDown={handleOnKeyDown}
+        ref={ref}
+        disabled={disabled}
+        {...rest}>
+        {slug || decorator ? (
+          <div className={`${prefix}--tile-content`}>{children}</div>
+        ) : (
+          children
+        )}
+        {(slug === true || decorator === true) && (
+          <AiLabel size="24" className={`${prefix}--tile--ai-label-icon`} />
+        )}
+        {React.isValidElement(decorator) && (
+          <div className={`${prefix}--tile--inner-decorator`}>{decorator}</div>
+        )}
+        {Icon && <Icon className={iconClasses} aria-hidden="true" />}
+      </Link>
+    );
   }
-
-  const v12DefaultIcons = useFeatureFlag('enable-v12-tile-default-icons');
-  if (v12DefaultIcons) {
-    if (!Icon) {
-      Icon = ArrowRight;
-    }
-
-    if (disabled) {
-      Icon = Error;
-    }
-  }
-
-  const iconClasses = cx({
-    [`${prefix}--tile--icon`]:
-      !v12DefaultIcons || (v12DefaultIcons && !disabled),
-    [`${prefix}--tile--disabled-icon`]: v12DefaultIcons && disabled,
-  });
-
-  return (
-    <Link
-      className={classes}
-      href={href}
-      tabIndex={!href && !disabled ? 0 : undefined}
-      onClick={!disabled ? handleOnClick : undefined}
-      onKeyDown={handleOnKeyDown}
-      ref={ref}
-      disabled={disabled}
-      {...rest}>
-      {slug || decorator ? (
-        <div className={`${prefix}--tile-content`}>{children}</div>
-      ) : (
-        children
-      )}
-      {(slug === true || decorator === true) && (
-        <AiLabel size="24" className={`${prefix}--tile--ai-label-icon`} />
-      )}
-      {React.isValidElement(decorator) && (
-        <div className={`${prefix}--tile--inner-decorator`}>{decorator}</div>
-      )}
-      {Icon && <Icon className={iconClasses} aria-hidden="true" />}
-    </Link>
-  );
-});
+);
 
 ClickableTile.displayName = 'ClickableTile';
 ClickableTile.propTypes = {

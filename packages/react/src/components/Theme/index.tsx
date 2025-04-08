@@ -7,7 +7,12 @@
 
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import React, { ElementType, useMemo, type PropsWithChildren } from 'react';
+import React, {
+  ElementType,
+  forwardRef,
+  useMemo,
+  type PropsWithChildren,
+} from 'react';
 import { usePrefix } from '../../internal/usePrefix';
 import { PolymorphicProps } from '../../types/common';
 import { LayerContext } from '../Layer/LayerContext';
@@ -22,27 +27,26 @@ export const ThemeContext = React.createContext<GlobalThemeProps>({
   theme: 'white',
 });
 
-export const GlobalTheme = React.forwardRef(function GlobalTheme(
-  { children, theme }: PropsWithChildren<GlobalThemeProps>,
-  ref: React.Ref<unknown>
-) {
-  const value = useMemo(() => {
-    return {
-      theme,
-    };
-  }, [theme]);
+export const GlobalTheme = forwardRef<unknown, GlobalThemeProps>(
+  ({ children, theme }, ref) => {
+    const value = useMemo(() => {
+      return {
+        theme,
+      };
+    }, [theme]);
 
-  const childrenWithProps = React.cloneElement(
-    children as React.ReactElement<any>,
-    { ref: ref }
-  );
+    const childrenWithProps = React.cloneElement(
+      children as React.ReactElement<any>,
+      { ref: ref }
+    );
 
-  return (
-    <ThemeContext.Provider value={value}>
-      {childrenWithProps}
-    </ThemeContext.Provider>
-  );
-});
+    return (
+      <ThemeContext.Provider value={value}>
+        {childrenWithProps}
+      </ThemeContext.Provider>
+    );
+  }
+);
 
 GlobalTheme.propTypes = {
   /**

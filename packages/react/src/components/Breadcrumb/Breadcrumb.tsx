@@ -6,10 +6,9 @@
  */
 
 import PropTypes from 'prop-types';
-import React, { PropsWithChildren } from 'react';
+import React, { forwardRef } from 'react';
 import cx from 'classnames';
 import { usePrefix } from '../../internal/usePrefix';
-import { ForwardRefReturn } from '../../types/common';
 
 export interface BreadcrumbProps extends React.HTMLAttributes<HTMLElement> {
   /**
@@ -34,8 +33,8 @@ export interface BreadcrumbProps extends React.HTMLAttributes<HTMLElement> {
   size?: 'sm' | 'md';
 }
 
-const Breadcrumb: ForwardRefReturn<HTMLElement, BreadcrumbProps> =
-  React.forwardRef(function Breadcrumb(
+const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
+  (
     {
       'aria-label': ariaLabel,
       children,
@@ -43,9 +42,9 @@ const Breadcrumb: ForwardRefReturn<HTMLElement, BreadcrumbProps> =
       noTrailingSlash,
       size,
       ...rest
-    }: PropsWithChildren<BreadcrumbProps>,
-    ref: React.Ref<HTMLElement>
-  ) {
+    },
+    ref
+  ) => {
     const prefix = usePrefix();
     const className = cx({
       [`${prefix}--breadcrumb`]: true,
@@ -62,7 +61,8 @@ const Breadcrumb: ForwardRefReturn<HTMLElement, BreadcrumbProps> =
         <ol className={className}>{children}</ol>
       </nav>
     );
-  });
+  }
+);
 
 Breadcrumb.displayName = 'Breadcrumb';
 Breadcrumb.propTypes = {

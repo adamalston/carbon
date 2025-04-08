@@ -5,19 +5,18 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React from 'react';
+import React, { forwardRef } from 'react';
 import DatePickerInput, { DatePickerInputProps } from '../DatePickerInput';
 import { FormContext } from '../FluidForm/FormContext';
 
-const FluidDatePickerInput = React.forwardRef(function FluidDatePickerInput(
-  { ...other }: DatePickerInputProps,
-  ref: React.Ref<HTMLDivElement>
-) {
-  return (
-    <FormContext.Provider value={{ isFluid: true }}>
-      <DatePickerInput ref={ref} {...other} />
-    </FormContext.Provider>
-  );
-});
+const FluidDatePickerInput = forwardRef<HTMLDivElement, DatePickerInputProps>(
+  (props, ref) => {
+    return (
+      <FormContext.Provider value={{ isFluid: true }}>
+        <DatePickerInput ref={ref} {...props} />
+      </FormContext.Provider>
+    );
+  }
+);
 
 export default FluidDatePickerInput;
