@@ -191,3 +191,28 @@ export const WithMenuAlignment = () => {
     </>
   );
 };
+
+export const Test = () => {
+  const targetRef = React.useRef(null);
+  return (
+    <>
+      <MenuButton
+        defaultopen
+        label="with MenuTarget"
+        menuTarget={targetRef.current}>
+        <MenuItem label="First action with a long label description" />
+        <MenuItem label="Second action" />
+        <MenuItem label="Third action" disabled />
+      </MenuButton>
+      <MenuButton defaultopen label="without">
+        <MenuItem label="First action with a long label description" />
+        <MenuItem label="Second action" />
+        <MenuItem label="Third action" disabled />
+      </MenuButton>
+
+      <div ref={targetRef} style={{ border: 'solid 5px #333', width: 300 }}>
+        Target block where menu items will render
+      </div>
+    </>
+  );
+};

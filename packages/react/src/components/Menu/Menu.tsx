@@ -386,7 +386,7 @@ const Menu = forwardRef<HTMLUListElement, MenuProps>(function Menu(
 
   useEffect(() => {
     if (open && focusableItems.length > 0) {
-      focusItem();
+      setTimeout(focusItem, 0);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, focusableItems]);
