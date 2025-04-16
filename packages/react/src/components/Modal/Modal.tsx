@@ -276,6 +276,7 @@ const Modal = React.forwardRef(function Modal(
   const innerModal = useRef<HTMLDivElement>(null);
   const startTrap = useRef<HTMLSpanElement>(null);
   const endTrap = useRef<HTMLSpanElement>(null);
+  const wasOpen = useRef(false);
   const [isScrollable, setIsScrollable] = useState(false);
   const modalInstanceId = `modal-${useId()}`;
   const modalLabelId = `${prefix}--modal-header__label--${modalInstanceId}`;
@@ -424,12 +425,18 @@ const Modal = React.forwardRef(function Modal(
   }, [open, prefix, enableDialogElement]);
 
   useEffect(() => {
-    if (!enableDialogElement && !open && launcherButtonRef) {
+    if (open) {
+      wasOpen.current = true;
+    }
+
+    if (!open && wasOpen.current && !enableDialogElement && launcherButtonRef) {
       setTimeout(() => {
         if ('current' in launcherButtonRef) {
           launcherButtonRef.current?.focus();
         }
       });
+
+      wasOpen.current = false;
     }
   }, [open, launcherButtonRef, enableDialogElement]);
 
