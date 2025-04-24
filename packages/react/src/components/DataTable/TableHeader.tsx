@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2016, 2023
+ * Copyright IBM Corp. 2016, 2025
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -13,11 +13,10 @@ import {
   ArrowsVertical as Arrows,
 } from '@carbon/icons-react';
 import classNames from 'classnames';
-import { sortStates } from './state/sorting';
 import { useId } from '../../internal/useId';
 import { usePrefix } from '../../internal/usePrefix';
 import { TranslateWithId, ReactAttr } from '../../types/common';
-import { DataTableSortState } from './state/sortStates';
+import { DataTableSortState, sortStates } from './state/sortStates';
 
 const defaultScope = 'col';
 

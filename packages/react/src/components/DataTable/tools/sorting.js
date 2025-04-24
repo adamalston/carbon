@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2016, 2023
+ * Copyright IBM Corp. 2016, 2025
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -85,7 +85,7 @@ export const compareStrings = (a, b, locale = 'en') => {
  * function
  * @param {string} config.sortDirection the sort direction used to determine the
  * order the comparison is called in
- * @param {Function} config.sortRow
+ * @param {Function | undefined} config.sortRow
  * @returns {Array[string]} array of sorted rowIds
  */
 export const sortRows = ({
