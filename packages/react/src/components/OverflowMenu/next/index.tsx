@@ -60,6 +60,10 @@ interface OverflowMenuProps {
    */
   size?: 'sm' | 'md' | 'lg';
 
+  // TODO: The types for this prop do not match the prop-types. Which needs to
+  // be updated? I seems odd that the prop-types for the `OverflowMenu` for
+  // Carbon v12 already include deprecated values. Maybe I'm misunderstanding or
+  // missing something.
   /**
    * Specify how the trigger tooltip should be aligned.
    */
