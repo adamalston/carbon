@@ -125,7 +125,7 @@ To ensure the table cells are styled appropriately, you'll need to use the new
 `getCellProps` prop getter, like so:
 
 ```jsx
-<TableCell {...getCellProps({ cell })} key={cell.id}>
+<TableCell {...getCellProps({ cell })}>
   {cell.value}
 </TableCell>
 ```

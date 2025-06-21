@@ -23,7 +23,7 @@ import DataTable, {
   TableExpandedRow,
 } from '..';
 import { rows, headers } from './shared';
-import mdx from '../../AILabel/AILabelDatatable.mdx';
+import mdx from '../../AILabel/AILabelDataTable.mdx';
 import Button from '../../Button';
 import { IconButton } from '../../IconButton';
 import { View, FolderOpen, Folders } from '@carbon/icons-react';
@@ -460,7 +460,7 @@ export const ColumnAILabelWithSelectionAndExpansion = (args) => (
                     <TableSelectRow {...getSelectionProps({ row })} />
                     {row.cells.map((cell) => {
                       return (
-                        <TableCell {...getCellProps({ cell })} key={cell.id}>
+                        <TableCell {...getCellProps({ cell })}>
                           {cell.value}
                         </TableCell>
                       );
@@ -515,7 +515,7 @@ export const ColumnAILabelSort = (args) => (
             {rows.map((row) => (
               <TableRow key={row.id} {...getRowProps({ row })}>
                 {row.cells.map((cell) => (
-                  <TableCell {...getCellProps({ cell })} key={cell.id}>
+                  <TableCell {...getCellProps({ cell })}>
                     {cell.value}
                   </TableCell>
                 ))}
@@ -561,7 +561,7 @@ export const FullTableAI = (args) => (
             {rows.map((row) => (
               <TableRow key={row.id} {...getRowProps({ row })}>
                 {row.cells.map((cell) => (
-                  <TableCell {...getCellProps({ cell })} key={cell.id}>
+                  <TableCell {...getCellProps({ cell })}>
                     {cell.value}
                   </TableCell>
                 ))}
