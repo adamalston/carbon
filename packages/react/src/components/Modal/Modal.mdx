@@ -1,4 +1,10 @@
-import { Story, ArgTypes, Canvas, Unstyled, Meta } from '@storybook/addon-docs/blocks';
+import {
+  Story,
+  ArgTypes,
+  Canvas,
+  Unstyled,
+  Meta,
+} from '@storybook/addon-docs/blocks';
 import Modal from '../Modal';
 import { InlineNotification } from '../Notification';
 import CodeSnippet from '../CodeSnippet';
@@ -116,9 +122,13 @@ const ModalStateManager = ({
     kind="warning"
     title="Warning"
     className="sb-notification">
-    <CodeSnippet type="inline" hideCopyButton>Modal</CodeSnippet>
+    <CodeSnippet type="inline" hideCopyButton>
+      Modal
+    </CodeSnippet>
     and
-    <CodeSnippet type="inline" hideCopyButton>ComposedModal</CodeSnippet>
+    <CodeSnippet type="inline" hideCopyButton>
+      ComposedModal
+    </CodeSnippet>
     have to be put at the top level in a React tree. The easiest way to ensure
     that is using a React portal, as shown in the example above.
   </InlineNotification>
@@ -251,9 +261,13 @@ With `<ComposedModal>`, you can control the buttons with the following code.
     title="Warning"
     className="sb-notification">
     As the instructions for the three buttons imply,
-    <CodeSnippet type="inline" hideCopyButton>ModalFooter</CodeSnippet>
+    <CodeSnippet type="inline" hideCopyButton>
+      ModalFooter
+    </CodeSnippet>
     is flexible with the buttons you render using
-    <CodeSnippet type="inline" hideCopyButton>Button</CodeSnippet>
+    <CodeSnippet type="inline" hideCopyButton>
+      Button
+    </CodeSnippet>
     components. In this case, your application code is responsible for handling
     button actions, such as closing the modal.
   </InlineNotification>

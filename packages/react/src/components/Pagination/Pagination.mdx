@@ -25,38 +25,44 @@ import { stackblitzPrefillConfig } from '../../../previewer/codePreviewer';
 
 ## Overview
 
-  <Canvas
-    of={PaginationStories.Default}
-    additionalActions={[
-      {
-        title: 'Open in Stackblitz',
-        onClick: () => stackblitzPrefillConfig(PaginationStories.Default),
-      },
-    ]}
-  />
+{' '}
+<Canvas
+  of={PaginationStories.Default}
+  additionalActions={[
+    {
+      title: 'Open in Stackblitz',
+      onClick: () => stackblitzPrefillConfig(PaginationStories.Default),
+    },
+  ]}
+/>
 
 ## Multiple pagination components
-  <Canvas
-    of={PaginationStories.MultiplePaginationComponents}
-    additionalActions={[
-      {
-        title: 'Open in Stackblitz',
-        onClick: () => stackblitzPrefillConfig(PaginationStories.MultiplePaginationComponents),
-      },
-    ]}
-  />
+
+{' '}
+<Canvas
+  of={PaginationStories.MultiplePaginationComponents}
+  additionalActions={[
+    {
+      title: 'Open in Stackblitz',
+      onClick: () =>
+        stackblitzPrefillConfig(PaginationStories.MultiplePaginationComponents),
+    },
+  ]}
+/>
 
 ## Pagination unknown pages
 
-  <Canvas
-    of={PaginationStories.PaginationUnknownPages}
-    additionalActions={[
-      {
-        title: 'Open in Stackblitz',
-        onClick: () => stackblitzPrefillConfig(PaginationStories.PaginationUnknownPages),
-      },
-    ]}
-  />
+{' '}
+<Canvas
+  of={PaginationStories.PaginationUnknownPages}
+  additionalActions={[
+    {
+      title: 'Open in Stackblitz',
+      onClick: () =>
+        stackblitzPrefillConfig(PaginationStories.PaginationUnknownPages),
+    },
+  ]}
+/>
 
 ## Pagination with custom page sizes label
 
@@ -68,7 +74,8 @@ import { stackblitzPrefillConfig } from '../../../previewer/codePreviewer';
         onClick: () => stackblitzPrefillConfig(PaginationStories.PaginationWithCustomPageSizesLabel),
       },
     ]}
-  />
+
+/>
 
 ## Component API
 

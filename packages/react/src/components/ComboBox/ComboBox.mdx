@@ -92,7 +92,8 @@ custom values and typeahead suggestions.
   additionalActions={[
     {
       title: 'Open in Stackblitz',
-      onClick: () => stackblitzPrefillConfig(ComboBoxStories.AutocompleteWithTypeahead),
+      onClick: () =>
+        stackblitzPrefillConfig(ComboBoxStories.AutocompleteWithTypeahead),
     },
   ]}
 />
@@ -304,6 +305,7 @@ callback.
 ```js
 {selectedItem: undefined, inputValue: 'Apple'}
 ```
+
 <Canvas
   of={ComboBoxStories.AllowCustomValue}
   additionalActions={[
