@@ -36,7 +36,7 @@ import { useControllableState } from '../../internal/useControllableState';
 import { useId } from '../../internal/useId';
 import useIsomorphicEffect from '../../internal/useIsomorphicEffect';
 import { useMergedRefs } from '../../internal/useMergedRefs';
-import { getInteractiveContent } from '../../internal/useNoInteractiveChildren';
+import { getInteractiveContent } from '@carbon/utilities-react';
 import { usePrefix } from '../../internal/usePrefix';
 import { keys, match, matches } from '../../internal/keyboard';
 import { usePressable } from './usePressable';

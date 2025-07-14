@@ -35,10 +35,7 @@ import { deprecate } from '../../prop-types/deprecate';
 import { composeEventHandlers } from '../../tools/events';
 import { usePrefix } from '../../internal/usePrefix';
 import useIsomorphicEffect from '../../internal/useIsomorphicEffect';
-import {
-  getInteractiveContent,
-  getRoleContent,
-} from '../../internal/useNoInteractiveChildren';
+import { getInteractiveContent, getRoleContent } from '@carbon/utilities-react';
 import { useMergedRefs } from '../../internal/useMergedRefs';
 import { useFeatureFlag } from '../FeatureFlags';
 import { useId } from '../../internal/useId';

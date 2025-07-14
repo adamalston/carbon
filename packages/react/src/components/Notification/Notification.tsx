@@ -33,7 +33,7 @@ import useIsomorphicEffect from '../../internal/useIsomorphicEffect';
 import {
   useNoInteractiveChildren,
   useInteractiveChildrenNeedDescription,
-} from '../../internal/useNoInteractiveChildren';
+} from '@carbon/utilities-react';
 import { keys, matches, match } from '../../internal/keyboard';
 import { usePrefix } from '../../internal/usePrefix';
 import { useId } from '../../internal/useId';
