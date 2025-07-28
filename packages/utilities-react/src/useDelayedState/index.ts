@@ -33,20 +33,23 @@ export function useDelayedState<S>(
   const timeoutId = useRef<number | null>(null);
   // We use `useCallback` to match the signature of React's `useState` which will
   // always return the same reference for the `setState` updater
-  const setStateWithDelay = useCallback((stateToSet, delayMs = 0) => {
-    window.clearTimeout(timeoutId.current ?? undefined);
-    timeoutId.current = null;
-
-    if (delayMs === 0) {
-      setState(stateToSet);
-      return;
-    }
-
-    timeoutId.current = window.setTimeout(() => {
-      setState(stateToSet);
+  const setStateWithDelay = useCallback(
+    (stateToSet: SetStateAction<S>, delayMs = 0) => {
+      window.clearTimeout(timeoutId.current ?? undefined);
       timeoutId.current = null;
-    }, delayMs);
-  }, []);
+
+      if (delayMs === 0) {
+        setState(stateToSet);
+        return;
+      }
+
+      timeoutId.current = window.setTimeout(() => {
+        setState(stateToSet);
+        timeoutId.current = null;
+      }, delayMs);
+    },
+    []
+  );
 
   useEffect(() => {
     return () => {

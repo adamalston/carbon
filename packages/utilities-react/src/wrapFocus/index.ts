@@ -6,7 +6,7 @@
  */
 
 import { tabbable } from 'tabbable';
-import { selectorTabbable } from './keyboard/navigation';
+import { selectorTabbable } from '../keyboard/navigation';
 
 /**
  * A flag `node.compareDocumentPosition(target)` returns that indicates

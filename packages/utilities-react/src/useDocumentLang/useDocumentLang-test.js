@@ -7,7 +7,7 @@
 
 import { render, screen, act } from '@testing-library/react';
 import React from 'react';
-import { useDocumentLang } from '../useDocumentLang';
+import { useDocumentLang } from '.';
 
 describe('useDocumentLang hook', () => {
   function TestComponent() {

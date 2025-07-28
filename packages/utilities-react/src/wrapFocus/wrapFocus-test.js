@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { wrapFocus, wrapFocusWithoutSentinels } from '../wrapFocus';
+import { wrapFocus, wrapFocusWithoutSentinels } from '.';
 
 describe('wrapFocus', () => {
   let node;

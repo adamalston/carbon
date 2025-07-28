@@ -13,8 +13,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { useResizeObserver } from './useResizeObserver';
-import { usePreviousValue } from './usePreviousValue';
+import { usePreviousValue, useResizeObserver } from '..';
 
 type Item = {
   id: string;

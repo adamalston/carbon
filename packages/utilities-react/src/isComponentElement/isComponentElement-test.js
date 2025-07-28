@@ -1,5 +1,5 @@
 import React from 'react';
-import { isComponentElement } from '../utils';
+import { isComponentElement } from '.';
 
 const TestComponent = ({ message }) => <div>{message}</div>;
 

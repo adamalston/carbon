@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { MouseEventHandler, useState } from 'react';
+import { useState, type MouseEventHandler, type RefObject } from 'react';
 
 /**
  * Array of two numbers either representing [left, right] or [top, bottom].
@@ -50,7 +50,9 @@ export interface UseAttachedMenuReturn {
  * @param {Element|object} anchor The element or ref the menu should visually be attached to.
  * @returns {useAttachedMenuReturn}
  */
-export function useAttachedMenu(anchor): UseAttachedMenuReturn {
+export function useAttachedMenu(
+  anchor: RefObject<HTMLDivElement | null>
+): UseAttachedMenuReturn {
   const [open, setOpen] = useState(false);
   const [position, setPosition] = useState<TwoCoordinates[]>([
     [-1, -1],
@@ -58,7 +60,7 @@ export function useAttachedMenu(anchor): UseAttachedMenuReturn {
   ]);
 
   function openMenu() {
-    const anchorEl = anchor?.current || anchor;
+    const anchorEl = anchor?.current;
 
     if (anchorEl) {
       const { left, top, right, bottom } = anchorEl.getBoundingClientRect();
@@ -84,13 +86,13 @@ export function useAttachedMenu(anchor): UseAttachedMenuReturn {
     }
   }
 
-  function handleMousedown(e) {
+  const handleMousedown: MouseEventHandler = (e) => {
     // prevent default for mousedown on trigger element to avoid
     // the "blur" event from firing on the menu as this would close
     // it and immediately re-open since "click" event is fired after
     // "blur" event.
     e.preventDefault();
-  }
+  };
 
   return {
     open,

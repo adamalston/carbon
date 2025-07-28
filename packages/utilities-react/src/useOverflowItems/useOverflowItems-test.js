@@ -6,7 +6,7 @@
  */
 
 import { renderHook, act } from '@testing-library/react';
-import useOverflowItems from '../useOverflowItems';
+import useOverflowItems from '.';
 
 // Mock ResizeObserver
 const mockResizeObserver = jest.fn(() => ({
@@ -16,7 +16,7 @@ const mockResizeObserver = jest.fn(() => ({
 }));
 
 // Mock useResizeObserver
-jest.mock('../../internal/useResizeObserver', () => ({
+jest.mock('../useResizeObserver/index', () => ({
   useResizeObserver: jest.fn(({ onResize }) => {
     // Simulate resize behavior
     if (onResize) {
@@ -26,7 +26,7 @@ jest.mock('../../internal/useResizeObserver', () => ({
 }));
 
 // Mock usePreviousValue - simpler approach
-jest.mock('../../internal/usePreviousValue', () => ({
+jest.mock('../usePreviousValue/index', () => ({
   usePreviousValue: jest.fn(() => undefined), // Just return undefined for most tests
 }));
 

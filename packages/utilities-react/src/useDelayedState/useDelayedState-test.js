@@ -8,7 +8,7 @@
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
-import { useDelayedState } from '../useDelayedState';
+import { useDelayedState } from '.';
 
 jest.useFakeTimers();
 const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });

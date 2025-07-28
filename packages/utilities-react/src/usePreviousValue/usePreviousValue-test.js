@@ -8,7 +8,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React, { useState } from 'react';
-import { usePreviousValue } from '../usePreviousValue';
+import { usePreviousValue } from '.';
 
 const TestComponent = () => {
   const [a, setA] = useState(10);

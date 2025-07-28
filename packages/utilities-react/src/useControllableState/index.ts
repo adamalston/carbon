@@ -6,7 +6,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
-import { warning } from './warning';
+import { warning } from '..';
 
 interface UseControllableStateConfig<T> {
   /** The name of the component. */

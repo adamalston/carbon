@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { warning } from '../internal/warning';
+import { warning } from '..';
 
 export const deprecateFieldOnObject = <T extends { displayName?: string }>(
   object: T,

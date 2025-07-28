@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import ClickListener from '../ClickListener';
+import ClickListener from '.';
 
 import { render } from '@testing-library/react';
 
