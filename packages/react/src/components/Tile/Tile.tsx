@@ -30,18 +30,18 @@ import {
   AiLabel,
 } from '@carbon/icons-react';
 import Link from '../Link';
-import { keys, matches } from '../../internal/keyboard';
+import { keys, matches } from '@carbon/utilities-react';
 import { deprecate } from '../../prop-types/deprecate';
 import { composeEventHandlers } from '../../tools/events';
-import { usePrefix } from '../../internal/usePrefix';
-import useIsomorphicEffect from '../../internal/useIsomorphicEffect';
+import { usePrefix } from '@carbon/utilities-react';
+import useIsomorphicEffect from '@carbon/utilities-react';
 import { getInteractiveContent, getRoleContent } from '@carbon/utilities-react';
-import { useMergedRefs } from '../../internal/useMergedRefs';
+import { useMergedRefs } from '@carbon/utilities-react';
 import { useFeatureFlag } from '../FeatureFlags';
-import { useId } from '../../internal/useId';
+import { useId } from '@carbon/utilities-react';
 import { Text } from '../Text';
 import { AILabel } from '../AILabel';
-import { isComponentElement } from '../../internal';
+import { isComponentElement } from '@carbon/utilities-react';
 
 export interface TileProps extends HTMLAttributes<HTMLDivElement> {
   children?: ReactNode;

@@ -8,10 +8,10 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { GridSettings } from './GridContext';
 import { GridComponent, GridBaseProps } from './GridTypes';
-import { PolymorphicRef } from '../../internal/PolymorphicProps';
+import { PolymorphicRef } from '@carbon/utilities-react';
 
 const FlexGrid = React.forwardRef<
   any,

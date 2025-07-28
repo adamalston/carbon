@@ -15,8 +15,8 @@ import React, {
   type ReactNode,
 } from 'react';
 import cx from 'classnames';
-import { usePrefix } from '../../internal/usePrefix';
-import { useMergedRefs } from '../../internal/useMergedRefs';
+import { usePrefix } from '@carbon/utilities-react';
+import { useMergedRefs } from '@carbon/utilities-react';
 import PropTypes from 'prop-types';
 import { AriaLabelPropType } from '../../prop-types/AriaPropTypes';
 import { SwitcherDivider, SwitcherItem } from '.';

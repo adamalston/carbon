@@ -8,7 +8,7 @@
 import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
 import cx from 'classnames';
-import { PrefixContext } from '../../internal/usePrefix';
+import { PrefixContext } from '@carbon/utilities-react';
 
 export interface ToggleSmallSkeletonProps {
   ['aria-label']: string;

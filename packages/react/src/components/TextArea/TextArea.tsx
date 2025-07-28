@@ -18,16 +18,16 @@ import React, {
 import classNames from 'classnames';
 import { deprecate } from '../../prop-types/deprecate';
 import { WarningFilled, WarningAltFilled } from '@carbon/icons-react';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { FormContext } from '../FluidForm';
-import { getAnnouncement } from '../../internal/getAnnouncement';
-import useIsomorphicEffect from '../../internal/useIsomorphicEffect';
-import { useMergedRefs } from '../../internal/useMergedRefs';
-import { useId } from '../../internal/useId';
-import { noopFn } from '../../internal/noopFn';
+import { getAnnouncement } from '@carbon/utilities-react';
+import useIsomorphicEffect from '@carbon/utilities-react';
+import { useMergedRefs } from '@carbon/utilities-react';
+import { useId } from '@carbon/utilities-react';
+import { noopFn } from '@carbon/utilities-react';
 import { Text } from '../Text';
 import { AILabel } from '../AILabel';
-import { isComponentElement } from '../../internal';
+import { isComponentElement } from '@carbon/utilities-react';
 
 export interface TextAreaProps
   extends React.InputHTMLAttributes<HTMLTextAreaElement> {

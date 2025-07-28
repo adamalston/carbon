@@ -7,7 +7,7 @@
 
 import React, { forwardRef, type HTMLAttributes } from 'react';
 import classNames from 'classnames';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import PropTypes from 'prop-types';
 
 export interface TableCellProps extends HTMLAttributes<HTMLTableCellElement> {

@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import React, { ForwardedRef } from 'react';
 import classnames from 'classnames';
 import Dropdown, { DropdownProps } from '../Dropdown';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { FormContext } from '../FluidForm/FormContext';
 export interface OnChangeData<ItemType> {
   selectedItem: ItemType | null;

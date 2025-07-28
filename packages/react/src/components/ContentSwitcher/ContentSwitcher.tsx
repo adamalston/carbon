@@ -23,9 +23,9 @@ import classNames from 'classnames';
 import { deprecate } from '../../prop-types/deprecate';
 import { LayoutConstraint } from '../Layout';
 import { composeEventHandlers } from '../../tools/events';
-import { getNextIndex, matches, keys } from '../../internal/keyboard';
-import { PrefixContext } from '../../internal/usePrefix';
-import { noopFn } from '../../internal/noopFn';
+import { getNextIndex, matches, keys } from '@carbon/utilities-react';
+import { PrefixContext } from '@carbon/utilities-react';
+import { noopFn } from '@carbon/utilities-react';
 import { IconSwitch } from '../Switch';
 
 export interface SwitchEventHandlersParams {

@@ -8,8 +8,8 @@
 import PropTypes from 'prop-types';
 import React, { MutableRefObject, ReactNode, useRef } from 'react';
 import classNames from 'classnames';
-import { usePrefix } from '../../internal/usePrefix';
-import useIsomorphicEffect from '../../internal/useIsomorphicEffect';
+import { usePrefix } from '@carbon/utilities-react';
+import useIsomorphicEffect from '@carbon/utilities-react';
 
 const randoms = [0.973051493507435, 0.15334737213558558, 0.5671034553053769];
 

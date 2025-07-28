@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { CheckmarkFilled, ErrorFilled } from '@carbon/icons-react';
 import Loading from '../Loading';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 
 export const InlineLoadingStatuses = [
   'inactive',

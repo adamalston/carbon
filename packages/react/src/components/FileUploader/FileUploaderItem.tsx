@@ -14,10 +14,10 @@ import React, {
   type HTMLAttributes,
 } from 'react';
 import Filename from './Filename';
-import { keys, matches } from '../../internal/keyboard';
-import { useId } from '../../internal/useId';
-import { usePrefix } from '../../internal/usePrefix';
-import { noopFn } from '../../internal/noopFn';
+import { keys, matches } from '@carbon/utilities-react';
+import { useId } from '@carbon/utilities-react';
+import { usePrefix } from '@carbon/utilities-react';
+import { noopFn } from '@carbon/utilities-react';
 import { Text } from '../Text';
 import { Tooltip } from '../Tooltip';
 

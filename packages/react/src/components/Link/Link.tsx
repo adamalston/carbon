@@ -14,8 +14,8 @@ import React, {
   ElementType,
   HTMLAttributeAnchorTarget,
 } from 'react';
-import { PolymorphicComponentPropWithRef } from '../../internal/PolymorphicProps';
-import { usePrefix } from '../../internal/usePrefix';
+import { PolymorphicComponentPropWithRef } from '@carbon/utilities-react';
+import { usePrefix } from '@carbon/utilities-react';
 
 export interface LinkBaseProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   /**

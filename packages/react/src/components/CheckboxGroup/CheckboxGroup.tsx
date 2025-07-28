@@ -9,11 +9,11 @@ import PropTypes from 'prop-types';
 import React, { cloneElement, type ReactNode } from 'react';
 import cx from 'classnames';
 import { deprecate } from '../../prop-types/deprecate';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { WarningFilled, WarningAltFilled } from '@carbon/icons-react';
-import { useId } from '../../internal/useId';
+import { useId } from '@carbon/utilities-react';
 import { AILabel } from '../AILabel';
-import { isComponentElement } from '../../internal';
+import { isComponentElement } from '@carbon/utilities-react';
 
 export interface CheckboxGroupProps {
   children?: ReactNode;

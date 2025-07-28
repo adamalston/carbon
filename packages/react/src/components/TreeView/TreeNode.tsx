@@ -20,10 +20,10 @@ import React, {
   type MutableRefObject,
   type FocusEvent,
 } from 'react';
-import { keys, match, matches } from '../../internal/keyboard';
-import { useControllableState } from '../../internal/useControllableState';
-import { usePrefix } from '../../internal/usePrefix';
-import { useId } from '../../internal/useId';
+import { keys, match, matches } from '@carbon/utilities-react';
+import { useControllableState } from '@carbon/utilities-react';
+import { usePrefix } from '@carbon/utilities-react';
+import { useId } from '@carbon/utilities-react';
 import { useFeatureFlag } from '../FeatureFlags';
 import { IconButton } from '../IconButton';
 import { TreeContext, DepthContext } from './TreeContext';

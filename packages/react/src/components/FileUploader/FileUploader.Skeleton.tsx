@@ -10,7 +10,7 @@ import React, { type HTMLAttributes } from 'react';
 import cx from 'classnames';
 import SkeletonText from '../SkeletonText';
 import ButtonSkeleton from '../Button/Button.Skeleton';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 
 export interface FileUploaderSkeletonProps
   extends HTMLAttributes<HTMLDivElement> {

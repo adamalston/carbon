@@ -8,7 +8,7 @@
 import cx from 'classnames';
 import React, { type ReactNode } from 'react';
 import PropTypes from 'prop-types';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 
 export interface HeaderSideNavItemsProps {
   className?: string | undefined;

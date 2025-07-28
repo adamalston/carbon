@@ -7,7 +7,7 @@
 
 import PropTypes from 'prop-types';
 import React, { PropsWithChildren, ReactNode } from 'react';
-import { IdPrefixContext } from '../../internal/useIdPrefix';
+import { IdPrefixContext } from '@carbon/utilities-react';
 
 export type IdPrefixProps = {
   children?: ReactNode;

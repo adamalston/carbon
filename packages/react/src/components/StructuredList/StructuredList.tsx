@@ -16,12 +16,12 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { useId } from '../../internal/useId';
+import { useId } from '@carbon/utilities-react';
 import { deprecate } from '../../prop-types/deprecate';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { Text } from '../Text';
 import { RadioButtonChecked, RadioButton } from '@carbon/icons-react';
-import { useOutsideClick } from '../../internal/useOutsideClick';
+import { useOutsideClick } from '@carbon/utilities-react';
 
 type DivAttrs = HTMLAttributes<HTMLDivElement>;
 

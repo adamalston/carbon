@@ -9,9 +9,9 @@ import React, { ReactSVGElement, useRef } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { CheckmarkFilled, ErrorFilled } from '@carbon/icons-react';
-import { useId } from '../../internal/useId';
-import { usePrefix } from '../../internal/usePrefix';
-import useIsomorphicEffect from '../../internal/useIsomorphicEffect';
+import { useId } from '@carbon/utilities-react';
+import { usePrefix } from '@carbon/utilities-react';
+import useIsomorphicEffect from '@carbon/utilities-react';
 
 export interface ProgressBarProps {
   /**

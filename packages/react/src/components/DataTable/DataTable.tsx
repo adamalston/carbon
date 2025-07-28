@@ -23,7 +23,7 @@ import { getCellId } from './tools/cells';
 import denormalize from './tools/denormalize';
 import { composeEventHandlers } from '../../tools/events';
 import { defaultFilterRows } from './tools/filter';
-import { setupGetInstanceId } from '../../tools/setupGetInstanceId';
+import { setupGetInstanceId } from '@carbon/utilities-react';
 import Table from './Table';
 import TableActionList from './TableActionList';
 import TableBatchAction from './TableBatchAction';
@@ -995,3 +995,5 @@ DataTable.propTypes = {
    */
   useZebraStyles: PropTypes.bool,
 };
+
+// I want to render a select where some items are in groups and others aren't

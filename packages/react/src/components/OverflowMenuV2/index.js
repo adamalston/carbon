@@ -7,7 +7,7 @@
 
 import React from 'react';
 
-import { warning } from '../../internal/warning';
+import { warning } from '@carbon/utilities-react';
 
 import { FeatureFlags } from '../FeatureFlags';
 import { OverflowMenu } from '../OverflowMenu';

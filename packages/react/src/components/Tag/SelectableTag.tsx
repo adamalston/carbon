@@ -15,15 +15,15 @@ import React, {
   ForwardedRef,
 } from 'react';
 import classNames from 'classnames';
-import { useId } from '../../internal/useId';
-import { usePrefix } from '../../internal/usePrefix';
+import { useId } from '@carbon/utilities-react';
+import { usePrefix } from '@carbon/utilities-react';
 import { PolymorphicProps } from '../../types/common';
 import Tag, { SIZES } from './Tag';
 import { Tooltip } from '../Tooltip';
 import { Text } from '../Text';
 import { isEllipsisActive } from './isEllipsisActive';
 import mergeRefs from '../../tools/mergeRefs';
-import { useControllableState } from '../../internal/useControllableState';
+import { useControllableState } from '@carbon/utilities-react';
 export interface SelectableTagBaseProps {
   /**
    * Provide a custom className that is applied to the containing <span>

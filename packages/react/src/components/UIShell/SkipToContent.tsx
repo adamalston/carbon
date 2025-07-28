@@ -8,7 +8,7 @@
 import cx from 'classnames';
 import React, { ComponentProps } from 'react';
 import PropTypes from 'prop-types';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 
 export type SkipToContentProps = Omit<ComponentProps<'a'>, 'children'> & {
   children?: string | undefined;

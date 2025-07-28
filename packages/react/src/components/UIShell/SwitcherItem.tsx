@@ -16,8 +16,8 @@ import React, {
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import Link from './Link';
-import { usePrefix } from '../../internal/usePrefix';
-import { keys, match } from '../../internal/keyboard';
+import { usePrefix } from '@carbon/utilities-react';
+import { keys, match } from '@carbon/utilities-react';
 import { AriaLabelPropType } from '../../prop-types/AriaPropTypes';
 
 export interface BaseSwitcherItemProps {

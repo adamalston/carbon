@@ -16,20 +16,20 @@ import {
   PageHeaderContentPageActions as PageHeaderContentPageActionsDirect,
   PageHeaderTabBar as PageHeaderTabBarDirect,
 } from '../PageHeader';
-import * as hooks from '../../internal/useMatchMedia';
+import * as hooks from '@carbon/utilities-react';
 import { breakpoints } from '@carbon/layout';
 import { Breadcrumb, BreadcrumbItem } from '../Breadcrumb';
 import { TabList, Tab, TabPanels, TabPanel } from '../Tabs/Tabs';
 import { Bee } from '@carbon/icons-react';
 
-import useOverflowItems from '../../internal/useOverflowItems';
+import useOverflowItems from '@carbon/utilities-react';
 const mockUseOverflowItems = useOverflowItems;
 
 const prefix = 'cds';
 
 let mockOverflowOnChange = jest.fn();
 
-jest.mock('../../internal/useOverflowItems');
+jest.mock('@carbon/utilities-react');
 
 jest.mock('@carbon/utilities', () => ({
   createOverflowHandler: jest.fn(({ onChange }) => {

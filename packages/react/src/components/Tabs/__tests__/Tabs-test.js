@@ -21,7 +21,7 @@ import { Notification } from '@carbon/icons-react';
 
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import * as hooks from '../../../internal/useMatchMedia';
+import { useMatchMedia as hooks } from '@carbon/utilities-react';
 
 const prefix = 'cds';
 

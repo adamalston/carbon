@@ -7,8 +7,8 @@
 
 import React, { type JSX } from 'react';
 import classNames from 'classnames';
-import { usePrefix } from '../../internal/usePrefix';
-import { useId } from '../../internal/useId';
+import { usePrefix } from '@carbon/utilities-react';
+import { useId } from '@carbon/utilities-react';
 import { ButtonBaseProps, ButtonProps } from './Button';
 
 const ButtonBase = React.forwardRef(function ButtonBase<

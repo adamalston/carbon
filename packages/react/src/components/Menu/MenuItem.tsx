@@ -31,11 +31,11 @@ import {
   FloatingFocusManager,
 } from '@floating-ui/react';
 import { CaretRight, CaretLeft, Checkmark } from '@carbon/icons-react';
-import { keys, match } from '../../internal/keyboard';
-import { useControllableState } from '../../internal/useControllableState';
-import { useMergedRefs } from '../../internal/useMergedRefs';
-import { usePrefix } from '../../internal/usePrefix';
-import { warning } from '../../internal/warning.js';
+import { keys, match } from '@carbon/utilities-react';
+import { useControllableState } from '@carbon/utilities-react';
+import { useMergedRefs } from '@carbon/utilities-react';
+import { usePrefix } from '@carbon/utilities-react';
+import { warning } from '@carbon/utilities-react';
 
 import { Menu } from './Menu';
 import { MenuContext } from './MenuContext';

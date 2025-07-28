@@ -11,7 +11,7 @@ import classnames from 'classnames';
 import { useId } from '../../../internal/useId';
 import Select from '../../Select';
 import SelectItem from '../../SelectItem';
-import { usePrefix } from '../../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 
 function PageSelector({
   className = null,

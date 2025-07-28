@@ -8,7 +8,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import cx from 'classnames';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { ButtonSize } from './Button';
 
 export interface ButtonSkeletonProps extends React.HTMLAttributes<HTMLElement> {

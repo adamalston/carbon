@@ -18,7 +18,7 @@ import React, {
 import {
   PolymorphicComponentPropWithRef,
   PolymorphicRef,
-} from '../../internal/PolymorphicProps';
+} from '@carbon/utilities-react';
 import { TextDirectionContext, type TextDir } from '.';
 
 export interface TextBaseProps {

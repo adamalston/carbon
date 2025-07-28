@@ -10,7 +10,7 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { forwardRef } from 'react';
 
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 
 export type TimePickerSelectProps = {
   /**

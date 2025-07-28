@@ -21,7 +21,7 @@ import { FormContext } from '../FluidForm';
 import { Tooltip } from '../Tooltip';
 import { PopoverAlignment } from '../Popover';
 import { deprecate } from '../../prop-types/deprecate';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 
 type ExcludedAttributes = 'size';
 

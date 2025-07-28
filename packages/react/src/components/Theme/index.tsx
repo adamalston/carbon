@@ -8,10 +8,10 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { ElementType, useMemo, type PropsWithChildren } from 'react';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { PolymorphicProps } from '../../types/common';
 import { LayerContext } from '../Layer/LayerContext';
-import { useMatchMedia } from '../../internal/useMatchMedia';
+import { useMatchMedia } from '@carbon/utilities-react';
 
 export interface GlobalThemeProps {
   theme?: 'white' | 'g10' | 'g90' | 'g100';

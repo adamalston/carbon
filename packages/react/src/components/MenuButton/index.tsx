@@ -19,9 +19,9 @@ import { ChevronDown } from '@carbon/icons-react';
 import Button from '../Button';
 import { Menu } from '../Menu';
 
-import { useAttachedMenu } from '../../internal/useAttachedMenu';
-import { useId } from '../../internal/useId';
-import { usePrefix } from '../../internal/usePrefix';
+import { useAttachedMenu } from '@carbon/utilities-react';
+import { useId } from '@carbon/utilities-react';
+import { usePrefix } from '@carbon/utilities-react';
 import {
   useFloating,
   flip,

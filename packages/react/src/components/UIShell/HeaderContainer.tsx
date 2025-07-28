@@ -7,8 +7,8 @@
 
 import PropTypes from 'prop-types';
 import React, { useState, useCallback } from 'react';
-import { keys, match } from '../../internal/keyboard';
-import { useWindowEvent } from '../../internal/useEvent';
+import { keys, match } from '@carbon/utilities-react';
+import { useWindowEvent } from '@carbon/utilities-react';
 
 export interface HeaderContainerRenderProps {
   isSideNavExpanded: boolean;

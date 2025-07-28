@@ -195,8 +195,6 @@ export {
 } from './components/Text';
 export * from './components/Tooltip/DefinitionTooltip';
 export * from './components/Theme';
-export * from './internal/usePrefix';
-export { useIdPrefix } from './internal/useIdPrefix';
 
 /* prop's interface exports */
 

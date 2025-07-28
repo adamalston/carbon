@@ -16,9 +16,9 @@ import React, {
 } from 'react';
 import cx from 'classnames';
 import Link, { LinkProps, LinkPropTypes } from './Link';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { deprecate } from '../../prop-types/deprecate';
-import { PolymorphicComponentPropWithRef } from '../../internal/PolymorphicProps';
+import { PolymorphicComponentPropWithRef } from '@carbon/utilities-react';
 
 export interface HeaderMenuItemBaseProps {
   className?: string | undefined;

@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { ClassPrefix } from '../ClassPrefix';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import mdx from './ClassPrefix.mdx';
 
 export default {

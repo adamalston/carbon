@@ -9,7 +9,7 @@ import { Settings } from '@carbon/icons-react';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import OverflowMenu, { OverflowMenuProps } from '../OverflowMenu';
 
 const defaultIconDescription = 'Settings';

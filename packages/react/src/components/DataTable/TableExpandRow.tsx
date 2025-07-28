@@ -15,12 +15,12 @@ import React, {
 } from 'react';
 import { ChevronRight } from '@carbon/icons-react';
 import TableCell from './TableCell';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { TableRowProps } from './TableRow';
 import TableSlugRow from './TableSlugRow';
 import TableDecoratorRow from './TableDecoratorRow';
 import { AILabel } from '../AILabel';
-import { isComponentElement } from '../../internal';
+import { isComponentElement } from '@carbon/utilities-react';
 
 export interface TableExpandRowProps extends PropsWithChildren<TableRowProps> {
   /**

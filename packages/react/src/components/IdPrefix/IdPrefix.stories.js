@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { IdPrefix } from '.';
-import { useIdPrefix } from '../../internal/useIdPrefix';
+import { useIdPrefix } from '@carbon/utilities-react';
 import mdx from './IdPrefix.mdx';
 
 export default {

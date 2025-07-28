@@ -25,7 +25,7 @@ import { Layer } from '../Layer';
 import { ModalHeader, type ModalHeaderProps } from './ModalHeader';
 import { ModalFooter, type ModalFooterProps } from './ModalFooter';
 import { debounce } from 'es-toolkit/compat';
-import useIsomorphicEffect from '../../internal/useIsomorphicEffect';
+import useIsomorphicEffect from '@carbon/utilities-react';
 import mergeRefs from '../../tools/mergeRefs';
 import cx from 'classnames';
 import { toggleClass } from '../../tools/toggleClass';
@@ -34,16 +34,16 @@ import {
   elementOrParentIsFloatingMenu,
   wrapFocus,
   wrapFocusWithoutSentinels,
-} from '../../internal/wrapFocus';
-import { usePrefix } from '../../internal/usePrefix';
-import { keys, match } from '../../internal/keyboard';
+} from '@carbon/utilities-react';
+import { usePrefix } from '@carbon/utilities-react';
+import { keys, match } from '@carbon/utilities-react';
 import { useFeatureFlag } from '../FeatureFlags';
 import { composeEventHandlers } from '../../tools/events';
 import { deprecate } from '../../prop-types/deprecate';
 import { unstable__Dialog as Dialog } from '../Dialog/index';
-import { warning } from '../../internal/warning';
+import { warning } from '@carbon/utilities-react';
 import { AILabel } from '../AILabel';
-import { isComponentElement } from '../../internal';
+import { isComponentElement } from '@carbon/utilities-react';
 
 export interface ModalBodyProps extends HTMLAttributes<HTMLDivElement> {
   /** Specify the content to be placed in the ModalBody. */

@@ -9,7 +9,7 @@ import { render, fireEvent } from '@testing-library/react';
 import { getByLabel, getByText } from '@carbon/test-utils/dom';
 import React from 'react';
 import { FileUploaderItem } from '../';
-import { keys } from '../../../internal/keyboard';
+import { keys } from '@carbon/utilities-react';
 
 const statuses = ['uploading', 'edit', 'complete'];
 

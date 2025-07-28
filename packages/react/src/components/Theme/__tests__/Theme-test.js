@@ -13,7 +13,7 @@ import {
   usePrefersDarkScheme,
 } from '../../Theme';
 import { screen, render } from '@testing-library/react';
-import * as hooks from '../../../internal/useMatchMedia';
+import { useMatchMedia as hooks } from '@carbon/utilities-react';
 
 describe('Theme', () => {
   it('should render the children passed in as a prop', () => {

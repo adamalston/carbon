@@ -13,7 +13,7 @@ import React, {
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { LayoutConstraint } from '../../Layout';
-import { usePrefix } from '../../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 
 interface ContainedListItemProps {
   /**

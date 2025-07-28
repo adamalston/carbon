@@ -9,7 +9,7 @@ import { ChevronRight } from '@carbon/icons-react';
 import cx from 'classnames';
 import PropTypes, { Validator } from 'prop-types';
 import React, { type HTMLAttributes } from 'react';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { deprecate } from '../../prop-types/deprecate';
 import requiredIfGivenPropIsTruthy from '../../prop-types/requiredIfGivenPropIsTruthy';
 

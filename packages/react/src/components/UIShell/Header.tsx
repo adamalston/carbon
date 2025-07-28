@@ -9,7 +9,7 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { ReactNode } from 'react';
 import { AriaLabelPropType } from '../../prop-types/AriaPropTypes';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 
 export interface HeaderProps {
   children?: ReactNode;

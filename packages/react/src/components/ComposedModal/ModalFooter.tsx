@@ -10,8 +10,8 @@ import PropTypes from 'prop-types';
 import Button from '../Button';
 import ButtonSet from '../ButtonSet';
 import cx from 'classnames';
-import { usePrefix } from '../../internal/usePrefix';
-import { noopFn } from '../../internal/noopFn';
+import { usePrefix } from '@carbon/utilities-react';
+import { noopFn } from '@carbon/utilities-react';
 import InlineLoading from '../InlineLoading';
 import { InlineLoadingStatus } from '../InlineLoading/InlineLoading';
 

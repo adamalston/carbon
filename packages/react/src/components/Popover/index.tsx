@@ -9,10 +9,10 @@ import cx from 'classnames';
 import PropTypes, { WeakValidationMap } from 'prop-types';
 import deprecateValuesWithin from '../../prop-types/deprecateValuesWithin';
 import React, { useEffect, useMemo, useRef, type ElementType } from 'react';
-import useIsomorphicEffect from '../../internal/useIsomorphicEffect';
-import { useMergedRefs } from '../../internal/useMergedRefs';
-import { usePrefix } from '../../internal/usePrefix';
-import { useWindowEvent, useEvent } from '../../internal/useEvent';
+import useIsomorphicEffect from '@carbon/utilities-react';
+import { useMergedRefs } from '@carbon/utilities-react';
+import { usePrefix } from '@carbon/utilities-react';
+import { useWindowEvent, useEvent } from '@carbon/utilities-react';
 import { mapPopoverAlign } from '../../tools/mapPopoverAlign';
 import {
   useFloating,
@@ -27,7 +27,7 @@ import { useFeatureFlag } from '../FeatureFlags';
 import {
   PolymorphicComponentPropWithRef,
   PolymorphicRef,
-} from '../../internal/PolymorphicProps';
+} from '@carbon/utilities-react';
 import { ToggletipButton } from '../Toggletip';
 
 export interface PopoverContext {

@@ -10,8 +10,8 @@ import React from 'react';
 import classNames from 'classnames';
 import InlineCheckbox from '../InlineCheckbox';
 import RadioButton from '../RadioButton';
-import { useId } from '../../internal/useId';
-import { usePrefix } from '../../internal/usePrefix';
+import { useId } from '@carbon/utilities-react';
+import { usePrefix } from '@carbon/utilities-react';
 import { deprecate } from '../../prop-types/deprecate';
 
 export interface TableSelectRowProps {

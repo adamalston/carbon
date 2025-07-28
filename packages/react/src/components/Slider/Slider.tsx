@@ -25,9 +25,9 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { throttle } from 'es-toolkit/compat';
 
-import * as keys from '../../internal/keyboard/keys';
-import { matches } from '../../internal/keyboard';
-import { PrefixContext } from '../../internal/usePrefix';
+import { keys } from '@carbon/utilities-react';
+import { matches } from '@carbon/utilities-react';
+import { PrefixContext } from '@carbon/utilities-react';
 import { deprecate } from '../../prop-types/deprecate';
 import { FeatureFlagContext } from '../FeatureFlags';
 import { WarningFilled, WarningAltFilled } from '@carbon/icons-react';
@@ -40,7 +40,7 @@ import {
   UpperHandleFocus,
 } from './SliderHandles';
 import { TranslateWithId } from '../../types/common';
-import { clamp } from '../../internal/clamp';
+import { clamp } from '@carbon/utilities-react';
 
 interface ThumbWrapperProps
   extends Omit<

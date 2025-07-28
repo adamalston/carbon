@@ -8,7 +8,7 @@
 import PropTypes from 'prop-types';
 import React, { ForwardedRef, FunctionComponent, RefObject } from 'react';
 import classnames from 'classnames';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { FormContext } from '../FluidForm/FormContext';
 import type { UseComboboxProps, UseMultipleSelectionProps } from 'downshift';
 import {

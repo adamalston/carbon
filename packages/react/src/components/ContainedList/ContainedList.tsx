@@ -9,8 +9,8 @@ import React, { ReactNode } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { LayoutConstraint } from '../Layout';
-import { useId } from '../../internal/useId';
-import { usePrefix } from '../../internal/usePrefix';
+import { useId } from '@carbon/utilities-react';
+import { usePrefix } from '@carbon/utilities-react';
 import ContainedListItem from './ContainedListItem';
 import { Search } from '../Search';
 

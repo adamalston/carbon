@@ -8,7 +8,7 @@
 import { render } from '@testing-library/react';
 import React from 'react';
 import { ClassPrefix } from '../../ClassPrefix';
-import { usePrefix } from '../../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 
 describe('ClassPrefix', () => {
   it('should set the prefix value used by usePrefix', () => {

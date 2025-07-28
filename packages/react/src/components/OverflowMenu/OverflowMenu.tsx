@@ -34,15 +34,15 @@ import {
   type MenuDirection,
   type MenuOffset,
 } from '../../internal/FloatingMenu';
-import { matches as keyCodeMatches, keys } from '../../internal/keyboard';
-import { noopFn } from '../../internal/noopFn';
-import { PrefixContext } from '../../internal/usePrefix';
+import { matches as keyCodeMatches, keys } from '@carbon/utilities-react';
+import { noopFn } from '@carbon/utilities-react';
+import { PrefixContext } from '@carbon/utilities-react';
 import { deprecate } from '../../prop-types/deprecate';
 import mergeRefs from '../../tools/mergeRefs';
-import { setupGetInstanceId } from '../../tools/setupGetInstanceId';
+import { setupGetInstanceId } from '@carbon/utilities-react';
 import { IconButton, IconButtonProps } from '../IconButton';
 import { OverflowMenuItemProps } from '../OverflowMenuItem/OverflowMenuItem';
-import { useOutsideClick } from '../../internal/useOutsideClick';
+import { useOutsideClick } from '@carbon/utilities-react';
 import deprecateValuesWithin from '../../prop-types/deprecateValuesWithin';
 import { mapPopoverAlign } from '../../tools/mapPopoverAlign';
 

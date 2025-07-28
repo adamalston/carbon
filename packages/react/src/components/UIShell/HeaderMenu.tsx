@@ -24,12 +24,12 @@ import React, {
   type Ref,
 } from 'react';
 import PropTypes from 'prop-types';
-import { keys, matches } from '../../internal/keyboard';
+import { keys, matches } from '@carbon/utilities-react';
 import { AriaLabelPropType } from '../../prop-types/AriaPropTypes';
-import { PrefixContext } from '../../internal/usePrefix';
+import { PrefixContext } from '@carbon/utilities-react';
 import { deprecate } from '../../prop-types/deprecate';
 import { composeEventHandlers } from '../../tools/events';
-import { useMergedRefs } from '../../internal/useMergedRefs';
+import { useMergedRefs } from '@carbon/utilities-react';
 import type HeaderMenuItem from './HeaderMenuItem';
 
 export interface HeaderMenuProps {

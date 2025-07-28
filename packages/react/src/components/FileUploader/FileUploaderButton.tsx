@@ -8,11 +8,11 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { useRef, useState, type HTMLAttributes } from 'react';
-import { matches, keys } from '../../internal/keyboard';
-import { useId } from '../../internal/useId';
-import { usePrefix } from '../../internal/usePrefix';
+import { matches, keys } from '@carbon/utilities-react';
+import { useId } from '@carbon/utilities-react';
+import { usePrefix } from '@carbon/utilities-react';
 import { deprecate } from '../../prop-types/deprecate';
-import { noopFn } from '../../internal/noopFn';
+import { noopFn } from '@carbon/utilities-react';
 import { ButtonKinds } from '../Button';
 
 export interface FileUploaderButtonProps

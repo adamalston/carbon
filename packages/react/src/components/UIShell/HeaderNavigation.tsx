@@ -9,7 +9,7 @@ import cx from 'classnames';
 import React, { type ComponentProps } from 'react';
 import PropTypes from 'prop-types';
 import { AriaLabelPropType } from '../../prop-types/AriaPropTypes';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 
 export type HeaderNavigationProps = ComponentProps<'nav'>;
 

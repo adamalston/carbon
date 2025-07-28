@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { match, keys } from '../../../internal/keyboard';
+import { match, keys } from '@carbon/utilities-react';
 
 /**
  * @param {object} config Plugin configuration.

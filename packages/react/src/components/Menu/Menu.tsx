@@ -20,14 +20,14 @@ import React, {
 } from 'react';
 import { createPortal } from 'react-dom';
 
-import { keys, match } from '../../internal/keyboard';
-import { useMergedRefs } from '../../internal/useMergedRefs';
-import { usePrefix } from '../../internal/usePrefix';
+import { keys, match } from '@carbon/utilities-react';
+import { useMergedRefs } from '@carbon/utilities-react';
+import { usePrefix } from '@carbon/utilities-react';
 import { deprecate } from '../../prop-types/deprecate';
 
 import { MenuContext, menuReducer } from './MenuContext';
 import { useLayoutDirection } from '../LayoutDirection';
-import { canUseDOM } from '../../internal/environment';
+import { canUseDOM } from '@carbon/utilities-react';
 
 const spacing = 8; // distance to keep to window edges, in px
 

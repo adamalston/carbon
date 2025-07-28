@@ -11,8 +11,8 @@ import PropTypes from 'prop-types';
 import React, { useState, useRef, useEffect } from 'react';
 import Select from '../Select';
 import SelectItem from '../SelectItem';
-import { useFallbackId } from '../../internal/useId';
-import { usePrefix } from '../../internal/usePrefix';
+import { useFallbackId } from '@carbon/utilities-react';
+import { usePrefix } from '@carbon/utilities-react';
 import { IconButton } from '../IconButton';
 import isEqual from 'react-fast-compare';
 

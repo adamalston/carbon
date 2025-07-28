@@ -17,9 +17,9 @@ import React, {
   RefObject,
 } from 'react';
 import Search, { SearchProps } from '../Search';
-import { useId } from '../../internal/useId';
-import { usePrefix } from '../../internal/usePrefix';
-import { noopFn } from '../../internal/noopFn';
+import { useId } from '@carbon/utilities-react';
+import { usePrefix } from '@carbon/utilities-react';
+import { noopFn } from '@carbon/utilities-react';
 import { TranslateWithId } from '../../types/common';
 
 /**

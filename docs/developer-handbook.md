@@ -655,7 +655,7 @@ pattern that we tend to use:
 ```jsx
 // SomeComponent.js
 // React imports
-import { warning } from '../../internal/warning';
+import { warning } from '@carbon/utilities-react';
 
 let didWarnAboutDeprecation = false;
 

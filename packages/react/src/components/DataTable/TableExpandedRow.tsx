@@ -9,7 +9,7 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { useRef, type HTMLAttributes } from 'react';
 import TableCell from './TableCell';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 
 export interface TableExpandedRowProps
   extends HTMLAttributes<HTMLTableRowElement> {

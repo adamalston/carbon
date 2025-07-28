@@ -10,7 +10,7 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 import { spacing } from '@carbon/layout';
 
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 
 /**
  * The steps in the spacing scale

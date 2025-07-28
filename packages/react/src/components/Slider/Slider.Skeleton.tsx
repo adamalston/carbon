@@ -8,8 +8,8 @@
 import PropTypes from 'prop-types';
 import React, { HTMLAttributes, useState } from 'react';
 import cx from 'classnames';
-import { usePrefix } from '../../internal/usePrefix';
-import useIsomorphicEffect from '../../internal/useIsomorphicEffect';
+import { usePrefix } from '@carbon/utilities-react';
+import useIsomorphicEffect from '@carbon/utilities-react';
 import classNames from 'classnames';
 import { LowerHandle, UpperHandle } from './SliderHandles';
 

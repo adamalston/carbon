@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { PrefixContext } from '../../internal/usePrefix';
+import { PrefixContext } from '@carbon/utilities-react';
 import React from 'react';
 
 export const LowerHandle = (props) => (

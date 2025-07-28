@@ -8,11 +8,11 @@
 import React, { Children, type HTMLAttributes } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import TableSlugRow from './TableSlugRow';
 import TableDecoratorRow from './TableDecoratorRow';
 import { AILabel } from '../AILabel';
-import { isComponentElement } from '../../internal';
+import { isComponentElement } from '@carbon/utilities-react';
 
 export interface TableRowProps extends HTMLAttributes<HTMLTableRowElement> {
   /**

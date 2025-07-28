@@ -9,7 +9,7 @@ import React, { type ComponentType, type FunctionComponent } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Button from '../Button';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 
 export type ChatButtonKind =
   | 'primary'

@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import classNames from 'classnames';
 import { IconButton } from '../IconButton';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 
 const noopFn = () => {};
 

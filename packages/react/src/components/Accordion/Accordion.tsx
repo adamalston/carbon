@@ -6,7 +6,7 @@
  */
 
 import cx from 'classnames';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import PropTypes from 'prop-types';
 import React, { PropsWithChildren, ReactNode } from 'react';
 import { AccordionProvider } from './AccordionProvider';

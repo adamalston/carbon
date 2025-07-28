@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import classnames from 'classnames';
 import { NumberInput, NumberInputProps } from '../NumberInput';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { FormContext } from '../FluidForm/FormContext';
 import { type NumberFormatOptions } from '@carbon/utilities';
 import { NumberFormatOptionsPropType } from '../NumberInput/NumberFormatPropTypes';

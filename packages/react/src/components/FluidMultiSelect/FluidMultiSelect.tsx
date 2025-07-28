@@ -13,7 +13,7 @@ import {
   MultiSelect,
   type MultiSelectProps,
 } from '../MultiSelect';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { FormContext } from '../FluidForm/FormContext';
 import { UseSelectProps } from 'downshift';
 

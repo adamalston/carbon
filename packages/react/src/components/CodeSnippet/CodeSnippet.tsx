@@ -14,15 +14,15 @@ import React, {
   useCallback,
 } from 'react';
 import classNames from 'classnames';
-import { useResizeObserver } from '../../internal/useResizeObserver';
+import { useResizeObserver } from '@carbon/utilities-react';
 import { ChevronDown } from '@carbon/icons-react';
 import Copy from '../Copy';
 import Button from '../Button';
 import CopyButton from '../CopyButton';
-import { useId } from '../../internal/useId';
+import { useId } from '@carbon/utilities-react';
 import copy from 'copy-to-clipboard';
 import { deprecate } from '../../prop-types/deprecate';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import deprecateValuesWithin from '../../prop-types/deprecateValuesWithin';
 import { mapPopoverAlign } from '../../tools/mapPopoverAlign';
 

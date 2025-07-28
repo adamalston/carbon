@@ -9,7 +9,7 @@ import cx from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Close } from '@carbon/icons-react';
-import { usePrefix } from '../../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 
 /**
  * `ListBoxSelection` is used to provide controls for clearing a selection, in

@@ -9,13 +9,13 @@ import * as FeatureFlags from '@carbon/feature-flags';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { PolymorphicProps } from '../../types/common';
 import { useGridSettings } from './GridContext';
 import {
   PolymorphicComponentPropWithRef,
   PolymorphicRef,
-} from '../../internal/PolymorphicProps';
+} from '@carbon/utilities-react';
 
 type ColumnSpanPercent = '25%' | '50%' | '75%' | '100%';
 

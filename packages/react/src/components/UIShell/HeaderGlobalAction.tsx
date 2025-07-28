@@ -10,7 +10,7 @@ import React, { ReactNode } from 'react';
 import PropTypes from 'prop-types';
 import { AriaLabelPropType } from '../../prop-types/AriaPropTypes';
 import Button from '../Button';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 
 export interface HeaderGlobalActionProps {
   /**

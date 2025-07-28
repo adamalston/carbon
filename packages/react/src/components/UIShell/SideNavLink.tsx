@@ -20,7 +20,7 @@ import Link, { LinkProps, LinkPropTypes } from './Link';
 import SideNavIcon from './SideNavIcon';
 import SideNavItem from './SideNavItem';
 import SideNavLinkText from './SideNavLinkText';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { SideNavContext } from './SideNav';
 
 export type SideNavLinkProps<E extends ElementType> = LinkProps<E> & {

@@ -16,10 +16,10 @@ import React, {
 import Filename from './Filename';
 import FileUploaderButton from './FileUploaderButton';
 import { ButtonKinds } from '../Button/Button';
-import { keys, matches } from '../../internal/keyboard';
-import { usePrefix } from '../../internal/usePrefix';
+import { keys, matches } from '@carbon/utilities-react';
+import { usePrefix } from '@carbon/utilities-react';
 import { Text } from '../Text';
-import { useId } from '../../internal/useId';
+import { useId } from '@carbon/utilities-react';
 
 export interface FileUploaderProps extends HTMLAttributes<HTMLSpanElement> {
   /**

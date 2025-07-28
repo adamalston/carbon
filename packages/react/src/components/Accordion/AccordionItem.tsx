@@ -19,10 +19,10 @@ import React, {
   useState,
 } from 'react';
 import { Text } from '../Text';
-import { match, keys } from '../../internal/keyboard';
-import { useId } from '../../internal/useId';
+import { match, keys } from '@carbon/utilities-react';
+import { useId } from '@carbon/utilities-react';
 import { deprecate } from '../../prop-types/deprecate';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { AccordionContext } from './AccordionProvider';
 
 export interface AccordionItemProps {

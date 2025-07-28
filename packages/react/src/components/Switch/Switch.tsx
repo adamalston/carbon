@@ -13,8 +13,8 @@ import React, {
   ReactNode,
 } from 'react';
 import classNames from 'classnames';
-import { usePrefix } from '../../internal/usePrefix';
-import { noopFn } from '../../internal/noopFn';
+import { usePrefix } from '@carbon/utilities-react';
+import { noopFn } from '@carbon/utilities-react';
 
 export interface SwitchEventHandlersParams {
   index?: number;

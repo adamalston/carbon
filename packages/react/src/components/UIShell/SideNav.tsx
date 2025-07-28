@@ -19,13 +19,13 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 import { AriaLabelPropType } from '../../prop-types/AriaPropTypes';
 import { CARBON_SIDENAV_ITEMS } from './_utils';
-import { usePrefix } from '../../internal/usePrefix';
-import { keys, match } from '../../internal/keyboard';
-import { useMergedRefs } from '../../internal/useMergedRefs';
-import { useWindowEvent } from '../../internal/useEvent';
-import { useDelayedState } from '../../internal/useDelayedState';
+import { usePrefix } from '@carbon/utilities-react';
+import { keys, match } from '@carbon/utilities-react';
+import { useMergedRefs } from '@carbon/utilities-react';
+import { useWindowEvent } from '@carbon/utilities-react';
+import { useDelayedState } from '@carbon/utilities-react';
 import { breakpoints } from '@carbon/layout';
-import { useMatchMedia } from '../../internal/useMatchMedia';
+import { useMatchMedia } from '@carbon/utilities-react';
 // TO-DO: comment back in when footer is added for rails
 // import SideNavFooter from './SideNavFooter';
 

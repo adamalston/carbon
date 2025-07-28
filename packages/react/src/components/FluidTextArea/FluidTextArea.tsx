@@ -10,7 +10,7 @@ import React from 'react';
 import classnames from 'classnames';
 import TextArea from '../TextArea';
 import { deprecate } from '../../prop-types/deprecate';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { FormContext } from '../FluidForm/FormContext';
 
 export interface FluidTextAreaProps {

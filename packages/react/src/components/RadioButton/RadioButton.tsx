@@ -10,11 +10,11 @@ import React, { cloneElement, useRef, type ReactNode } from 'react';
 import classNames from 'classnames';
 import { Text } from '../Text';
 import { deprecate } from '../../prop-types/deprecate';
-import { usePrefix } from '../../internal/usePrefix';
-import { useId } from '../../internal/useId';
+import { usePrefix } from '@carbon/utilities-react';
+import { useId } from '@carbon/utilities-react';
 import mergeRefs from '../../tools/mergeRefs';
 import { AILabel } from '../AILabel';
-import { isComponentElement } from '../../internal';
+import { isComponentElement } from '@carbon/utilities-react';
 
 type ExcludedAttributes = 'onChange';
 

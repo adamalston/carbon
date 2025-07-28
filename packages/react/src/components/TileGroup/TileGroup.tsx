@@ -17,8 +17,8 @@ import React, {
   type ReactNode,
 } from 'react';
 import RadioTile from '../RadioTile';
-import { usePrefix } from '../../internal/usePrefix';
-import { noopFn } from '../../internal/noopFn';
+import { usePrefix } from '@carbon/utilities-react';
+import { noopFn } from '@carbon/utilities-react';
 
 type ExcludedAttributes = 'onChange';
 

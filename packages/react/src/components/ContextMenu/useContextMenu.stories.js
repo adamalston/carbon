@@ -8,7 +8,7 @@
 import React, { useRef } from 'react';
 import { action } from 'storybook/actions';
 
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import CodeSnippet from '../CodeSnippet';
 import UnorderedList from '../UnorderedList';
 import ListItem from '../ListItem';

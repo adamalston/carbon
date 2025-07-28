@@ -8,9 +8,9 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { forwardRef } from 'react';
-import { keys, match } from '../../internal/keyboard';
-import { usePrefix } from '../../internal/usePrefix';
-import { warning } from '../../internal/warning';
+import { keys, match } from '@carbon/utilities-react';
+import { usePrefix } from '@carbon/utilities-react';
+import { warning } from '@carbon/utilities-react';
 import { Text } from '../Text';
 
 export interface OverflowMenuItemProps

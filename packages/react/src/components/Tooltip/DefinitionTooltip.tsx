@@ -9,9 +9,9 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Popover, PopoverAlignment, PopoverContent } from '../Popover';
-import { match, keys } from '../../internal/keyboard';
-import { useFallbackId } from '../../internal/useId';
-import { usePrefix } from '../../internal/usePrefix';
+import { match, keys } from '@carbon/utilities-react';
+import { useFallbackId } from '@carbon/utilities-react';
+import { usePrefix } from '@carbon/utilities-react';
 import { deprecate } from '../../prop-types/deprecate';
 
 export interface DefinitionTooltipProps

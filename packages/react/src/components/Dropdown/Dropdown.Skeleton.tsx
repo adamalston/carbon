@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import React, { type HTMLAttributes } from 'react';
 import cx from 'classnames';
 import { ListBoxSizePropType, type ListBoxSize } from '../ListBox';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 
 export interface DropdownSkeletonProps extends HTMLAttributes<HTMLDivElement> {
   /**

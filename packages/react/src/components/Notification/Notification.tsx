@@ -29,18 +29,18 @@ import {
 
 import { Text } from '../Text';
 import Button, { type ButtonProps } from '../Button';
-import useIsomorphicEffect from '../../internal/useIsomorphicEffect';
+import useIsomorphicEffect from '@carbon/utilities-react';
 import {
   useNoInteractiveChildren,
   useInteractiveChildrenNeedDescription,
 } from '@carbon/utilities-react';
-import { keys, matches, match } from '../../internal/keyboard';
-import { usePrefix } from '../../internal/usePrefix';
-import { useId } from '../../internal/useId';
-import { noopFn } from '../../internal/noopFn';
-import { wrapFocus, wrapFocusWithoutSentinels } from '../../internal/wrapFocus';
+import { keys, matches, match } from '@carbon/utilities-react';
+import { usePrefix } from '@carbon/utilities-react';
+import { useId } from '@carbon/utilities-react';
+import { noopFn } from '@carbon/utilities-react';
+import { wrapFocus, wrapFocusWithoutSentinels } from '@carbon/utilities-react';
 import { useFeatureFlag } from '../FeatureFlags';
-import { warning } from '../../internal/warning';
+import { warning } from '@carbon/utilities-react';
 import deprecateValuesWithin from '../../prop-types/deprecateValuesWithin';
 
 /**

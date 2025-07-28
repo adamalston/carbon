@@ -38,17 +38,17 @@ import {
   sortingPropTypes,
 } from './MultiSelectPropTypes';
 import { defaultSortItems, defaultCompareItems } from './tools/sorting';
-import { useSelection } from '../../internal/Selection';
-import { useId } from '../../internal/useId';
+import { useSelection } from '@carbon/utilities-react';
+import { useId } from '@carbon/utilities-react';
 import mergeRefs from '../../tools/mergeRefs';
 import { deprecate } from '../../prop-types/deprecate';
-import { keys, match } from '../../internal/keyboard';
-import { usePrefix } from '../../internal/usePrefix';
+import { keys, match } from '@carbon/utilities-react';
+import { usePrefix } from '@carbon/utilities-react';
 import { FormContext } from '../FluidForm';
 import { ListBoxProps } from '../ListBox/ListBox';
 import Checkbox from '../Checkbox';
 import type { TranslateWithId } from '../../types/common';
-import { noopFn } from '../../internal/noopFn';
+import { noopFn } from '@carbon/utilities-react';
 import {
   useFloating,
   flip,
@@ -58,7 +58,7 @@ import {
 } from '@floating-ui/react';
 import { useFeatureFlag } from '../FeatureFlags';
 import { AILabel } from '../AILabel';
-import { isComponentElement } from '../../internal';
+import { isComponentElement } from '@carbon/utilities-react';
 
 const {
   ItemClick,

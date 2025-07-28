@@ -8,12 +8,12 @@
 import React, { useRef, useState, type HTMLAttributes } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { keys, matches } from '../../internal/keyboard';
-import { useId } from '../../internal/useId';
-import { usePrefix } from '../../internal/usePrefix';
+import { keys, matches } from '@carbon/utilities-react';
+import { useId } from '@carbon/utilities-react';
+import { usePrefix } from '@carbon/utilities-react';
 import { composeEventHandlers } from '../../tools/events';
 import { deprecate } from '../../prop-types/deprecate';
-import { noopFn } from '../../internal/noopFn';
+import { noopFn } from '@carbon/utilities-react';
 
 export interface FileUploaderDropContainerProps
   extends Omit<HTMLAttributes<HTMLButtonElement>, 'tabIndex'> {

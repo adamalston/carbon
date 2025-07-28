@@ -38,17 +38,17 @@ import {
 import isEqual from 'react-fast-compare';
 import ListBox, { ListBoxSizePropType, type ListBoxSize } from '../ListBox';
 import { ListBoxTrigger, ListBoxSelection } from '../ListBox/next';
-import { match, keys } from '../../internal/keyboard';
-import { useId } from '../../internal/useId';
+import { match, keys } from '@carbon/utilities-react';
+import { useId } from '@carbon/utilities-react';
 import mergeRefs from '../../tools/mergeRefs';
 import { deprecate } from '../../prop-types/deprecate';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { FormContext } from '../FluidForm';
 import { autoUpdate, flip, hide, useFloating } from '@floating-ui/react';
 import { TranslateWithId } from '../../types/common';
 import { useFeatureFlag } from '../FeatureFlags';
 import { AILabel } from '../AILabel';
-import { isComponentElement } from '../../internal';
+import { isComponentElement } from '@carbon/utilities-react';
 
 const {
   InputBlur,

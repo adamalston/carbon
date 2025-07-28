@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { warning } from '../internal/warning';
+import { warning } from '@carbon/utilities-react';
 
 type PropValidator = (
   props: Record<string, any>,

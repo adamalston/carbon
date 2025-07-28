@@ -15,8 +15,8 @@ import React, {
 } from 'react';
 import classNames from 'classnames';
 import { Close } from '@carbon/icons-react';
-import { useId } from '../../internal/useId';
-import { usePrefix } from '../../internal/usePrefix';
+import { useId } from '@carbon/utilities-react';
+import { usePrefix } from '@carbon/utilities-react';
 import { Text } from '../Text';
 import { deprecate } from '../../prop-types/deprecate';
 import { DefinitionTooltip } from '../Tooltip';
@@ -24,13 +24,13 @@ import { isEllipsisActive } from './isEllipsisActive';
 import {
   PolymorphicComponentPropWithRef,
   PolymorphicRef,
-} from '../../internal/PolymorphicProps';
+} from '@carbon/utilities-react';
 import { SelectableTagBaseProps } from './SelectableTag';
 import { OperationalTagBaseProps } from './OperationalTag';
 import { DismissibleTagBaseProps } from './DismissibleTag';
-import { useMergedRefs } from '../../internal/useMergedRefs';
+import { useMergedRefs } from '@carbon/utilities-react';
 import { AILabel } from '../AILabel';
-import { isComponentElement } from '../../internal';
+import { isComponentElement } from '@carbon/utilities-react';
 
 export const TYPES = {
   red: 'Red',

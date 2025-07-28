@@ -8,7 +8,7 @@
 import React, { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 
 export interface ButtonSetProps extends React.HTMLAttributes<HTMLDivElement> {
   /**

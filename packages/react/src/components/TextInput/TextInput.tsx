@@ -19,12 +19,12 @@ import { useNormalizedInputProps } from '../../internal/useNormalizedInputProps'
 import { deprecate } from '../../prop-types/deprecate';
 import { textInputProps } from './util';
 import { FormContext } from '../FluidForm';
-import { useMergedRefs } from '../../internal/useMergedRefs';
-import { usePrefix } from '../../internal/usePrefix';
-import { getAnnouncement } from '../../internal/getAnnouncement';
+import { useMergedRefs } from '@carbon/utilities-react';
+import { usePrefix } from '@carbon/utilities-react';
+import { getAnnouncement } from '@carbon/utilities-react';
 import { Text } from '../Text';
 import { AILabel } from '../AILabel';
-import { isComponentElement } from '../../internal';
+import { isComponentElement } from '@carbon/utilities-react';
 
 type ExcludedAttributes = 'defaultValue' | 'id' | 'size' | 'value';
 

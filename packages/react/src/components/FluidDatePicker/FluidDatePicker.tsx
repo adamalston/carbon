@@ -8,7 +8,7 @@
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import DatePicker from '../DatePicker';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { FormContext } from '../FluidForm/FormContext';
 import React from 'react';
 

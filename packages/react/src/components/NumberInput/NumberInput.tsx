@@ -20,24 +20,24 @@ import React, {
   type MouseEvent,
   type ReactNode,
 } from 'react';
-import { useMergedRefs } from '../../internal/useMergedRefs';
+import { useMergedRefs } from '@carbon/utilities-react';
 import { useNormalizedInputProps as normalize } from '../../internal/useNormalizedInputProps';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { deprecate } from '../../prop-types/deprecate';
 import { FormContext } from '../FluidForm';
 import { Text } from '../Text';
 import { TranslateWithId } from '../../types/common';
-import { clamp } from '../../internal/clamp';
-import { useControllableState } from '../../internal/useControllableState';
+import { clamp } from '@carbon/utilities-react';
+import { useControllableState } from '@carbon/utilities-react';
 import {
   NumberFormatter,
   NumberParser,
   type NumberFormatOptions,
 } from '@carbon/utilities';
-import { keys, match } from '../../internal/keyboard';
+import { keys, match } from '@carbon/utilities-react';
 import { NumberFormatOptionsPropType } from './NumberFormatPropTypes';
 import { AILabel, type AILabelProps } from '../AILabel';
-import { isComponentElement } from '../../internal';
+import { isComponentElement } from '@carbon/utilities-react';
 
 export const translationIds = {
   'increment.number': 'increment.number',

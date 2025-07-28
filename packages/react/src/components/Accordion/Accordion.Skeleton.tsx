@@ -10,7 +10,7 @@ import React from 'react';
 import cx from 'classnames';
 import { ChevronRight } from '@carbon/icons-react';
 import SkeletonText from '../SkeletonText';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 
 export interface AccordionSkeletonProps {
   /**

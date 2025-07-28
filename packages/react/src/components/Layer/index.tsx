@@ -8,14 +8,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { LayerContext } from './LayerContext';
 import { LayerLevel, MAX_LEVEL, MIN_LEVEL, levels } from './LayerLevel';
 import {
   PolymorphicComponentPropWithRef,
   PolymorphicRef,
-} from '../../internal/PolymorphicProps';
-import { clamp } from '../../internal/clamp';
+} from '@carbon/utilities-react';
+import { clamp } from '@carbon/utilities-react';
 
 /**
  * A custom hook that will return information about the current layer. A common

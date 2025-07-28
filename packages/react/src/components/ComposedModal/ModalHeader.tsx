@@ -13,7 +13,7 @@ import React, {
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { Close } from '@carbon/icons-react';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { IconButton } from '../IconButton';
 
 export type DivProps = Omit<HTMLAttributes<HTMLDivElement>, 'title'>;

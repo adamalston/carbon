@@ -7,8 +7,8 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useRef } from 'react';
 import { deprecate } from '../../prop-types/deprecate';
-import { usePrefix } from '../../internal/usePrefix';
-import { useMergedRefs } from '../../internal/useMergedRefs';
+import { usePrefix } from '@carbon/utilities-react';
+import { useMergedRefs } from '@carbon/utilities-react';
 
 export interface InlineCheckboxProps {
   /*

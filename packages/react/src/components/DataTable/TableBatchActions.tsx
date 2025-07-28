@@ -11,7 +11,7 @@ import React, { type MouseEventHandler } from 'react';
 import Button from '../Button';
 import TableActionList from './TableActionList';
 import { Text } from '../Text';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import type { TranslateWithId } from '../../types/common';
 
 const TableBatchActionsTranslationKeys = [

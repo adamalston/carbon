@@ -8,9 +8,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import classnames from 'classnames';
 import Search, { type SearchProps } from '../Search';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { composeEventHandlers } from '../../tools/events';
-import { match, keys } from '../../internal/keyboard';
+import { match, keys } from '@carbon/utilities-react';
 import mergeRefs from '../../tools/mergeRefs';
 
 const ExpandableSearch = React.forwardRef(function ExpandableSearch(

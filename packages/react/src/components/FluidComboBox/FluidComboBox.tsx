@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import React, { ComponentType, ForwardedRef } from 'react';
 import classnames from 'classnames';
 import ComboBox from '../ComboBox';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { FormContext } from '../FluidForm/FormContext';
 import { ComboBoxProps } from '../ComboBox/ComboBox';
 

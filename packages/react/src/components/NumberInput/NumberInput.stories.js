@@ -11,7 +11,7 @@ import NumberInputSkeleton from './NumberInput.Skeleton';
 import Button from '../Button';
 import { AILabel, AILabelContent, AILabelActions } from '../AILabel';
 import { IconButton } from '../IconButton';
-import { useDocumentLang } from '../../internal/useDocumentLang';
+import { useDocumentLang } from '@carbon/utilities-react';
 import { View, FolderOpen, Folders } from '@carbon/icons-react';
 import mdx from './NumberInput.mdx';
 

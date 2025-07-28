@@ -7,7 +7,7 @@
 
 import PropTypes from 'prop-types';
 import React, { PropsWithChildren } from 'react';
-import { PrefixContext } from '../../internal/usePrefix';
+import { PrefixContext } from '@carbon/utilities-react';
 
 export interface ClassPrefixProps {
   /**

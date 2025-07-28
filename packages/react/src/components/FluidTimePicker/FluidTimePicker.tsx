@@ -8,7 +8,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import FluidTextInput, { FluidTextInputProps } from '../FluidTextInput';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { WarningFilled, WarningAltFilled } from '@carbon/icons-react';
 
 export interface FluidTimePickerProps extends FluidTextInputProps {

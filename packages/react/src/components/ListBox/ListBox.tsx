@@ -21,7 +21,7 @@ import {
   type ListBoxSize,
   type ListBoxType,
 } from '.';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { FormContext } from '../FluidForm';
 
 const handleOnKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {

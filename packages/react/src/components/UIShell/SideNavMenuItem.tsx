@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import React, { ElementType, ForwardedRef, Ref, ComponentProps } from 'react';
 import SideNavLinkText from './SideNavLinkText';
 import Link from './Link';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 
 export type SideNavMenuItemProps = ComponentProps<typeof Link> & {
   /**

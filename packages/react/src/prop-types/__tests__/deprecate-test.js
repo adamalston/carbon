@@ -13,8 +13,8 @@ describe('deprecate', () => {
 
   beforeEach(() => {
     jest.resetModules();
-    jest.mock('../../internal/warning');
-    warning = require('../../internal/warning').warning;
+    jest.mock('@carbon/utilities-react');
+    warning = require('@carbon/utilities-react').warning;
     deprecate = require('../deprecate').deprecate;
     mockPropType = jest.fn();
     mockArgs = [{ propName: true }, 'propName', 'ComponentName'];

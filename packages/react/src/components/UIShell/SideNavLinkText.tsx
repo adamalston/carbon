@@ -7,7 +7,7 @@
 
 import cx from 'classnames';
 import React, { ReactNode } from 'react';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import PropTypes from 'prop-types';
 
 export interface SideNavLinkTextProps {

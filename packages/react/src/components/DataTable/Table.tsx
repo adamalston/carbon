@@ -15,10 +15,10 @@ import React, {
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { debounce } from 'es-toolkit/compat';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { TableContext } from './TableContext';
-import { useWindowEvent } from '../../internal/useEvent';
-import useIsomorphicEffect from '../../internal/useIsomorphicEffect';
+import { useWindowEvent } from '@carbon/utilities-react';
+import useIsomorphicEffect from '@carbon/utilities-react';
 
 export interface TableProps {
   experimentalAutoAlign?: boolean;

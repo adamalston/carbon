@@ -9,7 +9,7 @@ import { Close, WarningFilled, CheckmarkFilled } from '@carbon/icons-react';
 import PropTypes from 'prop-types';
 import React, { type HTMLAttributes } from 'react';
 import Loading from '../Loading';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 
 export type FilenameStatus = 'edit' | 'complete' | 'uploading';
 

@@ -32,18 +32,18 @@ import React, {
 import { Grid } from '../Grid';
 import { isElement } from 'react-is';
 import { Tooltip } from '../Tooltip';
-import { useControllableState } from '../../internal/useControllableState';
-import { useId } from '../../internal/useId';
-import useIsomorphicEffect from '../../internal/useIsomorphicEffect';
-import { useMergedRefs } from '../../internal/useMergedRefs';
+import { useControllableState } from '@carbon/utilities-react';
+import { useId } from '@carbon/utilities-react';
+import useIsomorphicEffect from '@carbon/utilities-react';
+import { useMergedRefs } from '@carbon/utilities-react';
 import { getInteractiveContent } from '@carbon/utilities-react';
-import { usePrefix } from '../../internal/usePrefix';
-import { keys, match, matches } from '../../internal/keyboard';
+import { usePrefix } from '@carbon/utilities-react';
+import { keys, match, matches } from '@carbon/utilities-react';
 import { usePressable } from './usePressable';
 import { deprecate } from '../../prop-types/deprecate';
 import { Close } from '@carbon/icons-react';
-import { useEvent } from '../../internal/useEvent';
-import { useMatchMedia } from '../../internal/useMatchMedia';
+import { useEvent } from '@carbon/utilities-react';
+import { useMatchMedia } from '@carbon/utilities-react';
 import { Text } from '../Text';
 import BadgeIndicator from '../BadgeIndicator';
 

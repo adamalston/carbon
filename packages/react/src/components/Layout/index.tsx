@@ -9,7 +9,7 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { ElementType, HTMLAttributes, ReactNode } from 'react';
 
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 
 const sizes: Size[] = ['xs', 'sm', 'md', 'lg', 'xl', '2xl'];
 

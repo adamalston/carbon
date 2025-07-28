@@ -8,9 +8,9 @@
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { cloneElement, type ReactNode } from 'react';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { AILabel } from '../AILabel';
-import { isComponentElement } from '../../internal';
+import { isComponentElement } from '@carbon/utilities-react';
 
 export interface TableDecoratorRowProps {
   /**

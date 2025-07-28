@@ -10,7 +10,7 @@ import React from 'react';
 import { IconButton, IconButtonKind, IconButtonKinds } from '../IconButton';
 import { PopoverAlignment } from '../Popover';
 import ButtonBase from './ButtonBase';
-import { PolymorphicComponentPropWithRef } from '../../internal/PolymorphicProps';
+import { PolymorphicComponentPropWithRef } from '@carbon/utilities-react';
 
 export const ButtonKinds = [
   'primary',

@@ -9,10 +9,10 @@ import PropTypes from 'prop-types';
 import React, { ReactNode } from 'react';
 import Modal from '../Modal';
 import Button from '../Button';
-import { warning } from '../../internal/warning';
+import { warning } from '@carbon/utilities-react';
 import { ButtonKinds } from '../Button';
-import { noopFn } from '../../internal/noopFn';
-import { keys, match } from '../../internal/keyboard';
+import { noopFn } from '@carbon/utilities-react';
+import { keys, match } from '@carbon/utilities-react';
 
 export interface ModalWrapperProps {
   buttonTriggerClassName?: string;

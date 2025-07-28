@@ -17,9 +17,9 @@ import React, {
 import { debounce } from 'es-toolkit/compat';
 import classnames from 'classnames';
 import { composeEventHandlers } from '../../tools/events';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { IconButton } from '../IconButton';
-import { noopFn } from '../../internal/noopFn';
+import { noopFn } from '@carbon/utilities-react';
 import deprecateValuesWithin from '../../prop-types/deprecateValuesWithin';
 import { mapPopoverAlign } from '../../tools/mapPopoverAlign';
 

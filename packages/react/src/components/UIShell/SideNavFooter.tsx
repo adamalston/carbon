@@ -10,7 +10,7 @@ import { Close, ChevronRight } from '@carbon/icons-react';
 import cx from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 
 export interface SideNavFooterProps {
   /**

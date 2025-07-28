@@ -12,8 +12,8 @@ import { Copy as CopyIcon } from '@carbon/icons-react';
 import { ButtonProps } from '../Button';
 import Copy from '../Copy';
 import { LayoutConstraint } from '../Layout';
-import { usePrefix } from '../../internal/usePrefix';
-import { noopFn } from '../../internal/noopFn';
+import { usePrefix } from '@carbon/utilities-react';
+import { noopFn } from '@carbon/utilities-react';
 import deprecateValuesWithin from '../../prop-types/deprecateValuesWithin';
 import { mapPopoverAlign } from '../../tools/mapPopoverAlign';
 

@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import cx from 'classnames';
 import SkeletonText from '../SkeletonText';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 
 export interface PaginationSkeletonProps
   extends React.HTMLAttributes<HTMLDivElement> {

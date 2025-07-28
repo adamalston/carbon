@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { PolymorphicComponentPropWithRef } from '../../internal/PolymorphicProps';
+import { PolymorphicComponentPropWithRef } from '@carbon/utilities-react';
 import PropTypes from 'prop-types';
 
 export interface GridBaseProps {

@@ -8,7 +8,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import TreeNode from '../TreeNode';
-import { keys } from '../../../internal/keyboard';
+import { keys } from '@carbon/utilities-react';
 import { ArrowDown } from '@carbon/icons-react';
 import { TreeContext, DepthContext } from '../TreeContext';
 

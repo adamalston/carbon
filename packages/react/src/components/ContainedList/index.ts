@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { deprecateFieldOnObject } from '../../internal/deprecateFieldOnObject';
+import { deprecateFieldOnObject } from '@carbon/utilities-react';
 import ContainedList from './ContainedList';
 import ContainedListItem from './ContainedListItem';
 

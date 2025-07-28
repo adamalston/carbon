@@ -8,14 +8,14 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { keys, matches } from '../../internal/keyboard';
+import { keys, matches } from '@carbon/utilities-react';
 import {
   CheckmarkOutline,
   Warning,
   CircleDash,
   Incomplete,
 } from '@carbon/icons-react';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { Text } from '../Text';
 import { TranslateWithId } from '../../types/common';
 

@@ -13,15 +13,15 @@ import {
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { cloneElement } from 'react';
-import { keys, matches } from '../../internal/keyboard';
-import { useFallbackId } from '../../internal/useId';
-import { usePrefix } from '../../internal/usePrefix';
+import { keys, matches } from '@carbon/utilities-react';
+import { useFallbackId } from '@carbon/utilities-react';
+import { usePrefix } from '@carbon/utilities-react';
 import { deprecate } from '../../prop-types/deprecate';
-import { noopFn } from '../../internal/noopFn';
+import { noopFn } from '@carbon/utilities-react';
 import { Text } from '../Text';
 import { useFeatureFlag } from '../FeatureFlags';
 import { AILabel } from '../AILabel';
-import { isComponentElement } from '../../internal';
+import { isComponentElement } from '@carbon/utilities-react';
 
 export interface RadioTileProps {
   /**

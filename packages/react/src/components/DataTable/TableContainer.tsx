@@ -8,8 +8,8 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { useMemo, type HTMLAttributes } from 'react';
-import { usePrefix } from '../../internal/usePrefix';
-import { useId } from '../../internal/useId';
+import { usePrefix } from '@carbon/utilities-react';
+import { useId } from '@carbon/utilities-react';
 import { TableContext } from './TableContext';
 import { Heading, Section } from '../Heading';
 

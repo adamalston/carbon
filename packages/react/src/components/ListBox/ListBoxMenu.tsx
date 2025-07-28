@@ -6,7 +6,7 @@
  */
 
 import React, { forwardRef, type HTMLAttributes } from 'react';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import PropTypes from 'prop-types';
 import ListBoxMenuItem from './ListBoxMenuItem';
 

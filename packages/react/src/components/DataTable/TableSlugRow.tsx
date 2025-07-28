@@ -8,7 +8,7 @@
 import PropTypes from 'prop-types';
 import React, { ReactNode, useEffect } from 'react';
 import classNames from 'classnames';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import deprecateComponent from '../../prop-types/deprecateComponent';
 
 export interface TableSlugRowProps {

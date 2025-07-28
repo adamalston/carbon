@@ -27,15 +27,15 @@ import {
   elementOrParentIsFloatingMenu,
   wrapFocus,
   wrapFocusWithoutSentinels,
-} from '../../internal/wrapFocus';
+} from '@carbon/utilities-react';
 import { debounce } from 'es-toolkit/compat';
-import useIsomorphicEffect from '../../internal/useIsomorphicEffect';
-import { useId } from '../../internal/useId';
-import { usePrefix } from '../../internal/usePrefix';
-import { usePreviousValue } from '../../internal/usePreviousValue';
-import { keys, match } from '../../internal/keyboard';
+import useIsomorphicEffect from '@carbon/utilities-react';
+import { useId } from '@carbon/utilities-react';
+import { usePrefix } from '@carbon/utilities-react';
+import { usePreviousValue } from '@carbon/utilities-react';
+import { keys, match } from '@carbon/utilities-react';
 import { IconButton } from '../IconButton';
-import { noopFn } from '../../internal/noopFn';
+import { noopFn } from '@carbon/utilities-react';
 import { Text } from '../Text';
 import { InlineLoadingStatus } from '../InlineLoading/InlineLoading';
 import { useFeatureFlag } from '../FeatureFlags';
@@ -43,8 +43,8 @@ import { composeEventHandlers } from '../../tools/events';
 import { deprecate } from '../../prop-types/deprecate';
 import { unstable__Dialog as Dialog } from '../Dialog/index';
 import { AILabel } from '../AILabel';
-import { isComponentElement } from '../../internal';
-import { warning } from '../../internal/warning';
+import { isComponentElement } from '@carbon/utilities-react';
+import { warning } from '@carbon/utilities-react';
 
 export const ModalSizes = ['xs', 'sm', 'md', 'lg'] as const;
 const invalidOutsideClickMessage =

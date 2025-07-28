@@ -11,7 +11,7 @@ import cx from 'classnames';
 import React, { type ComponentProps, type JSX } from 'react';
 import PropTypes from 'prop-types';
 import { AriaLabelPropType } from '../../prop-types/AriaPropTypes';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 
 type HeaderMenuButtonBaseProps = Omit<
   ComponentProps<'button'>,

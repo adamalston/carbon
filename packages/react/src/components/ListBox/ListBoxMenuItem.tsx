@@ -18,8 +18,8 @@ import React, {
   type Ref,
 } from 'react';
 import PropTypes from 'prop-types';
-import { usePrefix } from '../../internal/usePrefix';
-import { useMergedRefs } from '../../internal/useMergedRefs';
+import { usePrefix } from '@carbon/utilities-react';
+import { useMergedRefs } from '@carbon/utilities-react';
 
 /**
  * Determines if the content of an element is truncated.

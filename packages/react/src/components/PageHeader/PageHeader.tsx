@@ -16,9 +16,9 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { breakpoints } from '@carbon/layout';
-import { useMatchMedia } from '../../internal/useMatchMedia';
+import { useMatchMedia } from '@carbon/utilities-react';
 import { Text } from '../Text';
 import { MenuButton } from '../MenuButton';
 import { MenuItemProps } from '../Menu/MenuItem';
@@ -28,9 +28,9 @@ import { AspectRatio } from '../AspectRatio';
 import { createOverflowHandler } from '@carbon/utilities';
 import { OperationalTag, Tag } from '../Tag';
 import { TYPES } from '../Tag/Tag';
-import useOverflowItems from '../../internal/useOverflowItems';
+import useOverflowItems from '@carbon/utilities-react';
 import { Popover, PopoverContent } from '../Popover';
-import { useId } from '../../internal/useId';
+import { useId } from '@carbon/utilities-react';
 import { Grid, Column } from '../Grid';
 
 /**

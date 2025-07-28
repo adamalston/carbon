@@ -14,7 +14,7 @@ import RadioButtonGroup from '../RadioButtonGroup';
 import { default as Checkbox } from '../Checkbox';
 import mdx from './Popover.mdx';
 import { Settings } from '@carbon/icons-react';
-import { keys, match } from '../../internal/keyboard';
+import { keys, match } from '@carbon/utilities-react';
 import OverflowMenu from '../OverflowMenu/OverflowMenu';
 import OverflowMenuItem from '../OverflowMenuItem';
 

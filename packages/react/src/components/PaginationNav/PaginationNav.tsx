@@ -14,11 +14,11 @@ import {
   OverflowMenuHorizontal,
 } from '@carbon/icons-react';
 import { IconButton } from '../IconButton';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { TranslateWithId } from '../../types/common';
 import { breakpoints } from '@carbon/layout';
-import { useMatchMedia } from '../../internal/useMatchMedia';
-import { clamp } from '../../internal/clamp';
+import { useMatchMedia } from '@carbon/utilities-react';
+import { clamp } from '@carbon/utilities-react';
 
 const translationIds = {
   'carbon.pagination-nav.next': 'Next',

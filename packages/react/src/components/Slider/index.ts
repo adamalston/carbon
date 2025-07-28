@@ -6,7 +6,7 @@
  */
 
 import SliderComponent from './Slider';
-import { createClassWrapper } from '../../internal/createClassWrapper';
+import { createClassWrapper } from '@carbon/utilities-react';
 
 const Slider = createClassWrapper(SliderComponent);
 

@@ -16,17 +16,17 @@ import React, {
   type HTMLAttributes,
   type RefObject,
 } from 'react';
-import useIsomorphicEffect from '../../internal/useIsomorphicEffect';
-import { usePrefix } from '../../internal/usePrefix';
+import useIsomorphicEffect from '@carbon/utilities-react';
+import { usePrefix } from '@carbon/utilities-react';
 import cx from 'classnames';
 import { Close } from '@carbon/icons-react';
 import { IconButton } from '../IconButton';
-import { noopFn } from '../../internal/noopFn';
+import { noopFn } from '@carbon/utilities-react';
 import { Text } from '../Text';
 import { Layer } from '../Layer';
 import ButtonSet from '../ButtonSet';
 import Button from '../Button';
-import { useId } from '../../internal/useId';
+import { useId } from '@carbon/utilities-react';
 import { debounce } from 'es-toolkit/compat';
 import { InlineLoadingStatus } from '../InlineLoading/InlineLoading';
 import InlineLoading from '../InlineLoading/InlineLoading';

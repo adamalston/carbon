@@ -8,13 +8,13 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { GridSettings, useGridSettings } from './GridContext';
 import { GridComponent, GridBaseProps } from './GridTypes';
 import {
   PolymorphicComponentPropWithRef,
   PolymorphicRef,
-} from '../../internal/PolymorphicProps';
+} from '@carbon/utilities-react';
 
 const CSSGrid = React.forwardRef<
   any,

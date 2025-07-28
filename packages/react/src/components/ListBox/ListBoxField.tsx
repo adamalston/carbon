@@ -7,7 +7,7 @@
 
 import React, { type HTMLAttributes } from 'react';
 import PropTypes from 'prop-types';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 
 // TODO: When can this code be deleted?
 // No longer used, left export for backward-compatibility

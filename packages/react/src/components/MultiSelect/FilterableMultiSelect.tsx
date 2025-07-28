@@ -47,15 +47,15 @@ import ListBox, {
   type ListBoxType,
 } from '../ListBox';
 import { ListBoxTrigger, ListBoxSelection } from '../ListBox/next';
-import { match, keys } from '../../internal/keyboard';
+import { match, keys } from '@carbon/utilities-react';
 import { defaultItemToString } from './tools/itemToString';
 import mergeRefs from '../../tools/mergeRefs';
 import { deprecate } from '../../prop-types/deprecate';
-import { useId } from '../../internal/useId';
+import { useId } from '@carbon/utilities-react';
 import { defaultSortItems, defaultCompareItems } from './tools/sorting';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { FormContext } from '../FluidForm';
-import { useSelection } from '../../internal/Selection';
+import { useSelection } from '@carbon/utilities-react';
 import {
   useFloating,
   flip,
@@ -65,7 +65,7 @@ import {
 } from '@floating-ui/react';
 import { TranslateWithId } from '../../types/common';
 import { AILabel } from '../AILabel';
-import { isComponentElement } from '../../internal';
+import { isComponentElement } from '@carbon/utilities-react';
 
 const {
   InputBlur,

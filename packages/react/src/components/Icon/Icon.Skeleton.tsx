@@ -8,7 +8,7 @@
 import PropTypes from 'prop-types';
 import React, { ComponentProps } from 'react';
 import cx from 'classnames';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 
 export interface IconSkeletonProps extends ComponentProps<'div'> {
   /**

@@ -10,7 +10,7 @@ import React, { forwardRef, type AriaAttributes } from 'react';
 import cx from 'classnames';
 import Link from '../Link';
 import { OverflowMenuHorizontal } from '@carbon/icons-react';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { Text } from '../Text';
 
 export interface BreadcrumbItemProps

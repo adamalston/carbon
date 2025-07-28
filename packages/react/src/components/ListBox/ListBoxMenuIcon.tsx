@@ -9,7 +9,7 @@ import cx from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ChevronDown } from '@carbon/icons-react';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { TranslateWithId } from '../../types/common';
 
 export type ListBoxMenuIconTranslationKey = 'close.menu' | 'open.menu';

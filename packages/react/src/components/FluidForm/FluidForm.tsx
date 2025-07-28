@@ -10,7 +10,7 @@ import React, { type HTMLAttributes } from 'react';
 import classnames from 'classnames';
 import Form from '../Form';
 import { FormContext } from './FormContext';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 
 export type FluidFormProps = HTMLAttributes<HTMLFormElement>;
 

@@ -18,12 +18,12 @@ import React, {
   type FocusEventHandler,
 } from 'react';
 import { Popover, type PopoverAlignment, PopoverContent } from '../Popover';
-import { match, keys } from '../../internal/keyboard';
-import { useWindowEvent } from '../../internal/useEvent';
-import { useId } from '../../internal/useId';
-import { usePrefix } from '../../internal/usePrefix';
+import { match, keys } from '@carbon/utilities-react';
+import { useWindowEvent } from '@carbon/utilities-react';
+import { useId } from '@carbon/utilities-react';
+import { usePrefix } from '@carbon/utilities-react';
 import { PolymorphicProps } from '../../types/common';
-import { PolymorphicComponentPropWithRef } from '../../internal/PolymorphicProps';
+import { PolymorphicComponentPropWithRef } from '@carbon/utilities-react';
 
 type ToggletipLabelProps<E extends ElementType> = {
   as?: E;

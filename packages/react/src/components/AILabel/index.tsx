@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import deprecateValuesWithin from '../../prop-types/deprecateValuesWithin';
 import React from 'react';
 
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import {
   Toggletip,
   ToggletipButton,
@@ -20,7 +20,7 @@ import {
 import { IconButton } from '../IconButton';
 import { mapPopoverAlign } from '../../tools/mapPopoverAlign';
 import { Undo } from '@carbon/icons-react';
-import { useId } from '../../internal/useId';
+import { useId } from '@carbon/utilities-react';
 import { deprecate } from '../../prop-types/deprecate';
 
 export type AILabelContentProps = React.HTMLAttributes<HTMLSpanElement>;

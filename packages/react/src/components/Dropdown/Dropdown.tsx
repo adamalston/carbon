@@ -44,10 +44,10 @@ import ListBox, {
 } from '../ListBox';
 import mergeRefs from '../../tools/mergeRefs';
 import { deprecate } from '../../prop-types/deprecate';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { FormContext } from '../FluidForm';
 import { TranslateWithId } from '../../types/common';
-import { useId } from '../../internal/useId';
+import { useId } from '@carbon/utilities-react';
 import {
   useFloating,
   flip,
@@ -57,7 +57,7 @@ import {
 } from '@floating-ui/react';
 import { useFeatureFlag } from '../FeatureFlags';
 import { AILabel } from '../AILabel';
-import { isComponentElement } from '../../internal';
+import { isComponentElement } from '@carbon/utilities-react';
 
 const { ItemMouseMove, MenuMouseLeave } =
   useSelect.stateChangeTypes as UseSelectInterface['stateChangeTypes'] & {

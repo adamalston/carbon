@@ -12,8 +12,8 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { useControllableState } from '../../internal/useControllableState';
-import { usePrefix } from '../../internal/usePrefix';
+import { useControllableState } from '@carbon/utilities-react';
+import { usePrefix } from '@carbon/utilities-react';
 import { Text } from '../Text';
 
 type ExcludedAttributes =

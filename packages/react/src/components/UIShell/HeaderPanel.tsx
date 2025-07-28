@@ -15,10 +15,10 @@ import React, {
   type ForwardedRef,
   type ReactNode,
 } from 'react';
-import { usePrefix } from '../../internal/usePrefix';
-import { keys, match } from '../../internal/keyboard';
-import { useWindowEvent } from '../../internal/useEvent';
-import { useMergedRefs } from '../../internal/useMergedRefs';
+import { usePrefix } from '@carbon/utilities-react';
+import { keys, match } from '@carbon/utilities-react';
+import { useWindowEvent } from '@carbon/utilities-react';
+import { useMergedRefs } from '@carbon/utilities-react';
 import Switcher from './Switcher';
 
 export interface HeaderPanelProps {

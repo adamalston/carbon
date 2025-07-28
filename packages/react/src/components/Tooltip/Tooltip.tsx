@@ -15,16 +15,16 @@ import React, {
   type JSX,
 } from 'react';
 import { Popover, PopoverAlignment, PopoverContent } from '../Popover';
-import { keys, match } from '../../internal/keyboard';
-import { useDelayedState } from '../../internal/useDelayedState';
-import { useId } from '../../internal/useId';
+import { keys, match } from '@carbon/utilities-react';
+import { useDelayedState } from '@carbon/utilities-react';
+import { useId } from '@carbon/utilities-react';
 import { useNoInteractiveChildren } from '@carbon/utilities-react';
-import { usePrefix } from '../../internal/usePrefix';
-import useIsomorphicEffect from '../../internal/useIsomorphicEffect';
+import { usePrefix } from '@carbon/utilities-react';
+import useIsomorphicEffect from '@carbon/utilities-react';
 import {
   PolymorphicComponentPropWithRef,
   PolymorphicRef,
-} from '../../internal/PolymorphicProps';
+} from '@carbon/utilities-react';
 
 /**
  * Event types that trigger a "drag" to stop.

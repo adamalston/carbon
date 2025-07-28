@@ -20,12 +20,12 @@ import {
 } from '@carbon/icons-react';
 import classNames from 'classnames';
 import { sortStates } from './state/sorting';
-import { useId } from '../../internal/useId';
-import { usePrefix } from '../../internal/usePrefix';
+import { useId } from '@carbon/utilities-react';
+import { usePrefix } from '@carbon/utilities-react';
 import { TranslateWithId } from '../../types/common';
 import { DataTableSortState } from './state/sortStates';
 import { AILabel } from '../AILabel';
-import { isComponentElement } from '../../internal';
+import { isComponentElement } from '@carbon/utilities-react';
 
 const defaultScope = 'col';
 

@@ -20,14 +20,14 @@ import React, {
   type MouseEvent,
   type ReactNode,
 } from 'react';
-import { keys, match } from '../../internal/keyboard';
-import { useId } from '../../internal/useId';
-import { usePrefix } from '../../internal/usePrefix';
+import { keys, match } from '@carbon/utilities-react';
+import { useId } from '@carbon/utilities-react';
+import { usePrefix } from '@carbon/utilities-react';
 import { composeEventHandlers } from '../../tools/events';
-import { useMergedRefs } from '../../internal/useMergedRefs';
+import { useMergedRefs } from '@carbon/utilities-react';
 import { deprecate } from '../../prop-types/deprecate';
 import { FormContext } from '../FluidForm';
-import { noopFn } from '../../internal/noopFn';
+import { noopFn } from '@carbon/utilities-react';
 
 type InputPropsBase = Omit<HTMLAttributes<HTMLInputElement>, 'onChange'>;
 export interface SearchProps extends InputPropsBase {

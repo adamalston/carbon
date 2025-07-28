@@ -12,7 +12,7 @@ import { CaretRight, CaretLeft } from '@carbon/icons-react';
 import Select from '../../Select';
 import SelectItem from '../../SelectItem';
 import { IconButton } from '../../IconButton';
-import { usePrefix } from '../../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 
 function Pagination({
   backwardText = 'Previous page',

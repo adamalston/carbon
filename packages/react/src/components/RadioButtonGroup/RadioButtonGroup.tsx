@@ -17,13 +17,13 @@ import React, {
 import classNames from 'classnames';
 import type { RadioButtonProps } from '../RadioButton';
 import { Legend } from '../Text';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 import { WarningFilled, WarningAltFilled } from '@carbon/icons-react';
 import { deprecate } from '../../prop-types/deprecate';
 import mergeRefs from '../../tools/mergeRefs';
-import { useId } from '../../internal/useId';
+import { useId } from '@carbon/utilities-react';
 import { AILabel } from '../AILabel';
-import { isComponentElement } from '../../internal';
+import { isComponentElement } from '@carbon/utilities-react';
 
 export const RadioButtonGroupContext = createContext(null);
 

@@ -16,8 +16,8 @@ import React, {
   useState,
 } from 'react';
 import SideNavIcon from './SideNavIcon';
-import { keys, match } from '../../internal/keyboard';
-import { usePrefix } from '../../internal/usePrefix';
+import { keys, match } from '@carbon/utilities-react';
+import { usePrefix } from '@carbon/utilities-react';
 import { SideNavContext } from './SideNav';
 
 export interface SideNavMenuProps {

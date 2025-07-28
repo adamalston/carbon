@@ -8,7 +8,7 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { usePrefix } from '../../internal/usePrefix';
+import { usePrefix } from '@carbon/utilities-react';
 
 export interface CodeSnippetSkeletonProps
   extends React.HTMLAttributes<Omit<HTMLDivElement, 'children'>> {
