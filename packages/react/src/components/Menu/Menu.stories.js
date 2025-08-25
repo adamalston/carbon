@@ -58,7 +58,12 @@ export const Default = (args) => {
   const target = document.getElementById('storybook-root');
 
   return (
-    <Menu {...args} target={target} x={document?.dir === 'rtl' ? 250 : 0}>
+    <Menu
+      {...args}
+      target={target}
+      x={document?.dir === 'rtl' ? 250 : 0}
+      // renderStrategy="top-layer"
+    >
       <MenuItem label="Share with" renderIcon={FolderShared}>
         <MenuItemRadioGroup
           label="Share with"

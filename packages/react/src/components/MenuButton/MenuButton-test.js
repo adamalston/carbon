@@ -142,7 +142,7 @@ describe('MenuButton', () => {
       // Close the menu with Escape.  Focus should move back to MenuButton.
       await userEvent.keyboard('{Escape}');
       expect(screen.queryByRole('menu')).not.toBeInTheDocument();
-      expect(menuButton).toHaveFocus();
+      expect(menuButton).toHaveFocus(); //
       expect(onClick).not.toHaveBeenCalled();
 
       // Open the menu with Space.  Focus moves to first MenuItem.

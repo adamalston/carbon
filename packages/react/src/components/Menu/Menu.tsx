@@ -9,16 +9,28 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, {
   forwardRef,
-  ReactNode,
   useContext,
   useEffect,
   useMemo,
   useReducer,
   useRef,
   useState,
-  RefObject,
+  type FocusEvent,
+  type HTMLAttributes,
+  type KeyboardEvent,
+  type ReactNode,
+  type RefObject,
 } from 'react';
 import { createPortal } from 'react-dom';
+import {
+  autoUpdate,
+  flip,
+  offset,
+  shift,
+  size as sizeMiddleware,
+  useFloating,
+  type VirtualElement,
+} from '@floating-ui/react-dom';
 
 import { keys, match } from '../../internal/keyboard';
 import { useMergedRefs } from '../../internal/useMergedRefs';
@@ -31,7 +43,7 @@ import { canUseDOM } from '../../internal/environment';
 
 const spacing = 8; // distance to keep to window edges, in px
 
-export interface MenuProps extends React.HTMLAttributes<HTMLUListElement> {
+export interface MenuProps extends HTMLAttributes<HTMLUListElement> {
   /**
    * The ref of the containing element, used for positioning and alignment of the menu
    */
@@ -104,10 +116,13 @@ export interface MenuProps extends React.HTMLAttributes<HTMLUListElement> {
   y?: number | [number, number];
 
   legacyAutoalign?: boolean;
+
+  // TODO: Add prop-types.
+  renderStrategy?: 'portal' | 'top-layer' | 'inline';
 }
 
-const Menu = forwardRef<HTMLUListElement, MenuProps>(function Menu(
-  {
+const Menu = forwardRef<HTMLUListElement, MenuProps>((props, forwardedRef) => {
+  const {
     children,
     className,
     containerRef,
@@ -118,14 +133,14 @@ const Menu = forwardRef<HTMLUListElement, MenuProps>(function Menu(
     onOpen,
     open,
     size = 'sm',
-    legacyAutoalign = 'true',
-    target = canUseDOM && document.body,
+    legacyAutoalign = true,
+    target = canUseDOM ? document.body : undefined,
     x = 0,
     y = 0,
+    renderStrategy,
     ...rest
-  },
-  forwardRef
-) {
+  } = props;
+
   const prefix = usePrefix();
 
   const focusReturn = useRef<HTMLElement | null>(null);
@@ -150,22 +165,128 @@ const Menu = forwardRef<HTMLUListElement, MenuProps>(function Menu(
   }, [childState, childDispatch]);
 
   const menu = useRef<HTMLUListElement>(null);
-  const ref = useMergedRefs([forwardRef, menu]);
+  const ref = useMergedRefs([forwardedRef, menu]);
 
   const [position, setPosition] = useState([-1, -1]);
+
+  const virtualRef = useRef<VirtualElement>(null);
+
+  const {
+    refs,
+    floatingStyles,
+    update,
+    // TODO: Do I need this `placement` property somewhere?
+    placement,
+  } = useFloating({
+    strategy: 'fixed',
+    placement:
+      menuAlignment === 'bottom-end' ||
+      menuAlignment === 'bottom-start' ||
+      menuAlignment === 'top'
+        ? menuAlignment
+        : 'bottom-start',
+    middleware: [
+      offset(4),
+      flip(),
+      shift({ padding: spacing }),
+      sizeMiddleware({
+        apply({ availableWidth, elements }) {
+          if (containerRef?.current) {
+            const w = containerRef.current.getBoundingClientRect().width;
+            elements.floating.style.maxWidth = `${Math.min(availableWidth, w)}px`;
+          } else {
+            elements.floating.style.maxWidth = `${availableWidth}px`;
+          }
+        },
+        padding: spacing,
+      }),
+    ],
+    whileElementsMounted: autoUpdate,
+  });
+
+  useEffect(() => {
+    if (containerRef?.current) {
+      refs.setReference(containerRef.current);
+    } else {
+      // build a virtual reference from x/y
+      virtualRef.current = {
+        getBoundingClientRect: () => {
+          const [vx1, vx2] = Array.isArray(x) ? x : [x, x];
+          const [vy1, vy2] = Array.isArray(y) ? y : [y, y];
+
+          const left = Math.min(vx1, vx2);
+          const right = Math.max(vx1, vx2);
+          const top = Math.min(vy1, vy2);
+          const bottom = Math.max(vy1, vy2);
+          const width = Math.max(0, right - left);
+          const height = Math.max(0, bottom - top);
+
+          return new DOMRect(left, top, width, height);
+        },
+      };
+      refs.setReference(virtualRef.current);
+    }
+  }, [containerRef, x, y, refs]);
+
+  const supportsPopover =
+    typeof HTMLElement !== 'undefined' &&
+    'showPopover' in HTMLElement.prototype;
+  const popoverSupported = supportsPopover && renderStrategy === 'top-layer';
+  const popoverRef = useRef<HTMLUListElement>(null);
+
+  // Set RTL based on the document direction or `LayoutDirection`
+  const { direction } = useLayoutDirection();
+
+  useEffect(() => {
+    if (!open) {
+      if (popoverSupported && popoverRef.current?.hidePopover) {
+        popoverRef.current.hidePopover();
+      }
+
+      setPosition([-1, -1]);
+
+      return;
+    }
+
+    if (popoverSupported && popoverRef.current?.showPopover) {
+      popoverRef.current.showPopover();
+    }
+
+    if (!legacyAutoalign && refs.floating.current) {
+      update();
+    } else if (legacyAutoalign && menu.current) {
+      const pos = calculatePosition();
+
+      if (
+        (document?.dir === 'rtl' || direction === 'rtl') &&
+        !rest?.id?.includes('MenuButton')
+      ) {
+        menu.current.style.insetInlineStart = `initial`;
+        menu.current.style.insetInlineEnd = `${pos[0]}px`;
+      } else {
+        menu.current.style.insetInlineStart = `${pos[0]}px`;
+        menu.current.style.insetInlineEnd = `initial`;
+      }
+
+      menu.current.style.insetBlockStart = `${pos[1]}px`;
+
+      setPosition(pos);
+    }
+
+    menu.current?.focus();
+    onOpen?.();
+  }, [open, legacyAutoalign, popoverSupported, update, direction]);
+
   const focusableItems = childContext.state.items.filter(
     (item) => !item.disabled && item.ref.current
   );
 
   // Getting the width from the parent container element - controlled
-  let actionButtonWidth: number;
+  let actionButtonWidth: number | undefined;
   if (containerRef?.current) {
     const { width: w } = containerRef.current.getBoundingClientRect();
     actionButtonWidth = w;
   }
-
-  // Set RTL based on the document direction or `LayoutDirection`
-  const { direction } = useLayoutDirection();
 
   function returnFocus() {
     if (focusReturn.current) {
@@ -202,14 +323,18 @@ const Menu = forwardRef<HTMLUListElement, MenuProps>(function Menu(
   }
 
   function handleClose() {
-    returnFocus();
+    // Removed because clicking a 'Share with' item in
+    // http://localhost:3000/?path=/story/components-menu--default would return
+    // the focus to 'Share with' instead of keeping it on that item.
+    // returnFocus();
 
+    // Then let the parent close the menu (this may unmount the portal)
     if (onClose) {
       onClose();
     }
   }
 
-  function handleKeyDown(e: React.KeyboardEvent<HTMLUListElement>) {
+  function handleKeyDown(e: KeyboardEvent<HTMLUListElement>) {
     e.stopPropagation();
 
     // if the user presses escape or this is a submenu
@@ -224,7 +349,7 @@ const Menu = forwardRef<HTMLUListElement, MenuProps>(function Menu(
     }
   }
 
-  function focusItem(e?: React.KeyboardEvent<HTMLUListElement>) {
+  function focusItem(e?: KeyboardEvent<HTMLUListElement>) {
     const currentItem = focusableItems.findIndex((item) =>
       item.ref?.current?.contains(document.activeElement)
     );
@@ -257,7 +382,7 @@ const Menu = forwardRef<HTMLUListElement, MenuProps>(function Menu(
     }
   }
 
-  function handleBlur(e: React.FocusEvent<HTMLUListElement>) {
+  function handleBlur(e: FocusEvent<HTMLUListElement>) {
     if (open && onClose && isRoot && !menu.current?.contains(e.relatedTarget)) {
       handleClose();
     }
@@ -396,11 +521,12 @@ const Menu = forwardRef<HTMLUListElement, MenuProps>(function Menu(
     if (open) {
       handleOpen();
     } else {
-      // reset position when menu is closed in order for the --shown
-      // modifier to be applied correctly
+      // If the portal unmounts, drop the focus to `body`, restore it again
+      // after commit.
+      returnFocus();
+
       setPosition([-1, -1]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
   const classNames = cx(
@@ -412,6 +538,7 @@ const Menu = forwardRef<HTMLUListElement, MenuProps>(function Menu(
       // visibility is needed for focusing elements.
       // opacity is only set once the position has been set correctly
       // to avoid a flicker effect when opening.
+      // [`${prefix}--menu--box-shadow-top`]: menuAlignment?.startsWith('top'),
       [`${prefix}--menu--box-shadow-top`]:
         menuAlignment && menuAlignment.slice(0, 3) === 'top',
       [`${prefix}--menu--open`]: open,
@@ -430,21 +557,29 @@ const Menu = forwardRef<HTMLUListElement, MenuProps>(function Menu(
         {...rest}
         className={classNames}
         role="menu"
-        ref={ref}
+        ref={(node) => {
+          (ref as any)(node);
+          popoverRef.current = node;
+          refs.setFloating(node);
+        }}
         aria-label={label}
         tabIndex={-1}
         onKeyDown={handleKeyDown}
-        onBlur={handleBlur}>
+        onBlur={handleBlur}
+        {...(renderStrategy === 'top-layer' ? { popover: 'auto' } : {})}
+        style={!legacyAutoalign ? { ...floatingStyles } : undefined}>
         {children}
       </ul>
     </MenuContext.Provider>
   );
 
-  if (!target) {
-    return rendered;
+  if (!renderStrategy || renderStrategy === 'portal') {
+    if (!target) return rendered;
+
+    return isRoot ? (open && createPortal(rendered, target)) || null : rendered;
   }
 
-  return isRoot ? (open && createPortal(rendered, target)) || null : rendered;
+  return rendered;
 });
 
 Menu.propTypes = {

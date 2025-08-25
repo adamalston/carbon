@@ -383,3 +383,98 @@ specification. Contributions of any kind welcome!
 ## 📝 License
 
 Licensed under the [Apache 2.0 License](/LICENSE).
+
+```diff
+diff --git a/packages/react/src/components/Menu/Menu.tsx b/packages/react/src/components/Menu/Menu.tsx
+index 455d07805..7feeba253 100644
+--- a/packages/react/src/components/Menu/Menu.tsx
++++ b/packages/react/src/components/Menu/Menu.tsx
+@@ -234,6 +234,10 @@ const Menu = forwardRef<HTMLUListElement, MenuProps>((props, forwardedRef) => {
+   const popoverSupported = supportsPopover && renderStrategy === 'top-layer';
+   const popoverRef = useRef<HTMLUListElement>(null);
+
++  const closeReasonRef = useRef<
++    'escape' | 'arrow-left' | 'blur' | 'item-activate' | 'other'
++  >(null);
++
+   // Set RTL based on the document direction or `LayoutDirection`
+   const { direction } = useLayoutDirection();
+
+@@ -323,15 +327,20 @@ const Menu = forwardRef<HTMLUListElement, MenuProps>((props, forwardedRef) => {
+   }
+
+   function handleClose() {
+-    // Removed because clicking a 'Share with' item in
+-    // http://localhost:3000/?path=/story/components-menu--default would return
+-    // the focus to 'Share with' instead of keeping it on that item.
+-    // returnFocus();
++    if (
++      closeReasonRef.current === 'escape' ||
++      closeReasonRef.current === 'arrow-left'
++    ) {
++      returnFocus();
++    }
+
+     // Then let the parent close the menu (this may unmount the portal)
+     if (onClose) {
+       onClose();
+     }
++
++    // reset reason after use
++    closeReasonRef.current = null;
+   }
+
+   function handleKeyDown(e: KeyboardEvent<HTMLUListElement>) {
+@@ -339,14 +348,25 @@ const Menu = forwardRef<HTMLUListElement, MenuProps>((props, forwardedRef) => {
+
+     // if the user presses escape or this is a submenu
+     // and the user presses ArrowLeft, close it
+-    if (
+-      (match(e, keys.Escape) || (!isRoot && match(e, keys.ArrowLeft))) &&
+-      onClose
+-    ) {
++    if (match(e, keys.Escape)) {
++      closeReasonRef.current = 'escape';
++
+       handleClose();
+-    } else {
+-      focusItem(e);
++      e.preventDefault();
++
++      return;
++    }
++
++    if (!isRoot && match(e, keys.ArrowLeft)) {
++      closeReasonRef.current = 'arrow-left';
++
++      handleClose();
++      e.preventDefault();
++
++      return;
+     }
++
++    focusItem(e);
+   }
+
+   function focusItem(e?: KeyboardEvent<HTMLUListElement>) {
+@@ -382,8 +402,10 @@ const Menu = forwardRef<HTMLUListElement, MenuProps>((props, forwardedRef) => {
+     }
+   }
+
+-  function handleBlur(e: FocusEvent<HTMLUListElement>) {
++  function handleBlur(e: React.FocusEvent<HTMLUListElement>) {
+     if (open && onClose && isRoot && !menu.current?.contains(e.relatedTarget)) {
++      closeReasonRef.current = 'blur';
++
+       handleClose();
+     }
+   }
+@@ -524,7 +546,6 @@ const Menu = forwardRef<HTMLUListElement, MenuProps>((props, forwardedRef) => {
+       // If the portal unmounts, drop the focus to `body`, restore it again
+       // after commit.
+       returnFocus();
+-
+       setPosition([-1, -1]);
+     }
+   }, [open]);
+```
