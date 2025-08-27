@@ -68,10 +68,8 @@ export {
 export {
   FeatureFlags,
   useFeatureFlag,
-  useFeatureFlags,
   FeatureFlags as unstable_FeatureFlags, // this export can be removed in v12
   useFeatureFlag as unstable_useFeatureFlag, // this export can be removed in v12
-  useFeatureFlags as unstable_useFeatureFlags, // this export can be removed in v12
 } from './components/FeatureFlags';
 export {
   FileUploader,

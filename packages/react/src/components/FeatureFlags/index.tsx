@@ -33,6 +33,7 @@ export interface FeatureFlagsProps {
   enableV12DynamicFloatingStyles?: boolean;
   enableEnhancedFileUploader?: boolean;
 }
+
 /**
  * Our FeatureFlagContext is used alongside the FeatureFlags component to enable
  * or disable feature flags in a given React tree
@@ -173,15 +174,6 @@ function useFeatureFlag(flag) {
 }
 
 /**
- * Access all feature flag information for the given FeatureFlagContext
- *
- * @returns {FeatureFlagScope}
- */
-function useFeatureFlags() {
-  return useContext(FeatureFlagContext);
-}
-
-/**
  * Compare two objects and determine if they are equal. This is a shallow
  * comparison since the objects we are comparing are objects with boolean flags
  * from the flags prop in the `FeatureFlags` component
@@ -213,4 +205,4 @@ function isEqual(
   return true;
 }
 
-export { FeatureFlags, FeatureFlagContext, useFeatureFlags, useFeatureFlag };
+export { FeatureFlags, useFeatureFlag };
