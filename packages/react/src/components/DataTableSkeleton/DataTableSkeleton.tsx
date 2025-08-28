@@ -68,7 +68,7 @@ export interface DataTableSkeletonProps
 const DataTableSkeleton: FunctionComponent<DataTableSkeletonProps> = ({
   headers,
   rowCount = 5,
-  columnCount = 5,
+  columnCount,
   zebra = false,
   compact = false,
   className,
@@ -84,9 +84,14 @@ const DataTableSkeleton: FunctionComponent<DataTableSkeletonProps> = ({
     [`${prefix}--data-table--compact`]: compact,
   });
 
+  const resolvedColumnCount = columnCount ?? headers?.length ?? 5;
   const rowRepeat = rowCount;
   const rows = Array(rowRepeat);
-  const columnsArray = Array.from({ length: columnCount }, (_, index) => index);
+  const columnsArray = Array.from(
+    { length: resolvedColumnCount },
+    (_, index) => index
+  );
+
   for (let i = 0; i < rowRepeat; i++) {
     rows[i] = (
       <tr key={i}>

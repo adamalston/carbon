@@ -40,6 +40,28 @@ describe('DataTableSkeleton', () => {
       expect(screen.getAllByRole('columnheader').length).toEqual(3);
     });
 
+    it('should use columnCount over headers length when both are provided', () => {
+      const headers = [
+        { key: 'col1', header: 'Column 1' },
+        { key: 'col2', header: 'Column 2' },
+      ];
+
+      render(<DataTableSkeleton columnCount={10} headers={headers} />);
+
+      expect(screen.getAllByRole('columnheader').length).toEqual(10);
+    });
+
+    it('should fall back to headers length when columnCount is not provided', () => {
+      const headers = [
+        { key: 'col1', header: 'Column 1' },
+        { key: 'col2', header: 'Column 2' },
+      ];
+
+      render(<DataTableSkeleton headers={headers} />);
+
+      expect(screen.getAllByRole('columnheader').length).toEqual(2);
+    });
+
     it('should respect the compact prop', () => {
       render(<DataTableSkeleton compact />);
 
@@ -68,6 +90,8 @@ describe('DataTableSkeleton', () => {
       expect(screen.getByText('Name')).toBeInTheDocument();
       expect(screen.getByText('Protocol')).toBeInTheDocument();
       expect(screen.getByText('Port')).toBeInTheDocument();
+
+      expect(screen.getAllByRole('columnheader').length).toEqual(3);
     });
 
     it('should respect the rowCount prop', () => {
