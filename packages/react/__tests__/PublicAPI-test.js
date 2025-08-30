@@ -184,6 +184,8 @@ test('Public API should only change with a semver change', () => {
       if (
         typeof Component[key] === 'function' &&
         key !== 'render' &&
+        // TODO: Can this call be replaced with `isValidElement` from React? If
+        // so, can `react-is` be uninstalled?
         isValidElementType(Component[key])
       ) {
         api[key] = mapComponentToAPI(Component[key]);

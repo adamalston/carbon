@@ -5,32 +5,37 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { ChevronLeft, ChevronRight } from '@carbon/icons-react';
+import {
+  ChevronLeft,
+  ChevronRight,
+  type CarbonIconType,
+} from '@carbon/icons-react';
 import { breakpoints } from '@carbon/layout';
 import cx from 'classnames';
 import { debounce } from 'es-toolkit/compat';
 import PropTypes from 'prop-types';
 import React, {
+  Children,
+  cloneElement,
+  createContext,
+  forwardRef,
+  isValidElement,
   useCallback,
-  useState,
-  useRef,
   useEffect,
   useMemo,
-  forwardRef,
-  createContext,
-  type ReactNode,
-  type MouseEvent,
-  type KeyboardEvent,
-  type HTMLAttributes,
-  type RefObject,
+  useRef,
+  useState,
+  type ComponentProps,
   type ComponentType,
-  type HTMLElementType,
   type ElementType,
-  isValidElement,
-  ReactElement,
+  type HTMLAttributes,
+  type HTMLElementType,
+  type KeyboardEvent,
+  type MouseEvent,
+  type ReactNode,
+  type RefObject,
 } from 'react';
 import { Grid } from '../Grid';
-import { isElement } from 'react-is';
 import { Tooltip } from '../Tooltip';
 import { useControllableState } from '../../internal/useControllableState';
 import { useId } from '../../internal/useId';
@@ -46,6 +51,7 @@ import { useEvent } from '../../internal/useEvent';
 import { useMatchMedia } from '../../internal/useMatchMedia';
 import { Text } from '../Text';
 import BadgeIndicator from '../BadgeIndicator';
+import { isComponentElement } from '../../internal';
 
 const verticalTabHeight = 64;
 
@@ -462,14 +468,13 @@ function TabList({
   const [isScrollable, setIsScrollable] = useState(false);
   const [scrollLeft, setScrollLeft] = useState<number>(0);
 
-  let hasSecondaryLabelTabs = false;
-  if (contained) {
-    hasSecondaryLabelTabs = React.Children.toArray(children).some((child) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20071
-      const _child = child as React.ReactElement<any>;
-      return React.isValidElement(child) && !!_child.props.secondaryLabel;
-    });
-  }
+  const hasSecondaryLabelTabs =
+    contained &&
+    Children.toArray(children).some(
+      (child) =>
+        isComponentElement(child, Tab) &&
+        typeof child.props.secondaryLabel !== 'undefined'
+    );
 
   const isLg = useMatchMedia(lgMediaQuery);
 
@@ -751,23 +756,21 @@ function TabList({
         onScroll={debouncedOnScroll}
         onKeyDown={onKeyDown}
         onBlur={handleBlur}>
-        {React.Children.map(children, (child, index) => {
-          return !isElement(child) ? null : (
+        {Children.map(children, (child, index) => {
+          return !isValidElement<ComponentProps<typeof Tab>>(child) ? null : (
             <TabContext.Provider
               value={{
                 index,
                 hasSecondaryLabel: hasSecondaryLabelTabs,
                 contained,
               }}>
-              {React.cloneElement(
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20071
-                child as React.ReactElement<{ ref?: React.Ref<any> }>,
-                {
-                  ref: (node) => {
-                    tabs.current[index] = node;
-                  },
-                }
-              )}
+              {cloneElement(child, {
+                ref: (node) => {
+                  if (!node) return;
+
+                  tabs.current[index] = node;
+                },
+              })}
             </TabContext.Provider>
           );
         })}
@@ -1056,22 +1059,20 @@ function TabListVertical({
         className={`${prefix}--tab--list`}
         onKeyDown={onKeyDown}
         onBlur={handleBlur}>
-        {React.Children.map(children, (child, index) => {
-          return !isElement(child) ? null : (
+        {Children.map(children, (child, index) => {
+          return !isValidElement<ComponentProps<typeof Tab>>(child) ? null : (
             <TabContext.Provider
               value={{
                 index,
                 hasSecondaryLabel: false,
               }}>
-              {React.cloneElement(
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20071
-                child as React.ReactElement<{ ref?: React.Ref<any> }>,
-                {
-                  ref: (node) => {
-                    tabs.current[index] = node;
-                  },
-                }
-              )}
+              {cloneElement(child, {
+                ref: (node) => {
+                  if (!node) return;
+
+                  tabs.current[index] = node;
+                },
+              })}
             </TabContext.Provider>
           );
         })}
@@ -1599,8 +1600,10 @@ const IconTab = React.forwardRef<HTMLDivElement, IconTabProps>(
     const value = useMemo(() => ({ badgeIndicator }), [badgeIndicator]);
 
     const hasSize20 =
-      isValidElement(children) &&
-      (children as ReactElement<{ size?: number }>).props.size === 20;
+      isValidElement<ComponentProps<CarbonIconType>>(children) &&
+      // TODO: According to the interface, `size` can be a string. Should that
+      // be checked here too?
+      children.props.size === 20;
 
     const classNames = cx(
       `${prefix}--tabs__nav-item--icon-only`,
@@ -1814,12 +1817,13 @@ function TabPanels({ children }: TabPanelsProps) {
 
   return (
     <>
-      {React.Children.map(children, (child, index) => {
-        return !isElement(child) ? null : (
+      {Children.map(children, (child, index) => {
+        return !isValidElement<ComponentProps<typeof TabPanel>>(
+          child
+        ) ? null : (
           <TabPanelContext.Provider value={index}>
-            {/*eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20071 */}
-            {React.cloneElement(child as React.ReactElement<any>, {
-              ref: (element: HTMLDivElement) => {
+            {cloneElement(child, {
+              ref: (element) => {
                 refs.current[index] = element;
               },
             })}

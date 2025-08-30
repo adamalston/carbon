@@ -58,7 +58,7 @@ export interface ModalHeaderProps extends DivProps {
   /**
    * Specify an optional label to be displayed
    */
-  label?: ReactNode;
+  label?: string;
 
   /**
    * Specify an optional className to be applied to the modal header label
@@ -189,7 +189,7 @@ ModalHeader.propTypes = {
   /**
    * Specify an optional label to be displayed
    */
-  label: PropTypes.node,
+  label: PropTypes.string,
 
   /**
    * Specify an optional className to be applied to the modal header label

@@ -11,19 +11,18 @@ import React, {
   useEffect,
   useRef,
   useState,
+  type ComponentProps,
   type HTMLAttributes,
   type KeyboardEvent,
   type MouseEvent,
   type MutableRefObject,
-  type ReactElement,
   type ReactNode,
   type RefObject,
 } from 'react';
-import { isElement } from 'react-is';
 import PropTypes from 'prop-types';
 import { Layer } from '../Layer';
-import { ModalHeader, type ModalHeaderProps } from './ModalHeader';
-import { ModalFooter, type ModalFooterProps } from './ModalFooter';
+import { ModalHeader } from './ModalHeader';
+import { ModalFooter } from './ModalFooter';
 import { debounce } from 'es-toolkit/compat';
 import useIsomorphicEffect from '../../internal/useIsomorphicEffect';
 import mergeRefs from '../../tools/mergeRefs';
@@ -439,35 +438,19 @@ const ComposedModal = React.forwardRef<HTMLDivElement, ComposedModalProps>(
     );
 
     // Generate aria-label based on Modal Header label if one is not provided (L253)
-    let generatedAriaLabel;
+    let generatedAriaLabel: ComponentProps<typeof ModalHeader>['label'];
     const childrenWithProps = React.Children.toArray(children).map((child) => {
-      switch (true) {
-        case isElement(child) &&
-          child.type === React.createElement(ModalHeader).type: {
-          const el = child as ReactElement<
-            ModalHeaderProps,
-            typeof ModalHeader
-          >;
-          generatedAriaLabel = el.props.label;
-          return React.cloneElement(el, { closeModal });
-        }
+      if (isComponentElement(child, ModalHeader)) {
+        generatedAriaLabel = child.props.label;
 
-        case isElement(child) &&
-          child.type === React.createElement(ModalFooter).type: {
-          const el = child as ReactElement<
-            ModalFooterProps,
-            typeof ModalFooter
-          >;
-          return React.cloneElement(el, {
-            closeModal,
-            inputref: button,
-            danger,
-          });
-        }
-
-        default:
-          return child;
+        return cloneElement(child, { closeModal });
       }
+
+      if (isComponentElement(child, ModalFooter)) {
+        return cloneElement(child, { closeModal, inputref: button, danger });
+      }
+
+      return child;
     });
 
     // Modals without a footer are considered passive and carry limitations as
