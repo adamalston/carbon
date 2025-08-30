@@ -8,7 +8,6 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, {
-  isValidElement,
   useRef,
   useState,
   type ComponentProps,
@@ -21,6 +20,7 @@ import { useWindowEvent } from '../../internal/useEvent';
 import { useMergedRefs } from '../../internal/useMergedRefs';
 import Switcher from './Switcher';
 import { noopFn } from '../../internal/noopFn';
+import { isComponentElement } from '../../internal';
 
 export interface HeaderPanelProps {
   /**
@@ -119,10 +119,7 @@ const HeaderPanel: React.FC<HeaderPanelProps> = React.forwardRef(
       if (!(target instanceof HTMLElement)) return;
       setLastClickedElement(target);
 
-      const isChildASwitcher =
-        isValidElement(children) &&
-        typeof children.type !== 'string' &&
-        children.type === Switcher;
+      const isChildASwitcher = isComponentElement(children, Switcher);
 
       if (
         isChildASwitcher &&

@@ -19,7 +19,6 @@ import React, {
   type FocusEvent,
   type KeyboardEvent,
   type MouseEvent,
-  type ReactElement,
   type ReactNode,
   type Ref,
 } from 'react';
@@ -220,10 +219,9 @@ export const HeaderMenu = frFn((props, ref) => {
    * `tabIndex: -1` so the user won't hit a large number of items in their tab
    * sequence when they might not want to go through all the items.
    */
-  const renderMenuItem = (item: ReactNode, index: number): ReactNode => {
-    if (isValidElement(item)) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20071
-      return cloneElement(item as ReactElement<any>, {
+  const renderMenuItem = (item: ReactNode, index: number) => {
+    if (isValidElement<ComponentProps<typeof HeaderMenuItem>>(item)) {
+      return cloneElement(item, {
         ref: handleItemRef(index),
       });
     }

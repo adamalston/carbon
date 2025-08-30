@@ -19,6 +19,7 @@ import React, {
 import RadioTile from '../RadioTile';
 import { usePrefix } from '../../internal/usePrefix';
 import { noopFn } from '../../internal/noopFn';
+import { isComponentElement } from '../../internal';
 
 type ExcludedAttributes = 'onChange';
 
@@ -107,13 +108,8 @@ export const TileGroup = <T extends string | number = string>({
       elements: typeof children
     ): ReactNode => {
       return Children.map(elements, (child) => {
-        if (!isValidElement(child)) return child;
-
         // If a `RadioTile` is found, return it with necessary props,
-        if (
-          isValidElement<ComponentProps<typeof RadioTile>>(child) &&
-          child.type === RadioTile
-        ) {
+        if (isComponentElement(child, RadioTile)) {
           const { value, ...otherProps } = child.props;
           return (
             <RadioTile
@@ -129,15 +125,17 @@ export const TileGroup = <T extends string | number = string>({
         }
 
         // If the child is not RadioTile and has children, recheck the children
-        const children = (child.props as { children?: ReactNode }).children;
-        const hasChildren = Children.count(children) > 0;
+        if (isValidElement<{ children?: ReactNode }>(child)) {
+          const children = child.props.children;
+          const hasChildren = Children.count(children) > 0;
 
-        if (hasChildren) {
-          return cloneElement(
-            child,
-            undefined,
-            traverseAndModifyChildren(children)
-          );
+          if (hasChildren) {
+            return cloneElement(
+              child,
+              undefined,
+              traverseAndModifyChildren(children)
+            );
+          }
         }
 
         // If the child is neither a RadioTile nor has children, return it as is

@@ -4,21 +4,22 @@
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
  */
+
 import React, {
+  Children,
+  createContext,
+  isValidElement,
   useRef,
-  type ForwardedRef,
   type ComponentProps,
   type FocusEvent,
+  type ForwardedRef,
   type KeyboardEvent,
   type MouseEventHandler,
-  isValidElement,
-  createContext,
-  type JSX,
 } from 'react';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import { AriaLabelPropType } from '../../prop-types/AriaPropTypes';
-import { CARBON_SIDENAV_ITEMS } from './_utils';
+import { CARBON_SIDENAV_ITEMS, unwrapIdentity } from './_utils';
 import { usePrefix } from '../../internal/usePrefix';
 import { keys, match } from '../../internal/keyboard';
 import { useMergedRefs } from '../../internal/useMergedRefs';
@@ -26,6 +27,7 @@ import { useWindowEvent } from '../../internal/useEvent';
 import { useDelayedState } from '../../internal/useDelayedState';
 import { breakpoints } from '@carbon/layout';
 import { useMatchMedia } from '../../internal/useMatchMedia';
+import type SideNavItems from './SideNavItems';
 // TO-DO: comment back in when footer is added for rails
 // import SideNavFooter from './SideNavFooter';
 
@@ -131,28 +133,23 @@ function SideNavRenderFunction(
     [`${prefix}--side-nav__overlay-active`]: expanded || expandedViaHoverState,
   });
 
-  let childrenToRender = children;
-
   // Pass the expansion state as a prop, so children can update themselves to match
-  childrenToRender = React.Children.map(children, (child) => {
+  const childrenToRender = Children.map(children, (child) => {
     // if we are controlled, check for if we have hovered over or the expanded state, else just use the expanded state (uncontrolled)
     const currentExpansionState = controlled
       ? expandedViaHoverState || expanded
       : expanded;
-    if (isValidElement(child)) {
-      const childJsxElement = child as JSX.Element;
+
+    if (isValidElement<ComponentProps<typeof SideNavItems>>(child)) {
+      const identity = unwrapIdentity(child);
+
       // avoid spreading `isSideNavExpanded` to non-Carbon UI Shell children
-      return React.cloneElement(childJsxElement, {
-        ...(CARBON_SIDENAV_ITEMS.includes(
-          childJsxElement.type?.displayName ?? childJsxElement.type?.name
-        )
-          ? {
-              isSideNavExpanded: currentExpansionState,
-            }
-          : {}),
-      });
+      return CARBON_SIDENAV_ITEMS.has(identity)
+        ? React.cloneElement(child, {
+            isSideNavExpanded: currentExpansionState,
+          })
+        : child;
     }
-    return child;
   });
 
   const eventHandlers: Partial<

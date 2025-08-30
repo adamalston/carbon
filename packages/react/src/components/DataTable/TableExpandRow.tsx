@@ -9,7 +9,6 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, {
   Children,
-  isValidElement,
   type HTMLAttributes,
   type MouseEventHandler,
   type PropsWithChildren,
@@ -136,9 +135,8 @@ const TableExpandRow = React.forwardRef(
 
     const normalizedChildren = Children.toArray(children).map((child) => {
       if (
-        isValidElement(child) &&
-        child.type !== TableSlugRow &&
-        child.type !== TableDecoratorRow
+        !isComponentElement(child, TableSlugRow) &&
+        !isComponentElement(child, TableDecoratorRow)
       ) {
         return child;
       }

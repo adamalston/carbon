@@ -28,6 +28,7 @@ import { PrefixContext } from '../../internal/usePrefix';
 import { noopFn } from '../../internal/noopFn';
 import { IconSwitch } from '../Switch';
 import type { SwitchEventHandlersParams } from '../Switch/Switch';
+import { isComponentElement } from '../../internal';
 
 export interface ContentSwitcherProps
   extends Omit<HTMLAttributes<HTMLElement>, 'onChange'> {
@@ -163,9 +164,9 @@ export const ContentSwitcher = ({
     }
   };
 
-  const isIconOnly = Children.map(children, (child) => {
-    return isValidElement(child) ? child.type === IconSwitch : null;
-  })?.every((val) => val === true);
+  const isIconOnly = Children.map(children, (child) =>
+    isComponentElement(child, IconSwitch)
+  )?.every(Boolean);
 
   const classes = classNames(`${prefix}--content-switcher`, className, {
     [`${prefix}--content-switcher--light`]: light,

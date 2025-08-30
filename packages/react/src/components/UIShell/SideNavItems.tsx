@@ -7,9 +7,10 @@
 
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import React from 'react';
-import { CARBON_SIDENAV_ITEMS } from './_utils';
+import React, { type ComponentProps } from 'react';
+import { CARBON_SIDENAV_ITEMS, unwrapIdentity } from './_utils';
 import { usePrefix } from '../../internal/usePrefix';
+import type SideNavMenu from './SideNavMenu';
 
 export interface SideNavItemsProps {
   /**
@@ -38,17 +39,13 @@ const SideNavItems: React.FC<SideNavItemsProps> = ({
   const prefix = usePrefix();
   const className = cx([`${prefix}--side-nav__items`], customClassName);
   const childrenWithExpandedState = React.Children.map(children, (child) => {
-    if (React.isValidElement(child)) {
+    if (React.isValidElement<ComponentProps<typeof SideNavMenu>>(child)) {
+      const identity = unwrapIdentity(child);
+
       // avoid spreading `isSideNavExpanded` to non-Carbon UI Shell children
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20071
-      const childDisplayName = (child.type as any)?.displayName;
-      return React.cloneElement(child, {
-        ...(CARBON_SIDENAV_ITEMS.includes(childDisplayName)
-          ? {
-              isSideNavExpanded,
-            }
-          : {}),
-      });
+      return CARBON_SIDENAV_ITEMS.has(identity)
+        ? React.cloneElement(child, { isSideNavExpanded })
+        : child;
     }
   });
   return <ul className={className}>{childrenWithExpandedState}</ul>;
