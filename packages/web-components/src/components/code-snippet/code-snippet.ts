@@ -352,20 +352,21 @@ class CDSCodeSnippet extends FocusMixin(LitElement) {
     } = this;
 
     let classes = `${prefix}--snippet`;
-    // eslint-disable-next-line  @typescript-eslint/no-unused-expressions -- https://github.com/carbon-design-system/carbon/issues/20071
-    type ? (classes += ` ${prefix}--snippet--${type}`) : '';
-    // eslint-disable-next-line  @typescript-eslint/no-unused-expressions -- https://github.com/carbon-design-system/carbon/issues/20071
-    type !== 'inline' && disabled
-      ? (classes += ` ${prefix}--snippet--disabled`)
-      : '';
-    // eslint-disable-next-line  @typescript-eslint/no-unused-expressions -- https://github.com/carbon-design-system/carbon/issues/20071
-    hideCopyButton ? (classes += ` ${prefix}--snippet--no-copy`) : '';
-    // eslint-disable-next-line  @typescript-eslint/no-unused-expressions -- https://github.com/carbon-design-system/carbon/issues/20071
-    wrapText ? (classes += ` ${prefix}--snippet--wraptext`) : '';
-    // eslint-disable-next-line  @typescript-eslint/no-unused-expressions -- https://github.com/carbon-design-system/carbon/issues/20071
-    type == 'multi' && hasRightOverflow
-      ? (classes += ` ${prefix}--snippet--has-right-overflow`)
-      : '';
+    if (type) {
+      classes += ` ${prefix}--snippet--${type}`;
+    }
+    if (type !== 'inline' && disabled) {
+      classes += ` ${prefix}--snippet--disabled`;
+    }
+    if (hideCopyButton) {
+      classes += ` ${prefix}--snippet--no-copy`;
+    }
+    if (wrapText) {
+      classes += ` ${prefix}--snippet--wraptext`;
+    }
+    if (type == 'multi' && hasRightOverflow) {
+      classes += ` ${prefix}--snippet--has-right-overflow`;
+    }
 
     const expandButtonClass = `${prefix}--snippet-btn--expand`;
 

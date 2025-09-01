@@ -79,10 +79,11 @@ class CDSToggletip extends HostListenerMixin(FocusMixin(LitElement)) {
    */
   private _handleActionsSlotChange({ target }: Event) {
     const hasContent = (target as HTMLSlotElement).assignedNodes();
-    // eslint-disable-next-line  @typescript-eslint/no-unused-expressions -- https://github.com/carbon-design-system/carbon/issues/20071
-    hasContent
-      ? this.setAttribute('has-actions', '')
-      : this.removeAttribute('has-actions');
+    if (hasContent) {
+      this.setAttribute('has-actions', '');
+    } else {
+      this.removeAttribute('has-actions');
+    }
   }
 
   protected _handleClick = () => {

@@ -990,12 +990,12 @@ function TabListVertical({
             halfTabHeight >
             containerHeight
         ) {
-          // eslint-disable-next-line  @typescript-eslint/no-unused-expressions -- https://github.com/carbon-design-system/carbon/issues/20071
-          ref.current &&
+          if (ref.current) {
             ref.current.scrollTo({
               top: (selectedIndex - 1) * verticalTabHeight,
               behavior: 'smooth',
             });
+          }
         }
       }
     }

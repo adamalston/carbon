@@ -376,12 +376,13 @@ export const DataTable = <RowType, ColTypes extends any[]>(
           key: header.key,
         });
         setState((prev) => ({ ...prev, ...nextSortState }));
-        // eslint-disable-next-line  @typescript-eslint/no-unused-expressions -- https://github.com/carbon-design-system/carbon/issues/20071
-        onClick &&
+
+        if (onClick) {
           handleOnHeaderClick(onClick, {
             sortHeaderKey: header.key,
             sortDirection: nextSortState.sortDirection,
           })(event);
+        }
       },
     };
   };

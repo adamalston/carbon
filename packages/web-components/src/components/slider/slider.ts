@@ -389,10 +389,11 @@ class CDSSlider extends HostListenerMixin(FormMixin(FocusMixin(LitElement))) {
               !this._draggingUpper &&
               differenceValue === differenceValueUpper
             ) {
-              // eslint-disable-next-line  @typescript-eslint/no-unused-expressions -- https://github.com/carbon-design-system/carbon/issues/20071
-              Math.round(position) > this.unstable_valueUpper
-                ? (this._rateUpper = position / 100)
-                : (this._rate = position / 100);
+              if (Math.round(position) > this.unstable_valueUpper) {
+                this._rateUpper = position / 100;
+              } else {
+                this._rate = position / 100;
+              }
             }
             this.dispatchEvent(
               new CustomEvent(
@@ -572,8 +573,7 @@ class CDSSlider extends HostListenerMixin(FormMixin(FocusMixin(LitElement))) {
     }
     const valueMain =
       eventContainer === 'upper' ? this.unstable_valueUpper : this.value;
-    // eslint-disable-next-line  @typescript-eslint/no-unused-expressions -- https://github.com/carbon-design-system/carbon/issues/20071
-    valueMain !== '' &&
+    if (valueMain !== '') {
       this.dispatchEvent(
         new CustomEvent((this.constructor as typeof CDSSlider).eventChange, {
           bubbles: true,
@@ -584,6 +584,7 @@ class CDSSlider extends HostListenerMixin(FormMixin(FocusMixin(LitElement))) {
           },
         })
       );
+    }
   };
 
   /**

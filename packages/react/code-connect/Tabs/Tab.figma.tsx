@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2016, 2024
+ * Copyright IBM Corp. 2016, 2025
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -22,21 +22,19 @@ const sharedTabProps = {
   icon: figma.instance('Swap icon'),
 };
 
-// eslint-disable-next-line  @typescript-eslint/no-unused-expressions -- https://github.com/carbon-design-system/carbon/issues/20071
-'',
-  figma.connect(
-    Tab,
-    'https://www.figma.com/design/YAnB1jKx0yCUL29j6uSLpg/(v11)-All-themes---Carbon-Design-System?node-id=5658-278361&t=wcK3P98b09VsrxXF-4',
-    {
-      variant: { Type: 'Text + Icon' },
-      props: sharedTabProps,
-      example: ({ label, disabled, renderIcon }) => (
-        <Tab disabled={disabled} renderIcon={renderIcon}>
-          {label}
-        </Tab>
-      ),
-    }
-  );
+figma.connect(
+  Tab,
+  'https://www.figma.com/design/YAnB1jKx0yCUL29j6uSLpg/(v11)-All-themes---Carbon-Design-System?node-id=5658-278361&t=wcK3P98b09VsrxXF-4',
+  {
+    variant: { Type: 'Text + Icon' },
+    props: sharedTabProps,
+    example: ({ label, disabled, renderIcon }) => (
+      <Tab disabled={disabled} renderIcon={renderIcon}>
+        {label}
+      </Tab>
+    ),
+  }
+);
 
 figma.connect(
   Tab,

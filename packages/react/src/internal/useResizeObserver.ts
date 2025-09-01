@@ -78,8 +78,9 @@ export const useResizeObserver = ({
       setWidth(entry.contentRect.width);
       setHeight(entry.contentRect.height);
 
-      // eslint-disable-next-line  @typescript-eslint/no-unused-expressions -- https://github.com/carbon-design-system/carbon/issues/20071
-      cb.current && cb.current(entry.contentRect);
+      if (cb.current) {
+        cb.current(entry.contentRect);
+      }
     };
 
     const observer = new ResizeObserver((entries) => {

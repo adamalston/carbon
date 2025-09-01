@@ -575,8 +575,10 @@ const ComboBox = forwardRef(
     useEffect(() => {
       if (prevInputValue.current !== inputValue) {
         prevInputValue.current = inputValue;
-        // eslint-disable-next-line  @typescript-eslint/no-unused-expressions -- https://github.com/carbon-design-system/carbon/issues/20071
-        onInputChange && onInputChange(inputValue);
+
+        if (onInputChange) {
+          onInputChange(inputValue);
+        }
       }
       // eslint-disable-next-line  react-hooks/exhaustive-deps -- https://github.com/carbon-design-system/carbon/issues/20071
     }, [inputValue]);

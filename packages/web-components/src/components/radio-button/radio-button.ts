@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2019, 2024
+ * Copyright IBM Corp. 2019, 2025
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -368,10 +368,12 @@ class CDSRadioButton extends HostListenerMixin(FocusMixin(LitElement)) {
           : '0'
       );
     }
-    // eslint-disable-next-line  @typescript-eslint/no-unused-expressions -- https://github.com/carbon-design-system/carbon/issues/20071
-    hasAILabel
-      ? this.setAttribute('ai-label', '')
-      : this.removeAttribute('ai-label');
+
+    if (hasAILabel) {
+      this.setAttribute('ai-label', '');
+    } else {
+      this.removeAttribute('ai-label');
+    }
   }
 
   render() {

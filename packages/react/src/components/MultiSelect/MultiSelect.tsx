@@ -676,10 +676,11 @@ export const MultiSelect = React.forwardRef(
     );
 
     const handleFocus = (evt: React.FocusEvent<HTMLDivElement>) => {
-      // eslint-disable-next-line  @typescript-eslint/no-unused-expressions -- https://github.com/carbon-design-system/carbon/issues/20071
-      evt.target.classList.contains(`${prefix}--tag__close-icon`)
-        ? setIsFocused(false)
-        : setIsFocused(evt.type === 'focus' ? true : false);
+      if (evt.target.classList.contains(`${prefix}--tag__close-icon`)) {
+        setIsFocused(false);
+      } else {
+        setIsFocused(evt.type === 'focus');
+      }
     };
 
     const readOnlyEventHandlers = readOnly

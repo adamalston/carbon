@@ -326,8 +326,11 @@ export function StructuredListRow(props: StructuredListRowProps) {
       ref={itemRef}
       onClick={(event) => {
         setSelectedRow?.(rowId);
-        // eslint-disable-next-line  @typescript-eslint/no-unused-expressions -- https://github.com/carbon-design-system/carbon/issues/20071
-        onClick && onClick(event);
+
+        if (onClick) {
+          onClick(event);
+        }
+
         if (selection) {
           // focus items only when selection is enabled
           setHasFocusWithin(true);
@@ -460,8 +463,10 @@ export function StructuredListInput(props: StructuredListInputProps) {
       value={row?.id ?? ''}
       onChange={(event) => {
         setSelectedRow?.(event.target.value);
-        // eslint-disable-next-line  @typescript-eslint/no-unused-expressions -- https://github.com/carbon-design-system/carbon/issues/20071
-        onChange && onChange(event);
+
+        if (onChange) {
+          onChange(event);
+        }
       }}
       id={id ?? defaultId}
       className={classes}
