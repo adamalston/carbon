@@ -561,7 +561,7 @@ class CDSSlider extends HostListenerMixin(FormMixin(FocusMixin(LitElement))) {
     const { detail } = event;
     const { intermediate, value } = detail;
     this.warnText = intermediate
-      ? `The inputted value ${intermediate} was corrected to the nearest allowed digit`
+      ? `The entered value "${intermediate}" was adjusted to the nearest allowed digit.`
       : '';
     if (intermediate !== value) {
       if (eventContainer === 'upper') {
