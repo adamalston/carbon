@@ -73,6 +73,7 @@ jobs:
           path: |
             node_modules
             */**/node_modules
+            ~/.yarn/berry/cache
           key:
             ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock',
             'packages/**/yarn.lock') }}
@@ -109,6 +110,7 @@ jobs:
           path: |
             node_modules
             */**/node_modules
+            ~/.yarn/berry/cache
           key:
             ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock',
             'packages/**/yarn.lock') }}
@@ -149,6 +151,7 @@ jobs:
           path: |
             node_modules
             */**/node_modules
+            ~/.yarn/berry/cache
           key:
             ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock',
             'packages/**/yarn.lock') }}
@@ -195,6 +198,7 @@ jobs:
           path: |
             node_modules
             */**/node_modules
+            ~/.yarn/berry/cache
           key:
             ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock',
             'packages/**/yarn.lock') }}
@@ -276,6 +280,7 @@ jobs:
           path: |
             node_modules
             */**/node_modules
+            ~/.yarn/berry/cache
           key:
             ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock',
             'packages/**/yarn.lock') }}
@@ -343,6 +348,7 @@ jobs:
           path: |
             node_modules
             */**/node_modules
+            ~/.yarn/berry/cache
           key:
             ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock',
             'packages/**/yarn.lock') }}
@@ -415,6 +421,7 @@ jobs:
           path: |
             node_modules
             */**/node_modules
+            ~/.yarn/berry/cache
           key:
             ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock',
             'packages/**/yarn.lock') }}
