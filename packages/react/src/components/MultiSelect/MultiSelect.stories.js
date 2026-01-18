@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2016, 2025
+ * Copyright IBM Corp. 2016, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -497,7 +497,7 @@ export const SelectAll = (args) => {
   const [label, setLabel] = useState('Choose options');
 
   const onChange = (value) => {
-    if (value.selectedItems.length == 1) {
+    if (value.selectedItems.length === 1) {
       setLabel('Option selected');
     } else if (value.selectedItems.length > 1) {
       setLabel('Options selected');
@@ -670,7 +670,7 @@ export const SelectAllWithDynamicItems = (args) => {
   const [items, setItems] = useState(itemsWithSelectAll);
 
   const onChange = (value) => {
-    if (value.selectedItems.length == 1) {
+    if (value.selectedItems.length === 1) {
       setLabel('Option selected');
     } else if (value.selectedItems.length > 1) {
       setLabel('Options selected');

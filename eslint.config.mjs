@@ -25,12 +25,14 @@ export default tseslint.config([
       },
     },
     rules: {
-      // All of these rules have directives in the codebase that disable them,
+      // These rules have directives in the codebase that disable them,
       // which implies that they were set previously.
       'no-console': 'error',
       'no-template-curly-in-string': 'error',
       'prefer-arrow-callback': ['error', { allowNamedFunctions: true }],
       'require-atomic-updates': 'error',
+
+      eqeqeq: 'error',
     },
   },
   {

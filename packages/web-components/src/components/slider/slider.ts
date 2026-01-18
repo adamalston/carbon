@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2019, 2025
+ * Copyright IBM Corp. 2019, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -227,7 +227,7 @@ class CDSSlider extends HostListenerMixin(FormMixin(FocusMixin(LitElement))) {
           (!shiftKey ? step : (max - min) / stepMultiplier) *
           THUMB_DIRECTION[key];
         // Snaps to next
-        if (eventContainer == 'thumb-upper') {
+        if (eventContainer === 'thumb-upper') {
           const stepCount = (unstable_valueUpper + diff) / step;
           const position = Math.min(
             max,

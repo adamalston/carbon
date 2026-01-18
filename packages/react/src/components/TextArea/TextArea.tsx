@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2016, 2025
+ * Copyright IBM Corp. 2016, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -309,13 +309,13 @@ const TextArea = frFn((props, forwardRef) => {
     },
     onChange: (evt) => {
       if (!disabled) {
-        if (counterMode == 'character') {
+        if (counterMode === 'character') {
           evt?.persist?.();
           // delay textCount assignation to give the textarea element value time to catch up if is a controlled input
           setTimeout(() => {
             setTextCount(evt.target?.value?.length);
           }, 0);
-        } else if (counterMode == 'word') {
+        } else if (counterMode === 'word') {
           if (!evt.target.value) {
             setTimeout(() => {
               setTextCount(0);
@@ -466,7 +466,7 @@ const TextArea = frFn((props, forwardRef) => {
 
   if (enableCounter) {
     // handle different counter mode
-    if (counterMode == 'character') {
+    if (counterMode === 'character') {
       textareaProps.maxLength = maxCount;
     }
   }

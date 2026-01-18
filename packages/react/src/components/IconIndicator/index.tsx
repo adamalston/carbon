@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2016, 2023
+ * Copyright IBM Corp. 2016, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -93,7 +93,7 @@ export const IconIndicator = React.forwardRef(
   ) => {
     const prefix = usePrefix();
     const classNames = cx(`${prefix}--icon-indicator`, customClassName, {
-      [`${prefix}--icon-indicator--20`]: size == 20,
+      [`${prefix}--icon-indicator--20`]: size === 20,
     });
 
     const IconForKind = iconTypes[kind];

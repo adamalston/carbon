@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2019, 2025
+ * Copyright IBM Corp. 2019, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -363,7 +363,7 @@ class CDSCodeSnippet extends FocusMixin(LitElement) {
     // eslint-disable-next-line  @typescript-eslint/no-unused-expressions -- https://github.com/carbon-design-system/carbon/issues/20452
     wrapText ? (classes += ` ${prefix}--snippet--wraptext`) : '';
     // eslint-disable-next-line  @typescript-eslint/no-unused-expressions -- https://github.com/carbon-design-system/carbon/issues/20452
-    type == 'multi' && hasRightOverflow
+    type === 'multi' && hasRightOverflow
       ? (classes += ` ${prefix}--snippet--has-right-overflow`)
       : '';
 

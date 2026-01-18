@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2016, 2025
+ * Copyright IBM Corp. 2016, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -608,9 +608,9 @@ const Slider = (props: SliderProps) => {
 
     let activeHandle: HandlePosition | undefined;
     if (hasTwoHandles()) {
-      if (evt.target == thumbRef.current) {
+      if (evt.target === thumbRef.current) {
         activeHandle = HandlePosition.LOWER;
-      } else if (evt.target == thumbRefUpper.current) {
+      } else if (evt.target === thumbRefUpper.current) {
         activeHandle = HandlePosition.UPPER;
       } else if (clientX) {
         const distanceToLower = calcDistanceToHandle(

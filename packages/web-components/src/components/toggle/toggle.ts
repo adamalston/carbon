@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2019, 2025
+ * Copyright IBM Corp. 2019, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -55,7 +55,7 @@ class CDSToggle extends HostListenerMixin(CDSCheckbox) {
   }
 
   protected _renderCheckmark() {
-    if (this.size !== TOGGLE_SIZE.SMALL || this.readOnly == true) {
+    if (this.size !== TOGGLE_SIZE.SMALL || this.readOnly === true) {
       return undefined;
     }
     return html`

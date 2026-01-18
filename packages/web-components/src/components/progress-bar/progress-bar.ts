@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2019, 2024
+ * Copyright IBM Corp. 2019, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -112,8 +112,8 @@ class CDSProgressBar extends LitElement {
       ) as HTMLElement;
 
       if (
-        status != PROGRESS_BAR_STATUS.ERROR &&
-        status != PROGRESS_BAR_STATUS.FINISHED
+        status !== PROGRESS_BAR_STATUS.ERROR &&
+        status !== PROGRESS_BAR_STATUS.FINISHED
       ) {
         bar.style.transform = `scaleX(${percentage})`;
       } else {

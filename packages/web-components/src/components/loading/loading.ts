@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2019, 2023
+ * Copyright IBM Corp. 2019, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -49,7 +49,7 @@ class CDSLoading extends LitElement {
     return this.small ? LOADING_TYPE.SMALL : LOADING_TYPE.REGULAR;
   }
   set type(value) {
-    this.small = value == LOADING_TYPE.SMALL;
+    this.small = value === LOADING_TYPE.SMALL;
   }
 
   /**

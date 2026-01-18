@@ -461,7 +461,7 @@ class CDSComboBox extends CDSDropdown {
   protected _renderFollowingLabel(): TemplateResult | void {
     const { clearSelectionLabel, _filterInputValue: filterInputValue } = this;
 
-    if (filterInputValue.length != 0) {
+    if (filterInputValue.length !== 0) {
       this.setAttribute('isClosable', '');
     } else {
       this.removeAttribute('isClosable');
@@ -595,7 +595,7 @@ class CDSComboBox extends CDSDropdown {
         // remove the autocomplete suggestion when closing the combobox
         this._removeAutoCompleteSuggestion();
         this._resetFilteredItems();
-        if (this._filterInputNode.value == '') {
+        if (this._filterInputNode.value === '') {
           this.value = '';
         }
         if (this.value) {

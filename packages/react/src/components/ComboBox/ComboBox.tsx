@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2016, 2025
+ * Copyright IBM Corp. 2016, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -1097,13 +1097,13 @@ const ComboBox = forwardRef(
                     );
                   }
 
-                  if (event.altKey && event.key == 'ArrowDown') {
+                  if (event.altKey && event.key === 'ArrowDown') {
                     event.preventDownshiftDefault = true;
                     if (!isOpen) {
                       toggleMenu();
                     }
                   }
-                  if (event.altKey && event.key == 'ArrowUp') {
+                  if (event.altKey && event.key === 'ArrowUp') {
                     event.preventDownshiftDefault = true;
                     if (isOpen) {
                       toggleMenu();
@@ -1111,8 +1111,8 @@ const ComboBox = forwardRef(
                   }
                   if (
                     !inputValue &&
-                    highlightedIndex == -1 &&
-                    event.key == 'Enter'
+                    highlightedIndex === -1 &&
+                    event.key === 'Enter'
                   ) {
                     if (!isOpen) toggleMenu();
                     selectItem(null);

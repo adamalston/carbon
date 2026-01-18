@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2024, 2025
+ * Copyright IBM Corp. 2024, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -276,7 +276,7 @@ class CDSMenu extends HostListenerMixin(LitElement) {
       const shadowRootActiveEl = this._findActiveElementInShadowRoot(document);
       currentItem = this.activeitems.findIndex((activeItem) => {
         return (
-          shadowRootActiveEl == activeItem.item ||
+          shadowRootActiveEl === activeItem.item ||
           activeItem.item.shadowRoot?.activeElement === shadowRootActiveEl
         );
       });

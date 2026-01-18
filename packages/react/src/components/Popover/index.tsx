@@ -415,8 +415,8 @@ export const Popover: PopoverComponent & {
           left: 'right',
         }[placement.split('-')[0]];
 
-        caretRef.current.style.left = x != null ? `${x}px` : '';
-        caretRef.current.style.top = y != null ? `${y}px` : '';
+        caretRef.current.style.left = x !== null ? `${x}px` : '';
+        caretRef.current.style.top = y !== null ? `${y}px` : '';
 
         // Ensure the static side gets unset when flipping to other placements' axes.
         caretRef.current.style.right = '';

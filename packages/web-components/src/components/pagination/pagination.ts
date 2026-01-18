@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2019, 2025
+ * Copyright IBM Corp. 2019, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -61,7 +61,7 @@ class CDSPagination extends FocusMixin(HostListenerMixin(LitElement)) {
 
     const min = totalItems === 0 ? 0 : start + 1;
 
-    if (pagesUnknown || totalItems == null) {
+    if (pagesUnknown || totalItems === null) {
       // * Indeterminate total:
       //   - totalItems === 0 → "0–0 of 0 items"
       //   - else → closed range "1–10 items", "11–20 items", etc.
@@ -182,7 +182,7 @@ class CDSPagination extends FocusMixin(HostListenerMixin(LitElement)) {
     const newStart = oldStart + pageSize;
 
     if (
-      newStart < (totalItems == null ? Infinity : totalItems) ||
+      newStart < (totalItems === null ? Infinity : totalItems) ||
       pagesUnknown
     ) {
       this._handleUserInitiatedChangeStart(newStart);
@@ -264,7 +264,7 @@ class CDSPagination extends FocusMixin(HostListenerMixin(LitElement)) {
    */
   @property({ attribute: false })
   formatStatusWithIndeterminateTotal = ({ start, end, count }) =>
-    end == null
+    end === null
       ? `Item ${start}–`
       : `${start}–${end} item${count <= 1 ? '' : 's'}`;
 
