@@ -32,9 +32,13 @@ export const unstable_tokens = [
   'durationModerate02',
   'durationSlow01',
   'durationSlow02',
-];
+] as const;
 
-export const easings = {
+export type EasingName = 'standard' | 'entrance' | 'exit';
+export type EasingMode = 'productive' | 'expressive';
+export type EasingMap = Record<EasingName, Record<EasingMode, string>>;
+
+export const easings: EasingMap = {
   standard: {
     productive: 'cubic-bezier(0.2, 0, 0.38, 0.9)',
     expressive: 'cubic-bezier(0.4, 0.14, 0.3, 1)',
@@ -49,7 +53,7 @@ export const easings = {
   },
 };
 
-export function motion(name, mode) {
+export const motion = (name: EasingName, mode: EasingMode) => {
   if (!easings[name]) {
     throw new Error(
       `Unable to find easing \`${name}\` in our supported easings. Expected ` +
@@ -65,4 +69,4 @@ export function motion(name, mode) {
   }
 
   return easing[mode];
-}
+};
