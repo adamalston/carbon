@@ -804,9 +804,6 @@ describe('ComponentName AVT1', () => {
 ##### `ComponentName-test.server.js`
 
 ```js
-/**
- * @jest-environment node
- */
 import ReactDOMServer from 'react-dom/server';
 import { ComponentName } from '../ComponentName';
 
@@ -1068,8 +1065,6 @@ The basic template for tests for Sass files will look like:
 ```js
 /**
  * <COPYRIGHT>
- *
- * @jest-environment node
  */
 
 'use strict';

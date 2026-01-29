@@ -3,8 +3,6 @@
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
- *
- * @jest-environment node
  */
 
 'use strict';
@@ -50,7 +48,7 @@ describe('scss/carousel', () => {
     await expect(
       render(`
         @use '../_carbon-utilities' as carousel;
-        
+
         .test {
           @include carousel.carousel;
         }
@@ -62,7 +60,7 @@ describe('scss/carousel', () => {
     await expect(
       render(`
         @use '../_carbon-utilities' as carousel;
-        
+
         @include carousel.wrapperStyles;
       `)
     ).resolves.not.toThrow();
@@ -72,7 +70,7 @@ describe('scss/carousel', () => {
     await expect(
       render(`
         @use '../_carbon-utilities' as carousel;
-        
+
         @include carousel.viewStyles;
       `)
     ).resolves.not.toThrow();
@@ -81,8 +79,8 @@ describe('scss/carousel', () => {
   test('default variables have expected values', async () => {
     const { unwrap } = await render(`
       @use '../_carbon-utilities' as carousel;
-      
-    
+
+
       $_: get('animateTime', carousel.$animateTime);
     `);
 
