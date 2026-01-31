@@ -1,7 +1,6 @@
 // @ts-check
 
-import { readdirSync, readFileSync } from 'node:fs';
-import { dirname, join, posix, relative, sep } from 'node:path';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { includeIgnoreFile } from '@eslint/compat';
@@ -15,118 +14,20 @@ import { defineConfig } from 'eslint/config';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
-/**
- * @param {string} filePath
- * @returns {string}
- */
-const normalizePath = (filePath) => filePath.split(sep).join('/');
+import gitignoreHelpers from './config/eslint/gitignore.cjs';
 
-/**
- * @param {string} rawLine
- * @returns {{ line: string, negated: boolean } | null}
- */
-const normalizeGitignoreLine = (rawLine) => {
-  const trimmedLine = rawLine.trim();
-  if (!trimmedLine || trimmedLine.startsWith('#')) return null;
-
-  let line = trimmedLine;
-  const negated = line.startsWith('!');
-
-  if (line.startsWith('\\#') || line.startsWith('\\!')) {
-    line = line.slice(1);
-  }
-
-  if (negated) {
-    line = line.slice(1);
-  }
-
-  return { line, negated };
-};
-
-/**
- * @param {string} rootDir
- * @returns {string[]}
- */
-const findGitignoreFiles = (rootDir) => {
-  const gitignoreFiles = [];
-  const pendingDirs = [rootDir];
-
-  // Traverse the repo tree, skipping directories that shouldn't affect ignore
-  // rules.
-  while (pendingDirs.length) {
-    const currentDir = pendingDirs.pop();
-
-    if (!currentDir) break;
-
-    const entries = readdirSync(currentDir, { withFileTypes: true });
-
-    for (const entry of entries) {
-      if (entry.name === '.gitignore') {
-        gitignoreFiles.push(join(currentDir, entry.name));
-        continue;
-      }
-
-      if (!entry.isDirectory() || entry.isSymbolicLink()) {
-        continue;
-      }
-
-      if (entry.name === '.git' || entry.name === 'node_modules') {
-        continue;
-      }
-
-      pendingDirs.push(join(currentDir, entry.name));
-    }
-  }
-
-  return gitignoreFiles;
-};
-
-/**
- * @param {string} gitignoreFile
- * @param {string} repoRoot
- */
-const parseNestedGitignore = (gitignoreFile, repoRoot) => {
-  const dirRelative = relative(repoRoot, dirname(gitignoreFile));
-  if (!dirRelative) return [];
-
-  const dirPrefix = normalizePath(dirRelative);
-  const rawLines = readFileSync(gitignoreFile, 'utf8').split(/\r?\n/);
-  const patterns = [];
-
-  for (const rawLine of rawLines) {
-    const normalized = normalizeGitignoreLine(rawLine);
-
-    if (!normalized) continue;
-
-    let { line } = normalized;
-    const { negated } = normalized;
-
-    const isAnchored = line.startsWith('/');
-    if (isAnchored) {
-      line = line.slice(1);
-    }
-
-    const hasSlash = line.includes('/');
-    const isDir = line.endsWith('/');
-    const patternBase = hasSlash
-      ? posix.join(dirPrefix, line)
-      : posix.join(dirPrefix, '**', line);
-    const pattern = isDir ? `${patternBase}**` : patternBase;
-
-    patterns.push(negated ? `!${pattern}` : pattern);
-  }
-
-  return patterns;
-};
+const { findGitignoreFiles, parseNestedGitignore } = gitignoreHelpers;
 
 const repoRoot = fileURLToPath(new URL('.', import.meta.url));
 const gitignorePaths = findGitignoreFiles(repoRoot).sort(
   (a, b) => a.length - b.length
 );
 const rootGitignore = join(repoRoot, '.gitignore');
-const nestedGitignorePatterns = gitignorePaths
-  .filter((gitignoreFile) => gitignoreFile !== rootGitignore)
-  .flatMap((gitignoreFile) => parseNestedGitignore(gitignoreFile, repoRoot));
+const nestedGitignorePatterns = gitignorePaths.reduce((acc, path) => {
+  if (path === rootGitignore) return acc;
+
+  return acc.concat(parseNestedGitignore(path, repoRoot));
+}, /** @type {string[]} */ ([]));
 
 // TODO: There is an `eslintConfig` reference in `package.json`. Investigate
 // whether it should be moved to this file or deleted.
@@ -169,7 +70,7 @@ export default defineConfig(
     },
   },
   {
-    files: ['**/*.js'],
+    files: ['**/*.cjs', '**/*.js'],
     rules: {
       '@typescript-eslint/no-require-imports': 'off',
     },
