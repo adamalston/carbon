@@ -2362,6 +2362,9 @@ Map {
           "type": "string",
         },
         "ariaLabel": [Function],
+        "checkboxProps": {
+          "type": "object",
+        },
         "checked": {
           "type": "bool",
         },
@@ -10177,6 +10180,9 @@ Map {
         "type": "string",
       },
       "ariaLabel": [Function],
+      "checkboxProps": {
+        "type": "object",
+      },
       "checked": {
         "type": "bool",
       },
