@@ -104,7 +104,7 @@ export interface DatePickerInputProps
 
   /**
    * Provide a regular expression that the input value must match
-   * TODO:need to be rewritten
+   * TODO: need to be rewritten
    */
   pattern?: (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
