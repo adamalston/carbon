@@ -6551,7 +6551,10 @@ Map {
                     "args": [
                       [
                         {
-                          "type": "any",
+                          "args": [
+                            [Function],
+                          ],
+                          "type": "instanceOf",
                         },
                         {
                           "args": [
