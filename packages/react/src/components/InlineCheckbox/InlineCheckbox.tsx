@@ -1,11 +1,11 @@
 /**
- * Copyright IBM Corp. 2016, 2025
+ * Copyright IBM Corp. 2016, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
  */
 import PropTypes from 'prop-types';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, type InputHTMLAttributes } from 'react';
 import { deprecate } from '../../prop-types/deprecate';
 import { usePrefix } from '../../internal/usePrefix';
 import { useMergedRefs } from '../../internal/useMergedRefs';
@@ -73,6 +73,14 @@ export interface InlineCheckboxProps {
    * Provide an optional tooltip for the InlineCheckbox
    */
   title?: string;
+
+  /**
+   * Provide additional attributes for the underlying input element.
+   *
+   * Component controlled props (for example `checked`, `id`, `name`) will take
+   * precedence.
+   */
+  inputProps?: InputHTMLAttributes<HTMLInputElement>;
 }
 
 // eslint-disable-next-line react/display-name -- https://github.com/carbon-design-system/carbon/issues/20452
@@ -90,14 +98,16 @@ const InlineCheckbox = React.forwardRef<HTMLInputElement, InlineCheckboxProps>(
       onClick,
       onKeyDown,
       title,
+      inputProps,
     } = props;
     const prefix = usePrefix();
     const inputRef = useRef<HTMLInputElement>(null);
     const ref = useMergedRefs([inputRef, forwardRef]);
 
-    const inputProps: React.InputHTMLAttributes<HTMLInputElement> & {
+    const mergedInputProps: InputHTMLAttributes<HTMLInputElement> & {
       ref: React.Ref<HTMLInputElement>;
     } = {
+      ...inputProps,
       checked,
       className: `${prefix}--checkbox`,
       disabled,
@@ -113,7 +123,7 @@ const InlineCheckbox = React.forwardRef<HTMLInputElement, InlineCheckboxProps>(
     };
 
     if (indeterminate) {
-      inputProps.checked = false;
+      mergedInputProps.checked = false;
     }
 
     useEffect(() => {
@@ -131,7 +141,7 @@ const InlineCheckbox = React.forwardRef<HTMLInputElement, InlineCheckboxProps>(
 
     return (
       <div className={`${prefix}--checkbox--inline`}>
-        <input {...inputProps} />
+        <input {...mergedInputProps} />
         {
           /* eslint-disable jsx-a11y/click-events-have-key-events,jsx-a11y/no-noninteractive-element-interactions */
           <label
@@ -210,6 +220,11 @@ InlineCheckbox.propTypes = {
    * Provide an optional tooltip for the InlineCheckbox
    */
   title: PropTypes.string,
+
+  /**
+   * Provide additional attributes for the underlying input element.
+   */
+  inputProps: PropTypes.object,
 };
 
 export default InlineCheckbox;

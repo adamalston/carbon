@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2023
+ * Copyright IBM Corp. 2023, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -143,6 +143,55 @@ describe('TableSelectAll', () => {
       );
 
       expect(screen.getByRole('columnheader')).toHaveClass('test-class');
+    });
+
+    it('should support passthrough props on the outermost element', () => {
+      render(
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableSelectAll
+                aria-label="Select all rows"
+                checked={false}
+                id="select-all"
+                name="select-all"
+                onSelect={() => {}}
+                data-testid="select-all-header"
+                title="Select all"
+              />
+            </TableRow>
+          </TableHead>
+        </Table>
+      );
+
+      expect(screen.getByTestId('select-all-header')).toHaveAttribute(
+        'title',
+        'Select all'
+      );
+    });
+
+    it('should support passthrough props on the inner checkbox control', () => {
+      render(
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableSelectAll
+                aria-label="Select all rows"
+                checked={false}
+                id="select-all"
+                name="select-all"
+                onSelect={() => {}}
+                checkboxProps={{ 'data-testid': 'select-all-checkbox' }}
+              />
+            </TableRow>
+          </TableHead>
+        </Table>
+      );
+
+      expect(screen.getByTestId('select-all-checkbox')).toHaveAttribute(
+        'type',
+        'checkbox'
+      );
     });
 
     it('should respect disabled prop', () => {

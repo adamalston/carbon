@@ -1,18 +1,21 @@
 /**
- * Copyright IBM Corp. 2016, 2025
+ * Copyright IBM Corp. 2016, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
  */
 
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, {
+  type ComponentPropsWithoutRef,
+  type InputHTMLAttributes,
+} from 'react';
 import InlineCheckbox from '../InlineCheckbox';
 import cx from 'classnames';
 import { usePrefix } from '../../internal/usePrefix';
 import { deprecate } from '../../prop-types/deprecate';
 
-export interface TableSelectAllProps {
+interface TableSelectAllBaseProps {
   /**
    * Specify the aria label for the underlying input control
    * node
@@ -59,7 +62,20 @@ export interface TableSelectAllProps {
    * Provide a handler to listen to when a user initiates a selection request
    */
   onSelect: React.MouseEventHandler<HTMLInputElement>;
+
+  /**
+   * Provide additional attributes for the checkbox.
+   */
+  checkboxProps?: InputHTMLAttributes<HTMLInputElement>;
 }
+
+type TableSelectAllElementProps = Omit<
+  ComponentPropsWithoutRef<'th'>,
+  'children' | 'id' | 'onSelect'
+>;
+
+export type TableSelectAllProps = TableSelectAllBaseProps &
+  TableSelectAllElementProps;
 
 const TableSelectAll = ({
   ariaLabel: deprecatedAriaLabel = 'Select all rows in the table',
@@ -71,10 +87,13 @@ const TableSelectAll = ({
   onSelect,
   disabled,
   className,
+  checkboxProps,
+  ...rest
 }: TableSelectAllProps) => {
   const prefix = usePrefix();
   return (
     <th
+      {...rest}
       aria-live="off"
       scope="col"
       className={cx(`${prefix}--table-column-checkbox`, className)}>
@@ -86,6 +105,7 @@ const TableSelectAll = ({
         name={name}
         onClick={onSelect}
         disabled={disabled}
+        inputProps={checkboxProps}
       />
     </th>
   );
@@ -138,6 +158,11 @@ TableSelectAll.propTypes = {
    * Provide a handler to listen to when a user initiates a selection request
    */
   onSelect: PropTypes.func.isRequired,
+
+  /**
+   * Provide additional attributes for the checkbox.
+   */
+  checkboxProps: PropTypes.object,
 };
 
 export default TableSelectAll;

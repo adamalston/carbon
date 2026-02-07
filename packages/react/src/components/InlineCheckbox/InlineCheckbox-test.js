@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2016, 2023
+ * Copyright IBM Corp. 2016, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -28,5 +28,21 @@ describe('InlineCheckbox', () => {
     );
     await userEvent.click(screen.getByRole('checkbox'));
     expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('should support data-testid on the input element', () => {
+    render(
+      <InlineCheckbox
+        aria-label="test-label"
+        id="test-id"
+        name="test-name"
+        inputProps={{ 'data-testid': 'inline-checkbox-input', title: 'test' }}
+      />
+    );
+
+    expect(screen.getByTestId('inline-checkbox-input')).toHaveAttribute(
+      'title',
+      'test'
+    );
   });
 });
