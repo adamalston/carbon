@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2023, 2025
+ * Copyright IBM Corp. 2023, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -188,7 +188,11 @@ const Menu = forwardRef<HTMLUListElement, MenuProps>(function Menu(
 
   function handleOpen() {
     if (menu.current) {
-      focusReturn.current = document.activeElement as HTMLElement;
+      const activeElement = document.activeElement;
+
+      focusReturn.current =
+        activeElement instanceof HTMLElement ? activeElement : null;
+
       if (legacyAutoalign) {
         const pos = calculatePosition();
         if (
