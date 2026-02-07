@@ -103,16 +103,9 @@ export interface DatePickerInputProps
   onClick?: func;
 
   /**
-   * Provide a regular expression that the input value must match
-   * TODO:need to be rewritten
+   * Provide a regular expression pattern string that the input value must match
    */
-  pattern?: (
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
-    props: { [key: string]: any },
-    propName: string,
-    componentName: string
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
-  ) => null | any | Error;
+  pattern?: string;
 
   /**
    * Specify the placeholder text
@@ -377,17 +370,27 @@ DatePickerInput.propTypes = {
   onClick: PropTypes.func,
 
   /**
-   * Provide a regular expression that the input value must match
+   * Provide a regular expression pattern string that the input value must match
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
-  pattern: (props, propName, componentName): null | any | Error => {
-    if (props[propName] === undefined) {
-      return;
+  pattern: (
+    props: Record<string, unknown>,
+    propName: string,
+    componentName: string
+  ): Error | null => {
+    const value = props[propName];
+
+    if (value === null || typeof value === 'undefined') return null;
+
+    if (typeof value !== 'string') {
+      return new Error(
+        `Invalid value of prop '${propName}' supplied to '${componentName}', it should be a string`
+      );
     }
+
     try {
-      new RegExp(props[propName]);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- https://github.com/carbon-design-system/carbon/issues/20452
-    } catch (e) {
+      new RegExp(value);
+      return null;
+    } catch {
       return new Error(
         `Invalid value of prop '${propName}' supplied to '${componentName}', it should be a valid regular expression`
       );
