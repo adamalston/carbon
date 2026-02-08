@@ -7,7 +7,6 @@
 
 import React, {
   Children,
-  createContext,
   forwardRef,
   isValidElement,
   useEffect,
@@ -29,6 +28,7 @@ import { useDelayedState } from '../../internal/useDelayedState';
 import { breakpoints } from '@carbon/layout';
 import { useMatchMedia } from '../../internal/useMatchMedia';
 import type SideNavItems from './SideNavItems';
+import { SideNavContext } from './SideNavContext';
 // TO-DO: comment back in when footer is added for rails
 // import SideNavFooter from './SideNavFooter';
 
@@ -52,14 +52,6 @@ export interface SideNavProps {
   onSideNavBlur?: () => void;
   enterDelayMs?: number;
 }
-
-interface SideNavContextData {
-  isRail?: boolean | undefined;
-}
-
-export const SideNavContext = createContext<SideNavContextData>(
-  {} as SideNavContextData
-);
 
 const frFn = forwardRef<HTMLElement, SideNavProps & ComponentProps<'nav'>>;
 

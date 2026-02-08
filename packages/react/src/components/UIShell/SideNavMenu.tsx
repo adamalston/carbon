@@ -18,7 +18,7 @@ import React, {
 import SideNavIcon from './SideNavIcon';
 import { keys, match } from '../../internal/keyboard';
 import { usePrefix } from '../../internal/usePrefix';
-import { SideNavContext } from './SideNav';
+import { SideNavContext } from './SideNavContext';
 
 export interface SideNavMenuProps {
   /**

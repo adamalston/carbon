@@ -20,7 +20,7 @@ import SideNavIcon from './SideNavIcon';
 import SideNavItem from './SideNavItem';
 import SideNavLinkText from './SideNavLinkText';
 import { usePrefix } from '../../internal/usePrefix';
-import { SideNavContext } from './SideNav';
+import { SideNavContext } from './SideNavContext';
 
 export type SideNavLinkProps<E extends ElementType> = LinkProps<E> & {
   /**
