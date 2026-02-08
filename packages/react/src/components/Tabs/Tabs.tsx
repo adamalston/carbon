@@ -1,42 +1,46 @@
 /**
- * Copyright IBM Corp. 2016, 2025
+ * Copyright IBM Corp. 2016, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
  */
 
-import { ChevronLeft, ChevronRight } from '@carbon/icons-react';
+import {
+  ChevronLeft,
+  ChevronRight,
+  type CarbonIconType,
+} from '@carbon/icons-react';
 import { breakpoints } from '@carbon/layout';
 import cx from 'classnames';
 import { debounce } from 'es-toolkit/compat';
 import PropTypes from 'prop-types';
 import React, {
+  Children,
+  cloneElement,
+  createContext,
+  forwardRef,
+  isValidElement,
   useCallback,
-  useState,
-  useRef,
   useEffect,
   useMemo,
-  forwardRef,
-  createContext,
-  type ReactNode,
-  type MouseEvent,
-  type KeyboardEvent,
-  type HTMLAttributes,
-  type RefObject,
+  useRef,
+  useState,
+  type ComponentProps,
   type ComponentType,
-  type HTMLElementType,
   type ElementType,
-  isValidElement,
-  ReactElement,
+  type HTMLAttributes,
+  type HTMLElementType,
+  type KeyboardEvent,
+  type MouseEvent,
+  type ReactNode,
+  type RefObject,
 } from 'react';
 import { Grid } from '../Grid';
-import { isElement } from 'react-is';
 import { Tooltip } from '../Tooltip';
 import { useControllableState } from '../../internal/useControllableState';
 import { useId } from '../../internal/useId';
 import useIsomorphicEffect from '../../internal/useIsomorphicEffect';
 import { useMergedRefs } from '../../internal/useMergedRefs';
-import { getInteractiveContent } from '../../internal/useNoInteractiveChildren';
 import { usePrefix } from '../../internal/usePrefix';
 import { keys, match, matches } from '../../internal/keyboard';
 import { usePressable } from './usePressable';
@@ -46,6 +50,7 @@ import { useEvent } from '../../internal/useEvent';
 import { useMatchMedia } from '../../internal/useMatchMedia';
 import { Text } from '../Text';
 import BadgeIndicator from '../BadgeIndicator';
+import { isComponentElement } from '../../internal';
 
 const verticalTabHeight = 64;
 
@@ -140,7 +145,7 @@ function Tabs({
 }: TabsProps) {
   const baseId = useId('ccs');
   if (dismissable && !onTabCloseRequest) {
-    // eslint-disable-next-line no-console -- https://github.com/carbon-design-system/carbon/issues/20071
+    // eslint-disable-next-line no-console -- https://github.com/carbon-design-system/carbon/issues/20452
     console.error(
       'dismissable property specified without also providing an onTabCloseRequest property.'
     );
@@ -462,14 +467,13 @@ function TabList({
   const [isScrollable, setIsScrollable] = useState(false);
   const [scrollLeft, setScrollLeft] = useState<number>(0);
 
-  let hasSecondaryLabelTabs = false;
-  if (contained) {
-    hasSecondaryLabelTabs = React.Children.toArray(children).some((child) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20071
-      const _child = child as React.ReactElement<any>;
-      return React.isValidElement(child) && !!_child.props.secondaryLabel;
-    });
-  }
+  const hasSecondaryLabelTabs =
+    contained &&
+    Children.toArray(children).some(
+      (child) =>
+        isComponentElement(child, Tab) &&
+        typeof child.props.secondaryLabel !== 'undefined'
+    );
 
   const isLg = useMatchMedia(lgMediaQuery);
 
@@ -620,7 +624,7 @@ function TabList({
         inline: 'nearest',
       });
     }
-    // eslint-disable-next-line  react-hooks/exhaustive-deps -- https://github.com/carbon-design-system/carbon/issues/20071
+    // eslint-disable-next-line  react-hooks/exhaustive-deps -- https://github.com/carbon-design-system/carbon/issues/20452
   }, []);
 
   useEffect(() => {
@@ -650,7 +654,7 @@ function TabList({
         setSelectedIndex(tabs.current.indexOf(tab));
       }
     }
-    // eslint-disable-next-line  react-hooks/exhaustive-deps -- https://github.com/carbon-design-system/carbon/issues/20071
+    // eslint-disable-next-line  react-hooks/exhaustive-deps -- https://github.com/carbon-design-system/carbon/issues/20452
   }, []);
 
   useIsomorphicEffect(() => {
@@ -751,23 +755,21 @@ function TabList({
         onScroll={debouncedOnScroll}
         onKeyDown={onKeyDown}
         onBlur={handleBlur}>
-        {React.Children.map(children, (child, index) => {
-          return !isElement(child) ? null : (
+        {Children.map(children, (child, index) => {
+          return !isValidElement<ComponentProps<typeof Tab>>(child) ? null : (
             <TabContext.Provider
               value={{
                 index,
                 hasSecondaryLabel: hasSecondaryLabelTabs,
                 contained,
               }}>
-              {React.cloneElement(
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20071
-                child as React.ReactElement<{ ref?: React.Ref<any> }>,
-                {
-                  ref: (node) => {
-                    tabs.current[index] = node;
-                  },
-                }
-              )}
+              {cloneElement(child, {
+                ref: (node) => {
+                  if (!node) return;
+
+                  tabs.current[index] = node;
+                },
+              })}
             </TabContext.Provider>
           );
         })}
@@ -969,7 +971,7 @@ function TabListVertical({
         setSelectedIndex(tabs.current.indexOf(tab));
       }
     }
-    // eslint-disable-next-line  react-hooks/exhaustive-deps -- https://github.com/carbon-design-system/carbon/issues/20071
+    // eslint-disable-next-line  react-hooks/exhaustive-deps -- https://github.com/carbon-design-system/carbon/issues/20452
   }, []);
 
   useEffect(() => {
@@ -990,12 +992,10 @@ function TabListVertical({
             halfTabHeight >
             containerHeight
         ) {
-          // eslint-disable-next-line  @typescript-eslint/no-unused-expressions -- https://github.com/carbon-design-system/carbon/issues/20071
-          ref.current &&
-            ref.current.scrollTo({
-              top: (selectedIndex - 1) * verticalTabHeight,
-              behavior: 'smooth',
-            });
+          ref.current?.scrollTo({
+            top: (selectedIndex - 1) * verticalTabHeight,
+            behavior: 'smooth',
+          });
         }
       }
     }
@@ -1056,22 +1056,20 @@ function TabListVertical({
         className={`${prefix}--tab--list`}
         onKeyDown={onKeyDown}
         onBlur={handleBlur}>
-        {React.Children.map(children, (child, index) => {
-          return !isElement(child) ? null : (
+        {Children.map(children, (child, index) => {
+          return !isValidElement<ComponentProps<typeof Tab>>(child) ? null : (
             <TabContext.Provider
               value={{
                 index,
                 hasSecondaryLabel: false,
               }}>
-              {React.cloneElement(
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20071
-                child as React.ReactElement<{ ref?: React.Ref<any> }>,
-                {
-                  ref: (node) => {
-                    tabs.current[index] = node;
-                  },
-                }
-              )}
+              {cloneElement(child, {
+                ref: (node) => {
+                  if (!node) return;
+
+                  tabs.current[index] = node;
+                },
+              })}
             </TabContext.Provider>
           );
         })}
@@ -1213,7 +1211,7 @@ export interface TabProps extends HTMLAttributes<HTMLElement> {
   secondaryLabel?: string;
 }
 
-// eslint-disable-next-line react/display-name -- https://github.com/carbon-design-system/carbon/issues/20071
+// eslint-disable-next-line react/display-name -- https://github.com/carbon-design-system/carbon/issues/20452
 const Tab = forwardRef<HTMLElement, TabProps>(
   (
     {
@@ -1248,7 +1246,7 @@ const Tab = forwardRef<HTMLElement, TabProps>(
     const panelId = `${baseId}-tabpanel-${index}`;
     const [isEllipsisApplied, setIsEllipsisApplied] = useState(false);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20071
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
     const isEllipsisActive = (element: any) => {
       setIsEllipsisApplied(element.offsetHeight < element.scrollHeight);
       return element.offsetHeight < element.scrollHeight;
@@ -1348,7 +1346,7 @@ const Tab = forwardRef<HTMLElement, TabProps>(
         })}>
         <button
           type="button"
-          tabIndex={selectedIndex === index && dismissable ? 0 : -1}
+          tabIndex={-1}
           aria-disabled={disabled}
           aria-hidden={
             selectedIndex === index && dismissable ? 'false' : 'true'
@@ -1562,6 +1560,11 @@ export interface IconTabProps extends DivAttributes {
   defaultOpen?: boolean;
 
   /**
+   *  Specify whether your IconTab is disabled.
+   */
+  disabled?: boolean;
+
+  /**
    * Specify the duration in milliseconds to delay before displaying the tooltip for the icon.
    */
   enterDelayMs?: number;
@@ -1580,7 +1583,7 @@ export interface IconTabProps extends DivAttributes {
    */
   leaveDelayMs?: number;
 }
-// eslint-disable-next-line react/display-name -- https://github.com/carbon-design-system/carbon/issues/20071
+// eslint-disable-next-line react/display-name -- https://github.com/carbon-design-system/carbon/issues/20452
 const IconTab = React.forwardRef<HTMLDivElement, IconTabProps>(
   (
     {
@@ -1599,8 +1602,11 @@ const IconTab = React.forwardRef<HTMLDivElement, IconTabProps>(
     const value = useMemo(() => ({ badgeIndicator }), [badgeIndicator]);
 
     const hasSize20 =
-      isValidElement(children) &&
-      (children as ReactElement<{ size?: number }>).props.size === 20;
+      isValidElement<ComponentProps<CarbonIconType>>(children) &&
+      // TODO: The interface allows `size` to be a string. Should this case be
+      // handled here, or should the prop type be restricted to `number`
+      // instead?
+      children.props.size === 20;
 
     const classNames = cx(
       `${prefix}--tabs__nav-item--icon-only`,
@@ -1681,60 +1687,16 @@ export interface TabPanelProps extends DivAttributes {
   className?: string;
 }
 
-// eslint-disable-next-line react/display-name -- https://github.com/carbon-design-system/carbon/issues/20071
+// eslint-disable-next-line react/display-name -- https://github.com/carbon-design-system/carbon/issues/20452
 const TabPanel = React.forwardRef<HTMLDivElement, TabPanelProps>(
   ({ children, className: customClassName, ...rest }, forwardRef) => {
     const prefix = usePrefix();
-    const panel = useRef<HTMLDivElement>(null);
-    const ref = useMergedRefs([forwardRef, panel]);
 
-    const [tabIndex, setTabIndex] = useState(0);
-    const [interactiveContent, setInteractiveContent] = useState(false);
     const { selectedIndex, baseId } = React.useContext(TabsContext);
     const index = React.useContext(TabPanelContext);
     const id = `${baseId}-tabpanel-${index}`;
     const tabId = `${baseId}-tab-${index}`;
-    const className = cx(`${prefix}--tab-content`, customClassName, {
-      [`${prefix}--tab-content--interactive`]: interactiveContent,
-    });
-
-    useEffect(() => {
-      if (!panel.current) {
-        return;
-      }
-
-      const content = getInteractiveContent(panel.current);
-      if (content) {
-        setInteractiveContent(true);
-        setTabIndex(-1);
-      }
-    }, []);
-
-    // tabindex should only be 0 if no interactive content in children
-    useEffect(() => {
-      const node = panel.current;
-      if (!node) {
-        return;
-      }
-
-      function callback() {
-        const content = getInteractiveContent(node as HTMLElement);
-        if (content) {
-          setInteractiveContent(true);
-          setTabIndex(-1);
-        } else {
-          setInteractiveContent(false);
-          setTabIndex(0);
-        }
-      }
-      const observer = new MutationObserver(callback);
-
-      observer.observe(node, {
-        childList: true,
-        subtree: true,
-      });
-      return () => observer.disconnect();
-    }, []);
+    const className = cx(`${prefix}--tab-content`, customClassName);
 
     return (
       <div
@@ -1742,9 +1704,8 @@ const TabPanel = React.forwardRef<HTMLDivElement, TabPanelProps>(
         aria-labelledby={tabId}
         id={id}
         className={className}
-        ref={ref}
+        ref={forwardRef}
         role="tabpanel"
-        tabIndex={tabIndex}
         hidden={selectedIndex !== index}>
         {children}
       </div>
@@ -1814,12 +1775,13 @@ function TabPanels({ children }: TabPanelsProps) {
 
   return (
     <>
-      {React.Children.map(children, (child, index) => {
-        return !isElement(child) ? null : (
+      {Children.map(children, (child, index) => {
+        return !isValidElement<ComponentProps<typeof TabPanel>>(
+          child
+        ) ? null : (
           <TabPanelContext.Provider value={index}>
-            {/*eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20071 */}
-            {React.cloneElement(child as React.ReactElement<any>, {
-              ref: (element: HTMLDivElement) => {
+            {cloneElement(child, {
+              ref: (element) => {
                 refs.current[index] = element;
               },
             })}

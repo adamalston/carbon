@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2019, 2023
+ * Copyright IBM Corp. 2019, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -7,6 +7,9 @@
 
 import { html, render } from 'lit';
 import { Default } from '../../src/components/toggle/toggle.stories';
+
+// JSDOM's DOM implementation does not provide `FormDataEvent`.
+type FormDataEventLike = Event & { formData: FormData };
 
 /**
  * @param formData A `FormData` instance.
@@ -36,7 +39,7 @@ xdescribe('cds-toggle', () => {
         document.body
       );
       await Promise.resolve();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20071
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
       expect(document.body.querySelector('cds-toggle' as any)).toMatchSnapshot({
         mode: 'shadow',
       });
@@ -58,7 +61,7 @@ xdescribe('cds-toggle', () => {
         document.body
       );
       await Promise.resolve();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20071
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
       expect(document.body.querySelector('cds-toggle' as any)).toMatchSnapshot({
         mode: 'shadow',
       });
@@ -85,11 +88,10 @@ xdescribe('cds-toggle', () => {
         bubbles: true,
         cancelable: false,
         composed: false,
-      });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20071
-      (event as any).formData = formData; // TODO: Wait for `FormDataEvent` being available in `lib.dom.d.ts`
+      }) as unknown as FormDataEventLike;
+      event.formData = formData;
       const form = document.querySelector('form');
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20071
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452
       form!.dispatchEvent(event);
       expect(getValues(formData)).toEqual({ 'name-foo': 'value-foo' });
     });
@@ -112,11 +114,10 @@ xdescribe('cds-toggle', () => {
         bubbles: true,
         cancelable: false,
         composed: false,
-      });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20071
-      (event as any).formData = formData; // TODO: Wait for `FormDataEvent` being available in `lib.dom.d.ts`
+      }) as unknown as FormDataEventLike;
+      event.formData = formData;
       const form = document.querySelector('form');
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20071
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452
       form!.dispatchEvent(event);
       expect(getValues(formData)).toEqual({ 'name-foo': 'on' });
     });
@@ -139,11 +140,10 @@ xdescribe('cds-toggle', () => {
         bubbles: true,
         cancelable: false,
         composed: false,
-      });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20071
-      (event as any).formData = formData; // TODO: Wait for `FormDataEvent` being available in `lib.dom.d.ts`
+      }) as unknown as FormDataEventLike;
+      event.formData = formData;
       const form = document.querySelector('form');
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20071
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452
       form!.dispatchEvent(event);
       expect(getValues(formData)).toEqual({});
     });
@@ -168,11 +168,10 @@ xdescribe('cds-toggle', () => {
         bubbles: true,
         cancelable: false,
         composed: false,
-      });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20071
-      (event as any).formData = formData; // TODO: Wait for `FormDataEvent` being available in `lib.dom.d.ts`
+      }) as unknown as FormDataEventLike;
+      event.formData = formData;
       const form = document.querySelector('form');
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20071
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452
       form!.dispatchEvent(event);
       expect(getValues(formData)).toEqual({});
     });

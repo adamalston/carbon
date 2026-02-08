@@ -44,7 +44,7 @@ export default class CDSTabs extends HostListenerMixin(CDSContentSwitcher) {
   /**
    * The currently selected index
    */
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- https://github.com/carbon-design-system/carbon/issues/20071
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- https://github.com/carbon-design-system/carbon/issues/20452
   // @ts-ignore: TS thinks this method is not referred to
   private _currentIndex = 0;
 
@@ -56,7 +56,7 @@ export default class CDSTabs extends HostListenerMixin(CDSContentSwitcher) {
   /**
    * `true` if the tablist is scrollable
    */
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- https://github.com/carbon-design-system/carbon/issues/20071
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- https://github.com/carbon-design-system/carbon/issues/20452
   // @ts-ignore: TS thinks this method is not referred to
   private _isScrollable = false;
 
@@ -82,10 +82,8 @@ export default class CDSTabs extends HostListenerMixin(CDSContentSwitcher) {
    *   Starts with the selected item
    *   Going prev/next item immediately changes the selection
    */
-  protected _navigate(
-    direction: number,
-    { immediate = true }: { immediate?: boolean } = {}
-  ) {
+  protected _navigate(direction: number) {
+    const immediate = this.selectionMode === 'automatic';
     const { selectorItem, selectorItemHighlighted, selectorItemSelected } = this
       .constructor as typeof CDSTabs;
     const nextItem = this._getNextItem(
@@ -97,10 +95,8 @@ export default class CDSTabs extends HostListenerMixin(CDSContentSwitcher) {
     if (!nextItem) {
       return;
     }
-
-    if (immediate) {
-      this._handleUserInitiatedSelectItem(nextItem as CDSTab);
-    } else {
+    this._handleUserInitiatedSelectItem(nextItem as CDSTab, 'keyboard');
+    if (!immediate) {
       forEach(this.querySelectorAll(selectorItem), (item) => {
         (item as CDSTab)[immediate ? 'selected' : 'highlighted'] =
           nextItem === item;
@@ -123,6 +119,14 @@ export default class CDSTabs extends HostListenerMixin(CDSContentSwitcher) {
   @HostListener('click')
   protected _handleClick(event: MouseEvent) {
     super._handleClick(event);
+    const { selectorItem } = this.constructor as typeof CDSTabs;
+    const currentItem = this._getCurrentItem(event.target as HTMLElement);
+    if (currentItem) {
+      forEach(this.querySelectorAll(selectorItem), (item) => {
+        (item as CDSTab).highlighted = false;
+      });
+      (currentItem as CDSTab).highlighted = true;
+    }
   }
 
   @HostListener('keydown')
@@ -161,6 +165,17 @@ export default class CDSTabs extends HostListenerMixin(CDSContentSwitcher) {
           }
         }
         break;
+      case TABS_KEYBOARD_ACTION.ACTIVATING:
+        {
+          const focusedTab: CDSTab | null = this.querySelector(
+            `${prefix}-tab[highlighted]`
+          );
+          if (focusedTab) {
+            this._selectionDidChange(focusedTab);
+            this.requestUpdate();
+          }
+        }
+        break;
       default:
         break;
     }
@@ -178,18 +193,18 @@ export default class CDSTabs extends HostListenerMixin(CDSContentSwitcher) {
       return;
     }
     const { scrollLeft, clientWidth, scrollWidth } =
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20071
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452
       this._contentContainerNode!;
     switch (direction) {
       case -1:
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20071
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452
         this._contentContainerNode!.scrollLeft = Math.max(
           scrollLeft - (scrollWidth / this._totalTabs) * 1.5,
           0
         );
         break;
       case 1:
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20071
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452
         this._contentContainerNode!.scrollLeft =
           Math.min(
             scrollLeft + (scrollWidth / this._totalTabs) * 1.5,
@@ -215,8 +230,11 @@ export default class CDSTabs extends HostListenerMixin(CDSContentSwitcher) {
     }
   }
 
-  protected _selectionDidChange(itemToSelect: CDSTab) {
-    super._selectionDidChange(itemToSelect);
+  protected _selectionDidChange(
+    itemToSelect: CDSTab,
+    interactionType?: 'mouse' | 'keyboard' | undefined
+  ) {
+    super._selectionDidChange(itemToSelect, interactionType);
     this._assistiveStatusText = this.selectedItemAssistiveText;
   }
 
@@ -378,11 +396,21 @@ export default class CDSTabs extends HostListenerMixin(CDSContentSwitcher) {
   firstUpdated() {
     // Call super to run content-switcher init logic (initial selection)
     super.firstUpdated();
-
-    const { selectorTablist } = this.constructor as typeof CDSTabs;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20071
+    const { selectorTablist, selectorItemEnabled } = this
+      .constructor as typeof CDSTabs;
+    const { selectionMode, selectedIndex } = this;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452
     const tablist = this.shadowRoot!.querySelector(selectorTablist)!;
     this.tablist = tablist;
+    if (selectionMode === 'manual') {
+      const firstItem =
+        this.querySelectorAll<CDSTab>(selectorItemEnabled)[selectedIndex];
+      if (firstItem) {
+        firstItem.highlighted = true;
+        firstItem.selected = true;
+        this.value = firstItem.value;
+      }
+    }
     this._cleanAndCreateIntersectionObserverContainer({ create: true });
   }
 
@@ -400,26 +428,26 @@ export default class CDSTabs extends HostListenerMixin(CDSContentSwitcher) {
         const end = tab.offsetLeft + tabWidth;
 
         // The start and end of the visible area of the tablist
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20071
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452
         const visibleStart = this.tablist!.scrollLeft + this.BUTTON_WIDTH;
         const visibleEnd =
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20071
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452
           this.tablist!.scrollLeft +
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20071
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452
           this.tablist!.clientWidth -
           this.BUTTON_WIDTH;
 
         // The beginning of the tab is clipped and not visible
         if (start < visibleStart) {
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20071
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452
           this.tablist!.scrollLeft = start - this.BUTTON_WIDTH;
         }
 
         // The end of the tab is clipped and not visible
         if (end > visibleEnd) {
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20071
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452
           this.tablist!.scrollLeft =
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20071
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452
             end + this.BUTTON_WIDTH - this.tablist!.clientWidth;
         }
       }
@@ -590,6 +618,9 @@ export default class CDSTabs extends HostListenerMixin(CDSContentSwitcher) {
     }
     if (key in NAVIGATION_DIRECTION) {
       return TABS_KEYBOARD_ACTION.NAVIGATING;
+    }
+    if (key === 'Enter' || key === ' ') {
+      return TABS_KEYBOARD_ACTION.ACTIVATING;
     }
     return TABS_KEYBOARD_ACTION.NONE;
   }

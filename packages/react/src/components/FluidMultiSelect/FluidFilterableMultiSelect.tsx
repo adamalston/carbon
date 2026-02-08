@@ -6,7 +6,11 @@
  */
 
 import PropTypes from 'prop-types';
-import React, { ForwardedRef, FunctionComponent } from 'react';
+import React, {
+  type ComponentProps,
+  type ForwardedRef,
+  type ReactNode,
+} from 'react';
 import classnames from 'classnames';
 import { usePrefix } from '../../internal/usePrefix';
 import { FormContext } from '../FluidForm/FormContext';
@@ -14,6 +18,7 @@ import type { UseComboboxProps, UseMultipleSelectionProps } from 'downshift';
 import {
   FilterableMultiSelect,
   type FilterableMultiSelectProps,
+  type MultiSelect,
 } from '../MultiSelect';
 
 interface OnChangeData<ItemType> {
@@ -21,7 +26,8 @@ interface OnChangeData<ItemType> {
 }
 
 export interface FluidFilterableMultiSelectProps<ItemType>
-  extends FilterableMultiSelectProps<ItemType> {
+  extends FilterableMultiSelectProps<ItemType>,
+    Pick<ComponentProps<typeof MultiSelect>, 'translateWithId'> {
   /**
    * Specify an optional className to be applied to the outer FluidForm wrapper
    */
@@ -76,7 +82,7 @@ export interface FluidFilterableMultiSelectProps<ItemType>
    * Function to render items as custom components instead of strings.
    * Defaults to null and is overridden by a getter
    */
-  itemToElement?: FunctionComponent<ItemType>;
+  itemToElement?: (item: ItemType) => ReactNode;
   /**
    * Helper function passed to downshift that allows the library to render a
    * given item to a string label. By default, it extracts the `label` field
@@ -135,10 +141,7 @@ export interface FluidFilterableMultiSelectProps<ItemType>
    * visiting this control
    */
   titleText?: React.ReactNode;
-  /**
-   * Callback function for translating ListBoxMenuIcon SVG title
-   */
-  translateWithId?: (id: string) => string;
+
   /**
    * Specify title to show title on hover
    */
@@ -341,7 +344,7 @@ FluidMultiSelect.propTypes = {
   titleText: PropTypes.node,
 
   /**
-   * Callback function for translating ListBoxMenuIcon SVG title
+   * Translates component strings using your i18n tool.
    */
   translateWithId: PropTypes.func,
 

@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2019, 2023
+ * Copyright IBM Corp. 2019, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -10,6 +10,9 @@ import EventManager from '../utils/event-manager';
 
 import CDSNumberInput from '../../src/components/number-input/number-input';
 import { Playground } from '../../src/components/number-input/number-input-story';
+
+// JSDOM's DOM implementation does not provide `FormDataEvent`.
+type FormDataEventLike = Event & { formData: FormData };
 
 /**
  * @param formData A `FormData` instance.
@@ -56,7 +59,7 @@ describe('cds-number-input', () => {
       );
       await Promise.resolve();
       expect(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20071
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
         document.body.querySelector('cds-number-input' as any)
       ).toMatchSnapshot({
         mode: 'shadow',
@@ -84,11 +87,10 @@ describe('cds-number-input', () => {
         bubbles: true,
         cancelable: false,
         composed: false,
-      });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20071
-      (event as any).formData = formData; // TODO: Wait for `FormDataEvent` being available in `lib.dom.d.ts`
+      }) as unknown as FormDataEventLike;
+      event.formData = formData;
       const form = document.querySelector('form');
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20071
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452
       form!.dispatchEvent(event);
       expect(getValues(formData)).toEqual({ 'name-foo': '50' });
     });
@@ -112,11 +114,10 @@ describe('cds-number-input', () => {
         bubbles: true,
         cancelable: false,
         composed: false,
-      });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20071
-      (event as any).formData = formData; // TODO: Wait for `FormDataEvent` being available in `lib.dom.d.ts`
+      }) as unknown as FormDataEventLike;
+      event.formData = formData;
       const form = document.querySelector('form');
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20071
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452
       form!.dispatchEvent(event);
       expect(getValues(formData)).toEqual({});
     });
@@ -129,7 +130,7 @@ describe('cds-number-input', () => {
     beforeEach(async () => {
       render(template(), document.body);
       await Promise.resolve();
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20071
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452
       elem = document.body.querySelector('cds-number-input')!;
     });
 
@@ -140,7 +141,7 @@ describe('cds-number-input', () => {
     // eslint-disable-next-line
     xit('should support checking if required value exists', async function () {
       const input = elem as CDSNumberInput;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20071
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
       input.value = null as any;
       input.required = true;
       const spyInvalid = jasmine.createSpy('invalid');
@@ -204,7 +205,7 @@ describe('cds-number-input', () => {
     beforeEach(async () => {
       render(template(), document.body);
       await Promise.resolve();
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20071
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452
       elem = document.body.querySelector('cds-number-input')!;
     });
 
@@ -230,7 +231,7 @@ describe('cds-number-input', () => {
       const stepSize = Number(input.step);
       const spyInput = jasmine.createSpy('input');
       events.on(elem, 'cds-number-input', spyInput);
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20071
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452
       (elem.shadowRoot!.querySelector('button.up-icon') as HTMLElement).click();
       expect(Number(input.value)).toEqual(initialValue + stepSize);
       expect(Number(spyInput.calls.argsFor(0)[0].detail.value)).toBe(
@@ -244,7 +245,7 @@ describe('cds-number-input', () => {
       const stepSize = Number(input.step);
       const spyInput = jasmine.createSpy('input');
       events.on(elem, 'cds-number-input', spyInput);
-      (elem.shadowRoot!.querySelector('button.down-icon') as HTMLElement) // eslint-disable-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20071
+      (elem.shadowRoot!.querySelector('button.down-icon') as HTMLElement) // eslint-disable-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452
         .click();
       expect(Number(input.value)).toEqual(initialValue - stepSize);
       expect(Number(spyInput.calls.argsFor(0)[0].detail.value)).toBe(
@@ -297,7 +298,7 @@ describe('cds-number-input', () => {
 
   afterEach(async () => {
     events.reset();
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20071
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452
     await render(undefined!, document.body);
   });
 });

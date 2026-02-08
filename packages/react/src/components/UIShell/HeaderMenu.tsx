@@ -46,7 +46,7 @@ export interface HeaderMenuProps {
   /**
    * Provide a custom ref handler for the menu button
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20071
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
   focusRef?: Ref<any>;
 
   /**

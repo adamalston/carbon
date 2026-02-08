@@ -13,8 +13,7 @@ import React, {
   useRef,
   useState,
   type ChangeEvent,
-  type ComponentType,
-  type FunctionComponent,
+  type ElementType,
   type HTMLAttributes,
   type KeyboardEvent,
   type MouseEvent,
@@ -28,6 +27,7 @@ import { useMergedRefs } from '../../internal/useMergedRefs';
 import { deprecate } from '../../prop-types/deprecate';
 import { FormContext } from '../FluidForm';
 import { noopFn } from '../../internal/noopFn';
+import { Tooltip } from '../Tooltip';
 
 type InputPropsBase = Omit<HTMLAttributes<HTMLInputElement>, 'onChange'>;
 export interface SearchProps extends InputPropsBase {
@@ -99,10 +99,12 @@ export interface SearchProps extends InputPropsBase {
   /**
    * A component used to render an icon.
    */
-  renderIcon?: ComponentType | FunctionComponent;
+  renderIcon?: ElementType;
 
   /**
-   * Specify the role for the underlying `<input>`, defaults to `searchbox`
+   * @deprecated Specify the role for the underlying `<input>`.
+   * No longer needed since `<input type="search">` already provides the correct semantics.
+   * This prop will be removed in the next major release of Carbon.
    */
   role?: string;
 
@@ -112,7 +114,7 @@ export interface SearchProps extends InputPropsBase {
   size?: 'sm' | 'md' | 'lg';
 
   /**
-   * Optional prop to specify the type of the `<input>`
+   * Specify the type of the `<input>`
    */
   type?: string;
 
@@ -141,9 +143,9 @@ const Search = React.forwardRef<HTMLInputElement, SearchProps>(
       onExpand,
       placeholder = 'Search',
       renderIcon,
-      role = 'searchbox',
+      role,
       size = 'md',
-      type = 'text',
+      type = 'search',
       value,
       ...rest
     },
@@ -242,29 +244,46 @@ const Search = React.forwardRef<HTMLInputElement, SearchProps>(
       }
     }
 
+    const magnifierButton = (
+      <div
+        aria-labelledby={onExpand ? searchId : undefined}
+        role={onExpand ? 'button' : undefined}
+        className={`${prefix}--search-magnifier`}
+        onClick={onExpand}
+        onKeyDown={handleExpandButtonKeyDown}
+        tabIndex={onExpand && !isExpanded ? 0 : -1}
+        ref={expandButtonRef}
+        aria-expanded={
+          onExpand && isExpanded
+            ? true
+            : onExpand && !isExpanded
+              ? false
+              : undefined
+        }
+        aria-controls={onExpand ? uniqueId : undefined}>
+        <CustomSearchIcon icon={renderIcon} />
+      </div>
+    );
+
+    // Wrap magnifierButton in a tooltip if it's expandable
+    const magnifierWithTooltip =
+      onExpand && !isExpanded ? (
+        <Tooltip
+          className={`${prefix}--search-tooltip ${prefix}--search-magnifier-tooltip`}
+          align="top"
+          label="Search">
+          {magnifierButton}
+        </Tooltip>
+      ) : (
+        magnifierButton
+      );
+
     return (
       <div role="search" aria-label={placeholder} className={searchClasses}>
+        {magnifierWithTooltip}
         {/* the magnifier is used in ExpandableSearch as a click target to expand,
       however, it does not need a keyboard event bc the input element gets focus on keyboard nav and expands that way*/}
-        {}
-        <div
-          aria-labelledby={onExpand ? searchId : undefined}
-          role={onExpand ? 'button' : undefined}
-          className={`${prefix}--search-magnifier`}
-          onClick={onExpand}
-          onKeyDown={handleExpandButtonKeyDown}
-          tabIndex={onExpand && !isExpanded ? 0 : -1}
-          ref={expandButtonRef}
-          aria-expanded={
-            onExpand && isExpanded
-              ? true
-              : onExpand && !isExpanded
-                ? false
-                : undefined
-          }
-          aria-controls={onExpand ? uniqueId : undefined}>
-          <CustomSearchIcon icon={renderIcon} />
-        </div>
+
         <label id={searchId} htmlFor={uniqueId} className={`${prefix}--label`}>
           {labelText}
         </label>
@@ -383,16 +402,22 @@ Search.propTypes = {
   renderIcon: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
 
   /**
+   * Deprecated, since <input type="search"> already provides correct semantics.
    * Specify the role for the underlying `<input>`, defaults to `searchbox`
    */
-  role: PropTypes.string,
+  role: deprecate(
+    PropTypes.string,
+    'The `role` prop has been deprecated since <input type="search"> already provides correct semantics. ' +
+      'It will be removed in the next major release of Carbon.'
+  ),
 
   /**
    * Specify the size of the Search
    */
   size: PropTypes.oneOf(['sm', 'md', 'lg']),
+
   /**
-   * Optional prop to specify the type of the `<input>`
+   * Specify the type of the `<input>`
    */
   type: PropTypes.string,
 

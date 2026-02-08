@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2019, 2025
+ * Copyright IBM Corp. 2019, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -52,7 +52,7 @@ class CDSAccordionSkeleton extends LitElement {
     if (changedProperties.has('alignment')) {
       // Propagate `alignment` attribute to descendants until `:host-context()` gets supported in all major browsers
       forEach(
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20071
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452
         this.shadowRoot!.querySelectorAll(
           (this.constructor as typeof CDSAccordionSkeleton)
             .selectorAccordionItemSkeletons
@@ -68,16 +68,17 @@ class CDSAccordionSkeleton extends LitElement {
     ) {
       // Propagate `isFlush` attribute to descendants until `:host-context()` gets supported in all major browsers
       forEach(
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20071
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452
         this.shadowRoot!.querySelectorAll(
           (this.constructor as typeof CDSAccordionSkeleton)
             .selectorAccordionItemSkeletons
         ),
         (elem) => {
-          // eslint-disable-next-line  @typescript-eslint/no-unused-expressions -- https://github.com/carbon-design-system/carbon/issues/20071
-          this.isFlush && this.alignment !== 'start'
-            ? elem.setAttribute('isFlush', '')
-            : elem.removeAttribute('isFlush');
+          if (this.isFlush && this.alignment !== 'start') {
+            elem.setAttribute('isFlush', '');
+          } else {
+            elem.removeAttribute('isFlush');
+          }
         }
       );
     }

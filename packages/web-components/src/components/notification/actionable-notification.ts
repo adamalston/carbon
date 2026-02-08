@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2019, 2024
+ * Copyright IBM Corp. 2019, 2025
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -20,6 +20,7 @@ import CDSInlineNotification from './inline-notification';
 import styles from './actionable-notification.scss?lit';
 import HostListener from '../../globals/decorators/host-listener';
 import HostListenerMixin from '../../globals/mixins/host-listener';
+import CDSButton from '../button/button';
 
 /**
  * The default icons, keyed by notification kind.
@@ -51,7 +52,7 @@ function tryFocusElems(elems: NodeListOf<HTMLElement>, reverse = false) {
     for (let i = 0; i < elems.length; ++i) {
       const elem = elems[i];
       elem.focus();
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20071
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452
       const active = elem.ownerDocument!.activeElement;
       if (
         active === elem ||
@@ -65,7 +66,7 @@ function tryFocusElems(elems: NodeListOf<HTMLElement>, reverse = false) {
     for (let i = elems.length - 1; i >= 0; --i) {
       const elem = elems[i];
       elem.focus();
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20071
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452
       const active = elem.ownerDocument!.activeElement;
       if (
         active === elem ||
@@ -137,7 +138,7 @@ class CDSActionableNotification extends HostListenerMixin(
    * Escape will close the notification if `closeOnEscape` is true
    */
   @HostListener('keydown')
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- https://github.com/carbon-design-system/carbon/issues/20071
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- https://github.com/carbon-design-system/carbon/issues/20452
   // @ts-ignore: The decorator refers to this method but TS thinks this method is not referred to
   private _handleKeyDown = async (event: KeyboardEvent) => {
     const { key } = event;
@@ -147,7 +148,7 @@ class CDSActionableNotification extends HostListenerMixin(
   };
 
   @HostListener('shadowRoot:focusout')
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- https://github.com/carbon-design-system/carbon/issues/20071
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- https://github.com/carbon-design-system/carbon/issues/20452
   // @ts-ignore: The decorator refers to this method but TS thinks this method is not referred to
   private _handleBlur = async ({ target, relatedTarget }: FocusEvent) => {
     const {
@@ -187,7 +188,7 @@ class CDSActionableNotification extends HostListenerMixin(
         relatedTarget as Node
       );
       // tabbable elements in Shadow root
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20071
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452
       const shadowElems = this.shadowRoot!.querySelectorAll(
         selectorTabbableForActionableNotification
       );
@@ -289,7 +290,13 @@ class CDSActionableNotification extends HostListenerMixin(
     }
     if (changedProperties.has('hasFocus')) {
       if (this.hasFocus) {
-        this.focus();
+        if (button) {
+          (button as CDSButton).updateComplete.then(() => {
+            (button as HTMLElement).focus();
+          });
+        } else {
+          this.focus();
+        }
       }
     }
   }

@@ -1,12 +1,12 @@
 /**
- * Copyright IBM Corp. 2019, 2025
+ * Copyright IBM Corp. 2019, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
  */
 
 import { classMap } from 'lit/directives/class-map.js';
-import { html, LitElement } from 'lit';
+import { adoptStyles, html, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { prefix } from '../../globals/settings';
@@ -15,8 +15,9 @@ import HostListener from '../../globals/decorators/host-listener';
 import HostListenerMixin from '../../globals/mixins/host-listener';
 import FocusMixin from '../../globals/mixins/focus';
 import { POPOVER_ALIGNMENT } from '../popover/defs';
-import FloatingUIContoller from '../../globals/controllers/floating-controller';
+import FloatingUIController from '../../globals/controllers/floating-controller';
 import styles from './toggletip.scss?lit';
+import popoverStyles from '../popover/popover.scss?lit';
 import { iconLoader } from '../../globals/internal/icon-loader';
 
 /**
@@ -29,7 +30,7 @@ class CDSToggletip extends HostListenerMixin(FocusMixin(LitElement)) {
   /**
    * Create popover controller instance
    */
-  private popoverController = new FloatingUIContoller(this);
+  private popoverController = new FloatingUIController(this);
 
   /**
    * How the tooltip is aligned to the trigger button.
@@ -72,6 +73,8 @@ class CDSToggletip extends HostListenerMixin(FocusMixin(LitElement)) {
     if (this.defaultOpen && !this.hasAttribute('open')) {
       this.open = true;
     }
+
+    adoptStyles(this.renderRoot as ShadowRoot, [popoverStyles, styles]);
   }
 
   /**
@@ -79,21 +82,22 @@ class CDSToggletip extends HostListenerMixin(FocusMixin(LitElement)) {
    */
   private _handleActionsSlotChange({ target }: Event) {
     const hasContent = (target as HTMLSlotElement).assignedNodes();
-    // eslint-disable-next-line  @typescript-eslint/no-unused-expressions -- https://github.com/carbon-design-system/carbon/issues/20071
-    hasContent
-      ? this.setAttribute('has-actions', '')
-      : this.removeAttribute('has-actions');
+    if (hasContent) {
+      this.setAttribute('has-actions', '');
+    } else {
+      this.removeAttribute('has-actions');
+    }
   }
 
-  protected _handleClick = () => {
+  protected _handleClick() {
     this.open = !this.open;
-  };
+  }
 
   /**
    * Handles `keydown` event on this element.
    */
   @HostListener('keydown')
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- https://github.com/carbon-design-system/carbon/issues/20071
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- https://github.com/carbon-design-system/carbon/issues/20452
   // @ts-ignore: The decorator refers to this method but TS thinks this method is not referred to
   protected _handleKeydown = async (event) => {
     if (event.key === 'Escape') {
@@ -107,14 +111,34 @@ class CDSToggletip extends HostListenerMixin(FocusMixin(LitElement)) {
    * @param event The event.
    */
   @HostListener('focusout')
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- https://github.com/carbon-design-system/carbon/issues/20071
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- https://github.com/carbon-design-system/carbon/issues/20452
   // @ts-ignore: The decorator refers to this method but TS thinks this method is not referred to
   protected _handleFocusOut(event: FocusEvent) {
-    const path = event.composedPath();
-    if (path.includes(this as unknown as EventTarget)) {
+    if (this.contains(event.relatedTarget as Node)) {
+      return;
+    }
+
+    if (this._deepShadowContains(this, event.relatedTarget)) {
       return;
     }
     this.open = false;
+  }
+
+  private _deepShadowContains(root: Node, el: EventTarget | null): boolean {
+    if (!(el instanceof Node)) {
+      return false;
+    }
+    if (el === root) {
+      return true;
+    }
+
+    return this._deepShadowContains(
+      root,
+      (el as HTMLElement).assignedSlot ||
+        el.parentNode ||
+        (el.getRootNode() as ShadowRoot).host ||
+        null
+    );
   }
 
   protected _renderToggleTipLabel = () => {
@@ -251,8 +275,6 @@ class CDSToggletip extends HostListenerMixin(FocusMixin(LitElement)) {
     ...LitElement.shadowRootOptions,
     delegatesFocus: true,
   };
-
-  static styles = styles;
 }
 
 export default CDSToggletip;

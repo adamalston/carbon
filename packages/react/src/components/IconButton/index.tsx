@@ -1,19 +1,19 @@
 /**
- * Copyright IBM Corp. 2016, 2025
+ * Copyright IBM Corp. 2016, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
  */
 
 import PropTypes from 'prop-types';
-import React, { ForwardedRef, ReactNode } from 'react';
+import React, { forwardRef, ReactNode } from 'react';
 import { ButtonSize } from '../Button';
 import classNames from 'classnames';
 import { Tooltip } from '../Tooltip';
 import { useId } from '../../internal/useId';
 import { usePrefix } from '../../internal/usePrefix';
 import ButtonBase from '../Button/ButtonBase';
-import deprecateValuesWithin from '../../prop-types/deprecateValuesWithin';
+import { deprecateValuesWithin } from '../../prop-types/deprecateValuesWithin';
 import BadgeIndicator from '../BadgeIndicator';
 import type {
   DeprecatedPopoverAlignment,
@@ -147,8 +147,8 @@ export interface IconButtonProps
   wrapperClasses?: string;
 }
 
-// eslint-disable-next-line react/display-name -- https://github.com/carbon-design-system/carbon/issues/20071
-const IconButton = React.forwardRef(
+// eslint-disable-next-line react/display-name -- https://github.com/carbon-design-system/carbon/issues/20452
+const IconButton = forwardRef<unknown, IconButtonProps>(
   (
     {
       align,
@@ -169,8 +169,8 @@ const IconButton = React.forwardRef(
       size,
       isSelected,
       ...rest
-    }: IconButtonProps,
-    ref: ForwardedRef<unknown> // TODO: this is unknown on Button, so should it be here as well?
+    },
+    ref
   ) => {
     const prefix = usePrefix();
 
@@ -183,7 +183,7 @@ const IconButton = React.forwardRef(
     );
 
     if (badgeCount && (kind !== 'ghost' || size !== 'lg')) {
-      // eslint-disable-next-line no-console -- https://github.com/carbon-design-system/carbon/issues/20071
+      // eslint-disable-next-line no-console -- https://github.com/carbon-design-system/carbon/issues/20452
       console.warn(
         "The prop BadgeCount must be used with hasIconOnly=true, kind='ghost' and size='lg'"
       );
