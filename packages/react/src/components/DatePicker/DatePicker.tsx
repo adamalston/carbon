@@ -8,12 +8,14 @@
 import PropTypes from 'prop-types';
 import React, {
   forwardRef,
+  isValidElement,
   useCallback,
   useContext,
   useEffect,
   useImperativeHandle,
   useRef,
   useState,
+  type ComponentProps,
   type ReactNode,
 } from 'react';
 import cx from 'classnames';
@@ -24,6 +26,7 @@ import { appendToPlugin } from './plugins/appendToPlugin';
 import carbonFlatpickrFixEventsPlugin from './plugins/fixEventsPlugin';
 import { rangePlugin } from './plugins/rangePlugin';
 import { deprecate } from '../../prop-types/deprecate';
+import { isComponentElement } from '../../internal';
 import { match, keys } from '../../internal/keyboard';
 import { usePrefix } from '../../internal/usePrefix';
 import { useSavedCallback } from '../../internal/useSavedCallback';
@@ -36,6 +39,7 @@ import {
   Plugin,
 } from 'flatpickr/dist/types/options';
 import type { Instance } from 'flatpickr/dist/types/instance';
+import type { CustomLocale } from 'flatpickr/dist/types/locale';
 import { datePartsOrder } from '@carbon/utilities';
 import { SUPPORTED_LOCALES, type SupportedLocale } from './DatePickerLocales';
 
@@ -203,6 +207,12 @@ function updateClassNames(calendar, prefix) {
 }
 
 export type DatePickerTypes = 'simple' | 'single' | 'range';
+export interface DatePickerRef {
+  calendar: Instance | null;
+  element: HTMLDivElement | null;
+}
+
+type LocaleObject = Partial<CustomLocale> & { locale?: string };
 
 export interface DatePickerProps {
   /**
@@ -219,7 +229,7 @@ export interface DatePickerProps {
   /**
    * The child nodes.
    */
-  children: ReactNode | object;
+  children: ReactNode;
 
   /**
    * The CSS class names.
@@ -278,12 +288,7 @@ export interface DatePickerProps {
   /**
    *  The language locale used to format the days of the week, months, and numbers. The full list of supported locales can be found here https://github.com/flatpickr/flatpickr/tree/master/src/l10n
    */
-  locale?:
-    | string
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
-    | any
-    | SupportedLocale
-    | undefined;
+  locale?: FlatpickrOptions['locale'] | LocaleObject | SupportedLocale;
 
   /**
    * The maximum date that a user can pick to.
@@ -355,7 +360,7 @@ export interface DatePickerProps {
 }
 
 // eslint-disable-next-line react/display-name
-const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>((props, ref) => {
+const DatePicker = forwardRef<DatePickerRef, DatePickerProps>((props, ref) => {
   const {
     allowInput,
     appendTo,
@@ -390,8 +395,8 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>((props, ref) => {
   const prefix = usePrefix();
   const { isFluid } = useContext(FormContext);
   const [hasInput, setHasInput] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
-  const startInputField: any = useCallback((node) => {
+  const startInputField = useRef<HTMLInputElement>(null);
+  const startInputFieldRef = useCallback((node: HTMLInputElement | null) => {
     if (node !== null) {
       startInputField.current = node;
       setHasInput(true);
@@ -412,14 +417,23 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>((props, ref) => {
   // fix datepicker deleting the selectedDate when the calendar closes
   const handleCalendarClose = useCallback(
     (selectedDates, dateStr, instance) => {
+      const startInput = startInputField.current;
       if (
         lastStartValue.current &&
         selectedDates[0] &&
-        !startInputField.current.value
+        startInput &&
+        !startInput.value
       ) {
-        startInputField.current.value = lastStartValue.current;
+        startInput.value = lastStartValue.current;
+
+        const endInputValue = endInputField.current?.value;
+        const selectedValues =
+          typeof endInputValue !== 'undefined'
+            ? [startInput.value, endInputValue]
+            : [startInput.value];
+
         calendarRef.current?.setDate(
-          [startInputField.current.value, endInputField?.current?.value],
+          selectedValues,
           true,
           calendarRef.current.config.dateFormat
         );
@@ -428,7 +442,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>((props, ref) => {
         onClose(selectedDates, dateStr, instance);
       }
     },
-    // eslint-disable-next-line  react-hooks/exhaustive-deps -- https://github.com/carbon-design-system/carbon/issues/20452
     [onClose]
   );
 
@@ -453,6 +466,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>((props, ref) => {
   const savedOnOpen = useSavedCallback(onOpen);
 
   const effectiveWarn = warn && !invalid;
+  const rootRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   const datePickerClasses = cx(`${prefix}--date-picker`, {
@@ -468,26 +482,18 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>((props, ref) => {
     [String(className)]: className,
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
-  const childrenWithProps = React.Children.toArray(children as any).map(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
-    (child: any, index) => {
-      if (
-        index === 0 &&
-        child.type === React.createElement(DatePickerInput, child.props).type
-      ) {
+  const childrenWithProps = React.Children.toArray(children).map(
+    (child, index) => {
+      if (index === 0 && isComponentElement(child, DatePickerInput)) {
         return React.cloneElement(child, {
           datePickerType,
-          ref: startInputField,
+          ref: startInputFieldRef,
           readOnly,
           invalid,
           warn: effectiveWarn,
         });
       }
-      if (
-        index === 1 &&
-        child.type === React.createElement(DatePickerInput, child.props).type
-      ) {
+      if (index === 1 && isComponentElement(child, DatePickerInput)) {
         return React.cloneElement(child, {
           datePickerType,
           ref: endInputField,
@@ -496,9 +502,13 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>((props, ref) => {
           warn: effectiveWarn,
         });
       }
+
+      if (!isValidElement<ComponentProps<typeof DatePickerInput>>(child))
+        return child;
+
       if (index === 0) {
         return React.cloneElement(child, {
-          ref: startInputField,
+          ref: startInputFieldRef,
           readOnly,
           invalid,
           warn: effectiveWarn,
@@ -524,7 +534,8 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>((props, ref) => {
       return;
     }
 
-    if (!startInputField.current) {
+    const start = startInputField.current;
+    if (!start) {
       return;
     }
 
@@ -552,7 +563,10 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>((props, ref) => {
 
     let localeData;
     if (typeof locale === 'object') {
-      const location = locale.locale ? locale.locale : 'en';
+      const location =
+        'locale' in locale && typeof locale.locale === 'string'
+          ? locale.locale
+          : 'en';
       localeData = { ...l10n[location], ...locale };
     } else {
       localeData = l10n[locale];
@@ -608,7 +622,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>((props, ref) => {
       <polygon points="5,8 10,3 10.7,3.7 6.4,8 10.7,12.3 10,13 "/>
     </svg>`;
 
-    const { current: start } = startInputField;
     const { current: end } = endInputField;
     const flatpickerConfig: Partial<FlatpickrOptions> = {
       inline: inline ?? false,
@@ -723,6 +736,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>((props, ref) => {
         datePickerType == 'range'
           ? endInputField.current
           : startInputField.current;
+      if (!lastInputField) return;
       if (match(event, keys.Tab)) {
         if (!event.shiftKey) {
           if (lastFocusedField.current === lastInputField) {
@@ -747,6 +761,9 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>((props, ref) => {
 
     function handleOnChange(event) {
       const { target } = event;
+      if (!start) {
+        return;
+      }
       if (target === start) {
         lastStartValue.current = start.value;
       }
@@ -857,10 +874,12 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>((props, ref) => {
   // this hook allows consumers to access the flatpickr calendar
   // instance for cases where functions like open() or close()
   // need to be imperatively called on the calendar
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
-  useImperativeHandle(ref, (): any => ({
+  useImperativeHandle(ref, () => ({
     get calendar() {
       return calendarRef.current;
+    },
+    get element() {
+      return rootRef.current;
     },
   }));
 
@@ -947,8 +966,8 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>((props, ref) => {
       }
       updateClassNames(calendarRef.current, prefix);
       //for simple date picker w/o calendar; initial mount may not have value
-    } else if (!calendarRef.current && value) {
-      startInputField.current.value = value;
+    } else if (!calendarRef.current && value && startInputField.current) {
+      startInputField.current.value = String(value);
     }
   }, [value, prefix, startInputField]);
 
@@ -978,7 +997,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>((props, ref) => {
   }
 
   return (
-    <div className={wrapperClasses} ref={ref} {...rest}>
+    <div className={wrapperClasses} ref={rootRef} {...rest}>
       <div className={datePickerClasses} ref={wrapperRef}>
         {childrenWithProps}
       </div>
