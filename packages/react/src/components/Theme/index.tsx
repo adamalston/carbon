@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2016, 2023
+ * Copyright IBM Corp. 2016, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -7,7 +7,12 @@
 
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import React, { ElementType, useMemo, type PropsWithChildren } from 'react';
+import React, {
+  useMemo,
+  type ElementType,
+  type PropsWithChildren,
+  type ReactElement,
+} from 'react';
 import { usePrefix } from '../../internal/usePrefix';
 import { PolymorphicProps } from '../../types/common';
 import { LayerContext } from '../Layer/LayerContext';
@@ -66,16 +71,22 @@ type ThemeBaseProps = GlobalThemeProps & {
 };
 
 type ThemeProps<E extends ElementType> = PolymorphicProps<E, ThemeBaseProps>;
+type ThemeComponent = {
+  <E extends ElementType>(props: ThemeProps<E>): ReactElement | null;
+};
+type ThemeWithPropTypes = ThemeComponent & {
+  propTypes?: Record<string, unknown>;
+};
 
 /**
  * Specify the theme to be applied to a page, or a region in a page
  */
-export function Theme<E extends ElementType = 'div'>({
-  as: BaseComponent = 'div' as E,
+export const Theme: ThemeWithPropTypes = ({
+  as: BaseComponent = 'div',
   className: customClassName,
   theme,
   ...rest
-}: ThemeProps<E>) {
+}: ThemeProps<ElementType>) => {
   const prefix = usePrefix();
   const className = cx(customClassName, {
     [`${prefix}--white`]: theme === 'white',
@@ -92,17 +103,15 @@ export function Theme<E extends ElementType = 'div'>({
       isDark,
     };
   }, [theme]);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
-  const BaseComponentAsAny = BaseComponent as any;
 
   return (
     <ThemeContext.Provider value={value}>
       <LayerContext.Provider value={1}>
-        <BaseComponentAsAny {...rest} className={className} />
+        <BaseComponent {...rest} className={className} />
       </LayerContext.Provider>
     </ThemeContext.Provider>
   );
-}
+};
 
 Theme.propTypes = {
   /**

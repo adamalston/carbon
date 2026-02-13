@@ -47,9 +47,9 @@ const Link = frFn((props, ref) => {
     ...rest
   } = props;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
-  const BaseComponentAsAny = (BaseComponent ?? element ?? 'a') as any;
-  return <BaseComponentAsAny ref={ref} {...rest} />;
+  const Component = BaseComponent ?? element ?? 'a';
+
+  return <Component ref={ref} {...rest} />;
 }) as LinkComponent;
 
 /**

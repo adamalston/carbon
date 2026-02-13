@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2016, 2023
+ * Copyright IBM Corp. 2016, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -34,12 +34,10 @@ export const Section = React.forwardRef(function Section<
 ) {
   const parentLevel = React.useContext(HeadingContext);
   const level = levelOverride ?? parentLevel + 1;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
-  const BaseComponentAsAny = BaseComponent as any;
 
   return (
     <HeadingContext.Provider value={Math.min(level, 6) as HeadingLevel}>
-      <BaseComponentAsAny ref={ref} {...rest} />
+      {React.createElement(BaseComponent, { ref, ...rest })}
     </HeadingContext.Provider>
   );
 });

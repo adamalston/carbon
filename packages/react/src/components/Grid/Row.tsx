@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2016, 2023
+ * Copyright IBM Corp. 2016, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -7,7 +7,7 @@
 
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { type ElementType } from 'react';
 import { usePrefix } from '../../internal/usePrefix';
 import { PolymorphicProps } from '../../types/common';
 
@@ -49,29 +49,31 @@ export interface RowComponent {
   ): React.ReactElement<any, any> | null;
 }
 
-function Row<T extends React.ElementType>({
-  as: BaseComponent = 'div' as T,
+type RowWithPropTypes = RowComponent & {
+  propTypes?: Record<string, unknown>;
+};
+
+const Row: RowWithPropTypes = ({
+  as: BaseComponent = 'div',
   condensed = false,
   narrow = false,
   className: containerClassName,
   children,
   ...rest
-}: RowProps<T>) {
+}: RowProps<ElementType>) => {
   const prefix = usePrefix();
   const className = cx(containerClassName, {
     [`${prefix}--row`]: true,
     [`${prefix}--row--condensed`]: condensed,
     [`${prefix}--row--narrow`]: narrow,
   });
-  // TypeScript type validation reports conflicts on different instances of keyof JSX.IntrinsicElements
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
-  const BaseComponentAsAny: any = BaseComponent;
+
   return (
-    <BaseComponentAsAny className={className} {...rest}>
+    <BaseComponent className={className} {...rest}>
       {children}
-    </BaseComponentAsAny>
+    </BaseComponent>
   );
-}
+};
 
 Row.propTypes = {
   /**
@@ -102,4 +104,6 @@ Row.propTypes = {
   narrow: PropTypes.bool,
 };
 
-export default Row as RowComponent;
+const RowComponentExport: RowComponent = Row;
+
+export default RowComponentExport;

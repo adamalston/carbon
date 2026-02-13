@@ -17,6 +17,7 @@ import React, {
   type ElementType,
   type FocusEventHandler,
   type KeyboardEventHandler,
+  type ReactElement,
   type ReactNode,
 } from 'react';
 import {
@@ -38,26 +39,31 @@ type ToggletipLabelProps<E extends ElementType> = {
   children?: ReactNode;
   className?: string;
 } & Omit<React.ComponentPropsWithoutRef<E>, 'as' | 'children' | 'className'>;
+type ToggletipLabelComponent = {
+  <E extends ElementType>(props: ToggletipLabelProps<E>): ReactElement | null;
+};
+type ToggletipLabelWithPropTypes = ToggletipLabelComponent & {
+  propTypes?: Record<string, unknown>;
+};
 
 /**
  * Used to render the label for a Toggletip
  */
-export function ToggletipLabel<E extends ElementType>({
-  as: BaseComponent = 'span' as E,
+export const ToggletipLabel: ToggletipLabelWithPropTypes = ({
+  as: BaseComponent = 'span',
   children,
   className: customClassName,
   ...rest
-}: ToggletipLabelProps<E>) {
+}: ToggletipLabelProps<ElementType>) => {
   const prefix = usePrefix();
   const className = cx(`${prefix}--toggletip-label`, customClassName);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
-  const BaseComponentAsAny = BaseComponent as any;
+
   return (
-    <BaseComponentAsAny className={className} {...rest}>
+    <BaseComponent className={className} {...rest}>
       {children}
-    </BaseComponentAsAny>
+    </BaseComponent>
   );
-}
+};
 
 ToggletipLabel.propTypes = {
   /**

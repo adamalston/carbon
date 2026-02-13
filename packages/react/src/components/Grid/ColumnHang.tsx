@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2016, 2023
+ * Copyright IBM Corp. 2016, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -37,27 +37,29 @@ export interface ColumnHangComponent {
   ): React.ReactElement<any, any> | null;
 }
 
+type ColumnHangWithPropTypes = ColumnHangComponent & {
+  propTypes?: Record<string, unknown>;
+};
+
 /**
  * Helper component for rendering content that hangs on the column. Useful when
  * trying to align content across different gutter modes
  */
-function ColumnHang<T extends React.ElementType>({
-  as: BaseComponent = 'div' as T,
+export const ColumnHang: ColumnHangWithPropTypes = ({
+  as: BaseComponent = 'div',
   className: customClassName,
   children,
   ...rest
-}: ColumnHangProps<T>) {
+}) => {
   const prefix = usePrefix();
   const className = cx(customClassName, `${prefix}--grid-column-hang`);
-  // cast as any to let TypeScript allow passing in attributes to base component
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
-  const BaseComponentAsAny: any = BaseComponent;
+
   return (
-    <BaseComponentAsAny {...rest} className={className}>
+    <BaseComponent {...rest} className={className}>
       {children}
-    </BaseComponentAsAny>
+    </BaseComponent>
   );
-}
+};
 
 ColumnHang.propTypes = {
   /**
@@ -75,7 +77,3 @@ ColumnHang.propTypes = {
    */
   className: PropTypes.string,
 };
-
-const ColumnHangComponent = ColumnHang as ColumnHangComponent;
-
-export { ColumnHangComponent as ColumnHang };
