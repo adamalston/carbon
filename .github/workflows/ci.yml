@@ -10,13 +10,9 @@ on:
   merge_group:
     types: [checks_requested]
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   dedupe:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Use Node.js version from .nvmrc
@@ -27,7 +23,7 @@ jobs:
         run: yarn dedupe --check
 
   format:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Use Node.js version from .nvmrc
@@ -42,7 +38,7 @@ jobs:
         run: yarn format:diff
 
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Use Node.js version from .nvmrc
@@ -59,7 +55,8 @@ jobs:
         run: yarn lint:styles
 
   test:
-    runs-on: ubuntu-latest
+    needs: lint
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Use Node.js version from .nvmrc
@@ -81,9 +78,6 @@ jobs:
           YARN_ENABLE_HARDENED_MODE: 0
         run: yarn install --immutable --immutable-cache
       - name: Build project
-        env:
-          NX_PARALLEL: 3
-          NODE_OPTIONS: --max-old-space-size=6144
         run: yarn build
       - name: Check generated styles
         run: |
@@ -99,7 +93,7 @@ jobs:
 
   web-components-test:
     needs: test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Use Node.js version from .nvmrc
@@ -140,7 +134,7 @@ jobs:
   e2e:
     needs: web-components-test
     name: 'test:e2e'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Use Node.js version from .nvmrc
@@ -175,22 +169,20 @@ jobs:
               - 'packages/icon-build-helpers/**'
       - name: Build project
         if: ${{ steps.filter.outputs.e2e == 'true' }}
-        env:
-          NX_PARALLEL: 3
-          NODE_OPTIONS: --max-old-space-size=6144
         run: yarn build
       - name: Run e2e tests
         if: ${{ steps.filter.outputs.e2e == 'true' }}
         run: yarn test:e2e
 
   vrt-runner:
+    needs: e2e
     strategy:
       fail-fast: false
-      max-parallel: 2
+      max-parallel: 1
       matrix:
         shardIndex: [1, 2, 3, 4]
         shardTotal: [4]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Use Node.js version from .nvmrc
@@ -214,9 +206,6 @@ jobs:
       - name: Install browsers
         run: yarn playwright install --with-deps
       - name: Build project
-        env:
-          NX_PARALLEL: 3
-          NODE_OPTIONS: --max-old-space-size=6144
         run: yarn build
       - name: Build storybook
         run: yarn workspace @carbon/react storybook:build
@@ -261,7 +250,7 @@ jobs:
 
   vrt:
     if: ${{ always() }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: vrt-runner
     steps:
       - name: Check VRT Runner job status
@@ -269,13 +258,14 @@ jobs:
         run: exit 1
 
   avt-runner:
+    needs: vrt
     strategy:
       fail-fast: false
-      max-parallel: 2
+      max-parallel: 1
       matrix:
         shardIndex: [1, 2, 3, 4]
         shardTotal: [4]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Use Node.js version from .nvmrc
@@ -299,9 +289,6 @@ jobs:
       - name: Install browsers
         run: yarn playwright install --with-deps
       - name: Build project
-        env:
-          NX_PARALLEL: 3
-          NODE_OPTIONS: --max-old-space-size=6144
         run: yarn build
       - name: Build storybook
         run: yarn workspace @carbon/react storybook:build
@@ -331,7 +318,7 @@ jobs:
 
   avt:
     if: ${{ always() }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: avt-runner
     steps:
       - name: Check AVT Runner job status
@@ -340,12 +327,10 @@ jobs:
 
   merge-playwright-reports:
     # Merge reports after *-runner jobs, even if some shards have failed
-    if:
-      ${{ github.repository == 'carbon-design-system/carbon' && !cancelled() &&
-      github.event.pull_request.draft == false }}
-    needs: [vrt-runner, avt-runner]
+    if: ${{ false }}
+    needs: avt
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Use Node.js version from .nvmrc
@@ -406,10 +391,9 @@ jobs:
           retention-days: 14
 
   chromatic-react:
-    if:
-      ${{ github.repository == 'carbon-design-system/carbon' &&
-      github.event.pull_request.draft == false }}
-    runs-on: ubuntu-latest
+    needs: avt
+    if: ${{ false }}
+    runs-on: ubuntu-22.04
     outputs:
       buildUrl: ${{ steps.chromatic.outputs.buildUrl }}
       storybookUrl: ${{ steps.chromatic.outputs.storybookUrl }}
@@ -439,9 +423,6 @@ jobs:
           YARN_ENABLE_HARDENED_MODE: 0
         run: yarn install --immutable --immutable-cache
       - name: Build project
-        env:
-          NX_PARALLEL: 3
-          NODE_OPTIONS: --max-old-space-size=6144
         run: yarn build
       - name: Build storybook
         run: yarn workspace @carbon/react storybook:build --stats-json
@@ -479,7 +460,8 @@ jobs:
   # PR timeline and the 'branch deployment' section at the bottom above the
   # status checks. This avoids noisy/large comments for deploy previews.
   react-storybook-preview:
-    runs-on: ubuntu-latest
+    if: ${{ false }}
+    runs-on: ubuntu-22.04
     needs: chromatic-react
     environment:
       name: '@carbon/react storybook preview'
