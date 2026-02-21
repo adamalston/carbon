@@ -341,6 +341,42 @@ describe('ComboBox', () => {
     expect(findInputNode()).toHaveDisplayValue('Apple');
   });
 
+  it('should not call onChange on blur when allowCustomValue input is empty with no selection', async () => {
+    render(<ComboBox {...mockProps} allowCustomValue />);
+    await userEvent.click(findInputNode());
+    fireEvent.blur(findInputNode());
+    expect(mockProps.onChange).not.toHaveBeenCalled();
+  });
+
+  it('should clear selectedItem to null when allowCustomValue input is emptied and blurred', async () => {
+    const user = userEvent.setup();
+    render(<ComboBox {...mockProps} allowCustomValue />);
+
+    await openMenu();
+    await user.click(screen.getByRole('option', { name: 'Item 0' }));
+    expect(mockProps.onChange).toHaveBeenCalledWith({
+      selectedItem: mockProps.items[0],
+    });
+
+    mockProps.onChange.mockClear();
+
+    await user.clear(findInputNode());
+    fireEvent.blur(findInputNode());
+
+    const calls = mockProps.onChange.mock.calls.map(([payload]) => payload);
+
+    expect(calls).not.toContainEqual(
+      expect.objectContaining({
+        selectedItem: '',
+      })
+    );
+    expect(calls).toContainEqual(
+      expect.objectContaining({
+        selectedItem: null,
+      })
+    );
+  });
+
   it('should apply onChange value if custom value is entered and `allowCustomValue` is set', async () => {
     render(<ComboBox {...mockProps} allowCustomValue />);
 
@@ -964,6 +1000,41 @@ describe('ComboBox', () => {
       await userEvent.keyboard('{Alt>}{ArrowUp}');
       assertMenuClosed(mockProps);
     });
+
+    it('should clear input and close menu on Escape when text is entered', async () => {
+      render(<ComboBox {...mockProps} />);
+
+      await userEvent.type(findInputNode(), 'xyz');
+      assertMenuOpen(mockProps);
+
+      await userEvent.keyboard('{Escape}');
+
+      assertMenuClosed(mockProps);
+      expect(findInputNode()).toHaveDisplayValue('');
+      expect(mockProps.onChange).not.toHaveBeenCalled();
+    });
+
+    it('should clear selected item and close menu on Escape', async () => {
+      render(<ComboBox {...mockProps} />);
+
+      await openMenu();
+      await userEvent.click(screen.getByRole('option', { name: 'Item 0' }));
+      expect(findInputNode()).toHaveDisplayValue('Item 0');
+      expect(mockProps.onChange).toHaveBeenCalledWith({
+        selectedItem: mockProps.items[0],
+      });
+
+      mockProps.onChange.mockClear();
+
+      await openMenu();
+      await userEvent.keyboard('{Escape}');
+
+      assertMenuClosed(mockProps);
+      expect(findInputNode()).toHaveDisplayValue('');
+      expect(mockProps.onChange).toHaveBeenCalledWith({
+        selectedItem: null,
+      });
+    });
   });
 
   describe('Highlights', () => {
@@ -1249,6 +1320,29 @@ describe('ComboBox', () => {
       await user.keyboard('[Tab]');
 
       expect(findInputNode()).toHaveDisplayValue('Apple');
+    });
+    it('should skip disabled items when completing typeahead suggestion on Tab', async () => {
+      const disabledTypeaheadProps = {
+        ...mockProps,
+        items: [
+          { id: 'apple', text: 'Apple', disabled: true },
+          { id: 'apricot', text: 'Apricot' },
+        ],
+        onChange: jest.fn(),
+      };
+      const user = userEvent.setup();
+      render(<ComboBox {...disabledTypeaheadProps} typeahead />);
+
+      const input = screen.getByRole('combobox');
+      user.click(input);
+
+      await user.type(input, 'Ap');
+      await user.keyboard('[Tab]');
+
+      expect(input).toHaveDisplayValue('Apricot');
+      expect(disabledTypeaheadProps.onChange).toHaveBeenLastCalledWith({
+        selectedItem: disabledTypeaheadProps.items[1],
+      });
     });
     it('should not autocomplete on Tab after backspace', async () => {
       const user = userEvent.setup();

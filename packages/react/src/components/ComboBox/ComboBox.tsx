@@ -70,6 +70,12 @@ const {
 
 const defaultShouldFilterItem = () => true;
 
+const isDisabledItem = (item: unknown) =>
+  item !== null &&
+  typeof item === 'object' &&
+  'disabled' in item &&
+  Boolean(item.disabled);
+
 const autocompleteCustomFilter = ({
   item,
   inputValue,
@@ -133,7 +139,7 @@ const findHighlightedIndex = <ItemType,>(
 
   for (let i = 0; i < items.length; i++) {
     const item = itemToString(items[i]).toLowerCase();
-    if (!items[i]['disabled'] && item.indexOf(searchValue) !== -1) {
+    if (!isDisabledItem(items[i]) && item.indexOf(searchValue) !== -1) {
       return i;
     }
   }
@@ -467,11 +473,13 @@ const ComboBox = forwardRef(
       if (typeahead) {
         if (inputValue.length >= prevInputLengthRef.current) {
           if (inputValue) {
-            const filteredItems = items.filter((item) =>
-              autocompleteCustomFilter({
-                item: itemToString(item),
-                inputValue: inputValue,
-              })
+            const filteredItems = items.filter(
+              (item) =>
+                !isDisabledItem(item) &&
+                autocompleteCustomFilter({
+                  item: itemToString(item),
+                  inputValue: inputValue,
+                })
             );
             if (filteredItems.length > 0) {
               const suggestion = itemToString(filteredItems[0]);
@@ -603,10 +611,13 @@ const ComboBox = forwardRef(
                 return changes;
               }
               const nextSelectedItem =
-                items.find((item) => itemToString(item) === inputValue) ??
-                inputValue;
+                inputValue === ''
+                  ? null
+                  : (items.find((item) => itemToString(item) === inputValue) ??
+                    inputValue);
               const isCustomSelection =
                 typeof nextSelectedItem === 'string' &&
+                nextSelectedItem !== '' &&
                 !items.some((item) => isEqual(item, nextSelectedItem));
 
               if (!isEqual(currentSelectedItem, nextSelectedItem) && onChange) {
@@ -872,8 +883,7 @@ const ComboBox = forwardRef(
       stateReducer,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars -- https://github.com/carbon-design-system/carbon/issues/20452
       isItemDisabled(item, _index) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
-        return (item as any)?.disabled;
+        return isDisabledItem(item);
       },
       ...downshiftProps,
       onStateChange: ({ type, selectedItem: newSelectedItem }) => {
@@ -1110,11 +1120,31 @@ const ComboBox = forwardRef(
                     event?.persist?.();
                   }
 
-                  if (match(event, keys.Escape) && inputValue) {
-                    if (event.target === textInput.current && isOpen) {
-                      toggleMenu();
-                      event.preventDownshiftDefault = true;
-                      event?.persist?.();
+                  if (match(event, keys.Escape)) {
+                    if (event.target === textInput.current) {
+                      if (inputValue) {
+                        setInputValue('');
+                        downshiftSetInputValue('');
+                        committedCustomValueRef.current = '';
+
+                        if (
+                          currentSelectedItem !== null &&
+                          typeof currentSelectedItem !== 'undefined'
+                        ) {
+                          setIsClearing(true);
+                          onChange({ selectedItem: null });
+                          selectItem(null);
+                        }
+                      }
+
+                      if (isOpen) {
+                        toggleMenu();
+                      }
+
+                      if (inputValue || isOpen) {
+                        event.preventDownshiftDefault = true;
+                        event?.persist?.();
+                      }
                     }
                   }
 
@@ -1154,10 +1184,12 @@ const ComboBox = forwardRef(
                   }
                   if (typeahead && event.key === 'Tab') {
                     //  event.preventDefault();
-                    const matchingItem = items.find((item) =>
-                      itemToString(item)
-                        .toLowerCase()
-                        .startsWith(inputValue.toLowerCase())
+                    const matchingItem = items.find(
+                      (item) =>
+                        !isDisabledItem(item) &&
+                        itemToString(item)
+                          .toLowerCase()
+                          .startsWith(inputValue.toLowerCase())
                     );
                     if (matchingItem) {
                       const newValue = itemToString(matchingItem);
