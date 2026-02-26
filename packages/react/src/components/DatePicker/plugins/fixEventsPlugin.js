@@ -12,10 +12,12 @@ import { match, keys } from '../../../internal/keyboard';
  * @returns {Plugin} A Flatpickr plugin to fix Flatpickr's behavior of certain events.
  */
 export default (config) => (fp) => {
-  const { inputFrom, inputTo, lastStartValue, container } = config;
+  const { inputFrom, inputTo, lastStartValue, container, onManualInputChange } =
+    config;
   // Avoid closing when mousedown starts inside but click lands outside after
   // scroll or blur (e.g., scrollable modal masks).
   let mouseDownInside = false;
+  let shouldSkipBlurSyncAfterEnter = false;
 
   const getEventPath = (event) =>
     typeof event.composedPath === 'function' ? event.composedPath() : [];
@@ -66,13 +68,26 @@ export default (config) => (fp) => {
     const { target } = event;
     if (inputFrom === target || inputTo === target) {
       if (match(event, keys.Enter)) {
+        const shouldTriggerChange = inputTo !== target;
         // Makes sure the hitting enter key picks up pending values of both `<input>`
         // Workaround for: https://github.com/flatpickr/flatpickr/issues/1942
         fp.setDate(
           [inputFrom.value, inputTo && inputTo.value],
-          true,
+          shouldTriggerChange,
           fp.config.dateFormat
         );
+
+        // Keep onChange behavior for end-input manual entry without triggering
+        // Flatpickr range plugin's async refocus cycle.
+        if (
+          !shouldTriggerChange &&
+          !target.readOnly &&
+          typeof onManualInputChange === 'function'
+        ) {
+          onManualInputChange(fp.selectedDates, fp.input.value, fp);
+        }
+
+        shouldSkipBlurSyncAfterEnter = inputTo === target;
         event.stopPropagation();
       } else if (
         match(event, keys.ArrowLeft) ||
@@ -91,6 +106,8 @@ export default (config) => (fp) => {
         // we stop event bubbling and the default Flatpickr's onChange behaviour here itself
         event.stopPropagation();
         event.preventDefault();
+      } else {
+        shouldSkipBlurSyncAfterEnter = false;
       }
     }
   };
@@ -107,10 +124,11 @@ export default (config) => (fp) => {
    */
   const handleBlur = (event) => {
     const { target } = event;
+    const skipBlurSync = inputTo === target && shouldSkipBlurSyncAfterEnter;
 
     // Only fall into this logic if the event is on the `to` input and there is a
     // `to` date selected
-    if (inputTo === target && fp.selectedDates[1]) {
+    if (inputTo === target && fp.selectedDates[1] && !skipBlurSync) {
       // Using getTime() enables the ability to more readily compare the date currently
       // selected in the calendar and the date currently in the value of the input
       const withoutTime = (date) => date?.setHours(0, 0, 0, 0);
@@ -138,7 +156,12 @@ export default (config) => (fp) => {
 
     const isValidDate = (date) => date?.toString() !== 'Invalid Date';
     // save end date in calendar immediately after it's been written down
-    if (inputTo === target && fp.selectedDates.length === 1 && inputTo.value) {
+    if (
+      inputTo === target &&
+      fp.selectedDates.length === 1 &&
+      inputTo.value &&
+      !skipBlurSync
+    ) {
       if (isValidDate(parseDateWithFormat(inputTo.value))) {
         fp.setDate(
           [inputFrom.value, inputTo.value],
@@ -149,7 +172,12 @@ export default (config) => (fp) => {
     }
 
     // overriding the flatpickr bug where the startDate gets deleted on blur
-    if (inputTo === target && !inputFrom.value && lastStartValue.current) {
+    if (
+      inputTo === target &&
+      !inputFrom.value &&
+      lastStartValue.current &&
+      !skipBlurSync
+    ) {
       if (isValidDate(parseDateWithFormat(lastStartValue.current))) {
         inputFrom.value = lastStartValue.current;
         if (inputTo.value) {
@@ -160,6 +188,10 @@ export default (config) => (fp) => {
           );
         }
       }
+    }
+
+    if (inputTo === target) {
+      shouldSkipBlurSyncAfterEnter = false;
     }
   };
 

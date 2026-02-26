@@ -642,6 +642,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>((props, ref) => {
           inputTo: endInputField.current,
           lastStartValue,
           container: wrapperRef.current,
+          onManualInputChange: savedOnChange,
         }) as unknown as Plugin,
       ],
       clickOpens: !readOnly,

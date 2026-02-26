@@ -870,6 +870,36 @@ describe('Range date picker', () => {
     expect(screen.getByRole('application')).not.toHaveClass('open');
   });
 
+  it('should move focus outside the picker after entering an end date and pressing Enter', async () => {
+    render(
+      <>
+        <DatePicker
+          onChange={() => {}}
+          dateFormat="m/d/Y"
+          datePickerType="range">
+          <DatePickerInput
+            id="date-picker-input-id-start-manual-focus"
+            labelText="Start date"
+          />
+          <DatePickerInput
+            id="date-picker-input-id-end-manual-focus"
+            labelText="End date"
+          />
+        </DatePicker>
+        <input aria-label="Outside input" />
+      </>
+    );
+
+    const endDateInput = screen.getByLabelText('End date');
+    const outsideInput = screen.getByLabelText('Outside input');
+
+    await userEvent.click(endDateInput);
+    await userEvent.type(endDateInput, '02/15/2026{enter}');
+    await userEvent.click(outsideInput);
+
+    expect(outsideInput).toHaveFocus();
+  });
+
   it('clearing end date should not cause console warnings', async () => {
     const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
 
