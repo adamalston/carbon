@@ -392,7 +392,8 @@ jobs:
   chromatic-react:
     if:
       ${{ github.repository == 'carbon-design-system/carbon' &&
-      github.event.pull_request.draft == false }}
+      github.event.pull_request.draft == false && github.event_name ==
+      'pull_request' }}
     runs-on: ubuntu-latest-larger-disk
     outputs:
       buildUrl: ${{ steps.chromatic.outputs.buildUrl }}
@@ -452,7 +453,7 @@ jobs:
             ${{ github.event.pull_request.head.ref || github.ref_name }}
           # 👇 Set to the PR head commit if it's a PR; otherwise to the ref (which typically resolves to the latest commit SHA)
           CHROMATIC_SHA: ${{ github.event.pull_request.head.sha || github.ref }}
-          # 👇 Makes sure this is always set to the corect owner/repo
+          # 👇 Makes sure this is always set to the correct owner/repo
           CHROMATIC_SLUG: ${{ github.repository }}
 
   # This takes the chromatic storybook url and pipes it into a github deployment
@@ -478,6 +479,7 @@ jobs:
           echo "- Chromatic build URL: ${{ env.buildUrl }}" >> $GITHUB_STEP_SUMMARY
 
   flag-agents-md-changes:
+    if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     steps:
       - name: Detect AGENTS.md changes
