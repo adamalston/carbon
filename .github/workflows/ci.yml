@@ -2,7 +2,7 @@ name: ci
 on:
   push:
     branches:
-      - main
+      - "**"
   pull_request:
     types: [opened, reopened, synchronize, ready_for_review]
     branches:
@@ -10,13 +10,9 @@ on:
   merge_group:
     types: [checks_requested]
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   dedupe:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Use Node.js version from .nvmrc
@@ -27,7 +23,7 @@ jobs:
         run: yarn dedupe --check
 
   format:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Use Node.js version from .nvmrc
@@ -42,7 +38,7 @@ jobs:
         run: yarn format:diff
 
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Use Node.js version from .nvmrc
@@ -59,7 +55,8 @@ jobs:
         run: yarn lint:styles
 
   test:
-    runs-on: ubuntu-latest-larger-disk
+    needs: lint
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Use Node.js version from .nvmrc
@@ -95,7 +92,8 @@ jobs:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   web-components-test:
-    runs-on: ubuntu-latest-larger-disk
+    needs: test
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Use Node.js version from .nvmrc
@@ -134,8 +132,9 @@ jobs:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   e2e:
+    needs: web-components-test
     name: 'test:e2e'
-    runs-on: ubuntu-latest-larger-disk
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Use Node.js version from .nvmrc
@@ -176,12 +175,14 @@ jobs:
         run: yarn test:e2e
 
   vrt-runner:
+    needs: e2e
     strategy:
       fail-fast: false
+      max-parallel: 1
       matrix:
         shardIndex: [1, 2, 3, 4]
         shardTotal: [4]
-    runs-on: ubuntu-latest-larger-disk
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Use Node.js version from .nvmrc
@@ -249,7 +250,7 @@ jobs:
 
   vrt:
     if: ${{ always() }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: vrt-runner
     steps:
       - name: Check VRT Runner job status
@@ -257,12 +258,14 @@ jobs:
         run: exit 1
 
   avt-runner:
+    needs: vrt
     strategy:
       fail-fast: false
+      max-parallel: 1
       matrix:
         shardIndex: [1, 2, 3, 4]
         shardTotal: [4]
-    runs-on: ubuntu-latest-larger-disk
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Use Node.js version from .nvmrc
@@ -315,7 +318,7 @@ jobs:
 
   avt:
     if: ${{ always() }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: avt-runner
     steps:
       - name: Check AVT Runner job status
@@ -324,12 +327,10 @@ jobs:
 
   merge-playwright-reports:
     # Merge reports after *-runner jobs, even if some shards have failed
-    if:
-      ${{ github.repository == 'carbon-design-system/carbon' && !cancelled() &&
-      github.event.pull_request.draft == false }}
-    needs: [vrt-runner, avt-runner]
+    if: ${{ false }}
+    needs: avt
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Use Node.js version from .nvmrc
@@ -390,10 +391,9 @@ jobs:
           retention-days: 14
 
   chromatic-react:
-    if:
-      ${{ github.repository == 'carbon-design-system/carbon' &&
-      github.event.pull_request.draft == false }}
-    runs-on: ubuntu-latest-larger-disk
+    needs: avt
+    if: ${{ false }}
+    runs-on: ubuntu-22.04
     outputs:
       buildUrl: ${{ steps.chromatic.outputs.buildUrl }}
       storybookUrl: ${{ steps.chromatic.outputs.storybookUrl }}
@@ -460,7 +460,8 @@ jobs:
   # PR timeline and the 'branch deployment' section at the bottom above the
   # status checks. This avoids noisy/large comments for deploy previews.
   react-storybook-preview:
-    runs-on: ubuntu-latest
+    if: ${{ false }}
+    runs-on: ubuntu-22.04
     needs: chromatic-react
     environment:
       name: '@carbon/react storybook preview'
@@ -478,7 +479,7 @@ jobs:
           echo "- Chromatic build URL: ${{ env.buildUrl }}" >> $GITHUB_STEP_SUMMARY
 
   flag-agents-md-changes:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Detect AGENTS.md changes
         id: changes
