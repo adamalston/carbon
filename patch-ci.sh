@@ -32,14 +32,24 @@ patch_workflow() {
     s/^  test:\n(?:    needs:.*\n)?/  test:\n    needs: lint\n/m;
     s/^  web-components-test:\n(?:    needs:.*\n)?/  web-components-test:\n    needs: test\n/m;
     s/^  e2e:\n(?:    needs:.*\n)?/  e2e:\n    needs: web-components-test\n/m;
-    s/^  vrt-runner:\n(?:    needs:.*\n)?/  vrt-runner:\n    needs: e2e\n/m;
-    s/^  avt-runner:\n(?:    needs:.*\n)?/  avt-runner:\n    needs: vrt\n/m;
+
+    # Handle both the older VRT flow and the current AVT build/runner flow.
+    if (/^  avt-build:\n/m) {
+      s/^  avt-build:\n(?:    needs:.*\n)?/  avt-build:\n    needs: e2e\n/m;
+      s/^  avt-runner:\n(?:    needs:.*\n)?/  avt-runner:\n    needs: avt-build\n/m;
+    } else {
+      s/^  vrt-runner:\n(?:    needs:.*\n)?/  vrt-runner:\n    needs: e2e\n/m;
+      s/^  avt-runner:\n(?:    needs:.*\n)?/  avt-runner:\n    needs: vrt\n/m;
+    }
+
     s/(^  merge-playwright-reports:\n(?:    #.*\n)?)    if:\n(?:      .*\n)*?    needs: [^\n]*\n/$1    if: \${{ false }}\n    needs: avt\n/m;
     s/^  chromatic-react:\n(?:    needs:.*\n)?(?:    if:\n(?:      .*\n)*|    if:.*\n)?/  chromatic-react:\n    needs: avt\n    if: \${{ false }}\n/m;
     s/^  react-storybook-preview:\n(?:    if:.*\n)?/  react-storybook-preview:\n    if: \${{ false }}\n/m;
+    s/^  flag-agents-md-changes:\n(?:    if:.*\n)?/  flag-agents-md-changes:\n    if: \${{ false }}\n/m;
 
     # Serialize shards for VRT/AVT.
     s/(^  vrt-runner:\n    needs: e2e\n    strategy:\n      fail-fast: false\n)(?:      max-parallel:\s*\d+\n)?/$1      max-parallel: 1\n/m;
+    s/(^  avt-runner:\n    needs: avt-build\n    strategy:\n      fail-fast: false\n)(?:      max-parallel:\s*\d+\n)?/$1      max-parallel: 1\n/m;
     s/(^  avt-runner:\n    needs: vrt\n    strategy:\n      fail-fast: false\n)(?:      max-parallel:\s*\d+\n)?/$1      max-parallel: 1\n/m;
   ' "${workflow_file}"
 }
