@@ -1439,6 +1439,36 @@ describe('Range date picker', () => {
 
       expect(handleBlur).not.toHaveBeenCalled();
     });
+
+    it('should preserve the start input value when the end input blurs after manual entry', async () => {
+      render(
+        <DatePicker
+          dateFormat="Y-m-d"
+          onChange={() => {}}
+          datePickerType="range">
+          <DatePickerInput
+            id="start-blur"
+            labelText="Start date"
+            data-testid="start-input-blur"
+          />
+          <DatePickerInput
+            id="end-blur"
+            labelText="End date"
+            data-testid="end-input-blur"
+          />
+        </DatePicker>
+      );
+
+      const start = await screen.findByTestId('start-input-blur');
+      const end = await screen.findByTestId('end-input-blur');
+
+      await userEvent.type(start, '2023-01-05{enter}');
+      await userEvent.type(end, '2023-01-19');
+      fireEvent.blur(end);
+
+      expect(start.value).toBe('2023-01-05');
+      expect(end.value).toBe('2023-01-19');
+    });
   });
 });
 

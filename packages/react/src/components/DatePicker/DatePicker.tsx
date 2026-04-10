@@ -7,7 +7,10 @@
 
 import PropTypes from 'prop-types';
 import React, {
+  Children,
+  cloneElement,
   forwardRef,
+  isValidElement,
   useCallback,
   useEffect,
   useImperativeHandle,
@@ -20,7 +23,7 @@ import flatpickr from 'flatpickr';
 import l10n from 'flatpickr/dist/l10n/index';
 import DatePickerInput from '../DatePickerInput';
 import { appendToPlugin } from './plugins/appendToPlugin';
-import carbonFlatpickrFixEventsPlugin from './plugins/fixEventsPlugin';
+import { fixEventsPlugin } from './plugins/fixEventsPlugin';
 import { rangePlugin } from './plugins/rangePlugin';
 import { deprecate } from '../../prop-types/deprecate';
 import { match, keys } from '../../internal/keyboard';
@@ -37,10 +40,11 @@ import type { Instance } from 'flatpickr/dist/types/instance';
 import { datePartsOrder } from '@carbon/utilities';
 import { SUPPORTED_LOCALES, type SupportedLocale } from './DatePickerLocales';
 import { isEmptyDateValue } from './utils';
+import type { Locale } from 'flatpickr/dist/types/locale';
 
 // Weekdays shorthand for English locale
 // Ensure localization exists before trying to access it
-function initializeWeekdayShorthand() {
+const initializeWeekdayShorthand = () => {
   if (l10n?.en?.weekdays?.shorthand) {
     l10n.en.weekdays.shorthand.forEach((_day, index) => {
       const currentDay = l10n.en.weekdays.shorthand;
@@ -51,139 +55,160 @@ function initializeWeekdayShorthand() {
       }
     });
   }
-}
+};
 
-const forEach = Array.prototype.forEach;
-
-/**
- * @param {number} monthNumber The month number.
- * @param {boolean} shorthand `true` to use shorthand month.
- * @param {Locale} locale The Flatpickr locale data.
- * @returns {string} The month string.
- */
-const monthToStr = (monthNumber, shorthand, locale) =>
+const monthToStr = (monthNumber: number, shorthand: boolean, locale: Locale) =>
   locale.months[shorthand ? 'shorthand' : 'longhand'][monthNumber];
 
-/**
- * @param {object} config Plugin configuration.
- * @param {boolean} [config.shorthand] `true` to use shorthand month.
- * @param {string} config.selectorFlatpickrMonthYearContainer The CSS selector for the container of month/year selection UI.
- * @param {string} config.selectorFlatpickrYearContainer The CSS selector for the container of year selection UI.
- * @param {string} config.selectorFlatpickrCurrentMonth The CSS selector for the text-based month selection UI.
- * @param {string} config.classFlatpickrCurrentMonth The CSS class for the text-based month selection UI.
- * @param {string} config.locale The locale code.
- * @returns {Plugin} A Flatpickr plugin to use text instead of `<select>` for month picker.
- */
-const carbonFlatpickrMonthSelectPlugin = (config) => (fp) => {
-  const setupElements = () => {
-    if (!fp.monthElements) {
-      return;
-    }
-    fp.monthElements.forEach((elem) => {
-      if (!elem.parentNode) {
+interface CarbonFlatpickrMonthSelectPluginConfig {
+  shorthand?: boolean;
+  selectorFlatpickrMonthYearContainer: string;
+  selectorFlatpickrYearContainer: string;
+  selectorFlatpickrCurrentMonth: string;
+  classFlatpickrCurrentMonth: string;
+  locale: DatePickerProps['locale'];
+}
+
+type CarbonFlatpickrMonthSelectPlugin = (
+  config: CarbonFlatpickrMonthSelectPluginConfig
+) => Plugin;
+
+const carbonFlatpickrMonthSelectPlugin: CarbonFlatpickrMonthSelectPlugin =
+  (config) => (fp) => {
+    const setupElements = () => {
+      if (!fp.monthElements) {
         return;
       }
-      elem.parentNode.removeChild(elem);
-    });
-    fp.monthElements.splice(
-      0,
-      fp.monthElements.length,
-      ...fp.monthElements.map(() => {
-        const monthElement = fp._createElement(
-          'span',
-          config.classFlatpickrCurrentMonth
-        );
-        monthElement.textContent = monthToStr(
+      fp.monthElements.forEach((elem) => {
+        if (!elem.parentNode) {
+          return;
+        }
+        elem.parentNode.removeChild(elem);
+      });
+      fp.monthElements.splice(
+        0,
+        fp.monthElements.length,
+        ...fp.monthElements
+          .map(() => {
+            const currentYearElement = fp.yearElements[0];
+            const monthYearContainer = currentYearElement?.closest(
+              config.selectorFlatpickrMonthYearContainer
+            );
+
+            if (!currentYearElement || !monthYearContainer) {
+              return null;
+            }
+
+            const monthElement = fp._createElement<HTMLSpanElement>(
+              'span',
+              config.classFlatpickrCurrentMonth
+            );
+            monthElement.textContent = monthToStr(
+              fp.currentMonth,
+              config.shorthand === true,
+              fp.l10n
+            );
+
+            // Depending on the locale, toggle the order of the month and year
+            if (datePartsOrder.isMonthFirst(config.locale)) {
+              monthYearContainer.insertBefore(
+                monthElement,
+                currentYearElement.closest(
+                  config.selectorFlatpickrYearContainer
+                )
+              );
+            } else {
+              monthYearContainer.insertAdjacentElement(
+                'afterend',
+                monthElement
+              );
+            }
+
+            return monthElement;
+          })
+          .filter(
+            (monthElement): monthElement is HTMLSpanElement =>
+              monthElement !== null
+          )
+      );
+    };
+
+    const updateCurrentMonth = () => {
+      if (fp.monthElements) {
+        const monthStr = monthToStr(
           fp.currentMonth,
           config.shorthand === true,
           fp.l10n
         );
+        fp.yearElements.forEach((elem) => {
+          const currentMonthContainer = elem.closest(
+            config.selectorFlatpickrMonthYearContainer
+          );
 
-        // Depending on the locale, toggle the order of the month and year
-        if (datePartsOrder.isMonthFirst(config.locale)) {
-          fp.yearElements[0]
-            .closest(config.selectorFlatpickrMonthYearContainer)
-            .insertBefore(
-              monthElement,
-              fp.yearElements[0].closest(config.selectorFlatpickrYearContainer)
-            );
-        } else {
-          fp.yearElements[0]
-            .closest(config.selectorFlatpickrMonthYearContainer)
-            .insertAdjacentElement('afterend', monthElement);
-        }
-
-        return monthElement;
-      })
-    );
-  };
-
-  const updateCurrentMonth = () => {
-    if (fp.monthElements) {
-      const monthStr = monthToStr(
-        fp.currentMonth,
-        config.shorthand === true,
-        fp.l10n
-      );
-      fp.yearElements.forEach((elem) => {
-        const currentMonthContainer = elem.closest(
-          config.selectorFlatpickrMonthYearContainer
-        );
-        Array.prototype.forEach.call(
-          currentMonthContainer.querySelectorAll('.cur-month'),
-          (monthElement) => {
-            monthElement.textContent = monthStr;
+          if (!currentMonthContainer) {
+            return;
           }
-        );
-      });
-    }
-  };
 
-  const register = () => {
-    fp.loadedPlugins.push('carbonFlatpickrMonthSelectPlugin');
-  };
+          Array.prototype.forEach.call(
+            currentMonthContainer.querySelectorAll('.cur-month'),
+            (monthElement) => {
+              monthElement.textContent = monthStr;
+            }
+          );
+        });
+      }
+    };
 
-  return {
-    onMonthChange: updateCurrentMonth,
-    onValueUpdate: updateCurrentMonth,
-    onOpen: updateCurrentMonth,
-    onReady: [setupElements, updateCurrentMonth, register],
+    const register = () => {
+      fp.loadedPlugins.push('carbonFlatpickrMonthSelectPlugin');
+    };
+
+    return {
+      onMonthChange: updateCurrentMonth,
+      onValueUpdate: updateCurrentMonth,
+      onOpen: updateCurrentMonth,
+      onReady: [setupElements, updateCurrentMonth, register],
+    };
   };
-};
 
 /**
- * Determine if every child in a list of children has no label specified
- * @param {Array<ReactElement>} children
- * @returns {boolean}
+ * Determine if every child element in a list has no label specified.
  */
-function isLabelTextEmpty(children) {
-  return children.every((child) => !child.props.labelText);
-}
+const isLabelTextEmpty = (children: ReactNode) => {
+  return Children.toArray(children).every((child) => {
+    return (
+      !isValidElement<{ labelText?: ReactNode }>(child) ||
+      !child.props.labelText
+    );
+  });
+};
 
-function updateClassNames(calendar, prefix) {
+const updateClassNames = (calendar: Instance, prefix: string) => {
   const calendarContainer = calendar.calendarContainer;
   const daysContainer = calendar.days;
   if (calendarContainer && daysContainer) {
+    const monthElement = calendarContainer.querySelector('.flatpickr-month');
+    const weekdaysElement = calendarContainer.querySelector(
+      '.flatpickr-weekdays'
+    );
+    const flatpickrDaysElement =
+      calendarContainer.querySelector('.flatpickr-days');
+
+    if (!monthElement || !weekdaysElement || !flatpickrDaysElement) {
+      return;
+    }
+
     // calendarContainer and daysContainer are undefined if flatpickr detects a mobile device
     calendarContainer.classList.add(`${prefix}--date-picker__calendar`);
-    calendarContainer
-      .querySelector('.flatpickr-month')
-      .classList.add(`${prefix}--date-picker__month`);
-    calendarContainer
-      .querySelector('.flatpickr-weekdays')
-      .classList.add(`${prefix}--date-picker__weekdays`);
-    calendarContainer
-      .querySelector('.flatpickr-days')
-      .classList.add(`${prefix}--date-picker__days`);
-    forEach.call(
-      calendarContainer.querySelectorAll('.flatpickr-weekday'),
-      (item) => {
-        const currentItem = item;
-        currentItem.innerHTML = currentItem.innerHTML.replace(/\s+/g, '');
-        currentItem.classList.add(`${prefix}--date-picker__weekday`);
-      }
-    );
-    forEach.call(daysContainer.querySelectorAll('.flatpickr-day'), (item) => {
+    monthElement.classList.add(`${prefix}--date-picker__month`);
+    weekdaysElement.classList.add(`${prefix}--date-picker__weekdays`);
+    flatpickrDaysElement.classList.add(`${prefix}--date-picker__days`);
+    calendarContainer.querySelectorAll('.flatpickr-weekday').forEach((item) => {
+      const currentItem = item;
+      currentItem.innerHTML = currentItem.innerHTML.replace(/\s+/g, '');
+      currentItem.classList.add(`${prefix}--date-picker__weekday`);
+    });
+    daysContainer.querySelectorAll('.flatpickr-day').forEach((item) => {
       item.classList.add(`${prefix}--date-picker__day`);
       item.setAttribute('role', 'button');
       if (
@@ -199,7 +224,7 @@ function updateClassNames(calendar, prefix) {
       }
     });
   }
-}
+};
 
 export type DatePickerTypes = 'simple' | 'single' | 'range';
 
@@ -220,7 +245,7 @@ export interface DatePickerProps {
   /**
    * The child nodes.
    */
-  children: ReactNode | object;
+  children: ReactNode;
 
   /**
    * The CSS class names.
@@ -399,7 +424,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>((props, ref) => {
 
   // fix datepicker deleting the selectedDate when the calendar closes
   const handleCalendarClose = useCallback(
-    (selectedDates, dateStr, instance) => {
+    (selectedDates: Date[], dateStr: string, instance: Instance) => {
       if (
         lastStartValue.current &&
         selectedDates[0] &&
@@ -420,7 +445,12 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>((props, ref) => {
     [onClose]
   );
 
-  const onCalendarClose = (selectedDates, dateStr, instance, e) => {
+  const onCalendarClose = (
+    selectedDates: Date[],
+    dateStr: string,
+    instance: Instance,
+    e?: Event
+  ) => {
     if (e && e.type === 'clickOutside') {
       return;
     }
@@ -456,49 +486,44 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>((props, ref) => {
     [String(className)]: className,
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
-  const childrenWithProps = React.Children.toArray(children as any).map(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
-    (child: any, index) => {
-      if (index === 0 && isComponentElement(child, DatePickerInput)) {
-        return React.cloneElement(child, {
-          datePickerType,
-          ref: startInputField,
-          readOnly,
-          invalid,
-          warn: effectiveWarn,
-        });
-      }
-      if (index === 1 && isComponentElement(child, DatePickerInput)) {
-        return React.cloneElement(child, {
-          datePickerType,
-          ref: endInputField,
-          readOnly,
-          invalid,
-          warn: effectiveWarn,
-        });
-      }
-      // TODO: The docs say this component expects `DatePickerInput` children.
-      // Can these non-`DatePickerInput` fallbacks be deleted?
-      // https://github.com/carbon-design-system/carbon/blob/b4297c52b50edf2fbc6c439c38edc8ee860c77fc/packages/react/src/components/DatePicker/DatePicker.mdx?plain=1#L49-L50
-      if (index === 0) {
-        return React.cloneElement(child, {
-          ref: startInputField,
-          readOnly,
-          invalid,
-          warn: effectiveWarn,
-        });
-      }
-      if (index === 1) {
-        return React.cloneElement(child, {
-          ref: endInputField,
-          readOnly,
-          invalid,
-          warn: effectiveWarn,
-        });
-      }
+  const childrenWithProps = Children.toArray(children).map((child, index) => {
+    if (index === 0 && isComponentElement(child, DatePickerInput)) {
+      return cloneElement(child, {
+        datePickerType,
+        ref: startInputField,
+        readOnly,
+        invalid,
+        warn: effectiveWarn,
+      });
     }
-  );
+    if (index === 1 && isComponentElement(child, DatePickerInput)) {
+      return cloneElement(child, {
+        datePickerType,
+        ref: endInputField,
+        readOnly,
+        invalid,
+        warn: effectiveWarn,
+      });
+    }
+    // Keep a generic element fallback for `React.lazy(DatePickerInput)`, which
+    // does not satisfy `isComponentElement`.
+    if (index === 0 && isValidElement(child)) {
+      return cloneElement(child, {
+        ref: startInputField,
+        readOnly,
+        invalid,
+        warn: effectiveWarn,
+      });
+    }
+    if (index === 1 && isValidElement(child)) {
+      return cloneElement(child, {
+        ref: endInputField,
+        readOnly,
+        invalid,
+        warn: effectiveWarn,
+      });
+    }
+  });
 
   useEffect(() => {
     initializeWeekdayShorthand();
@@ -513,7 +538,11 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>((props, ref) => {
       return;
     }
 
-    const onHook = (_electedDates, _dateStr, instance) => {
+    const onHook = (
+      _electedDates: Date[],
+      _dateStr: string,
+      instance: Instance
+    ) => {
       updateClassNames(instance, prefix);
       if (startInputField?.current) {
         startInputField.current.readOnly = readOnly;
@@ -626,13 +655,12 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>((props, ref) => {
           selectorFlatpickrCurrentMonth: '.cur-month',
           classFlatpickrCurrentMonth: 'cur-month',
           locale: locale,
-        }) as unknown as Plugin,
-        carbonFlatpickrFixEventsPlugin({
+        }),
+        fixEventsPlugin({
           inputFrom: startInputField.current,
           inputTo: endInputField.current,
-          lastStartValue,
           container: wrapperRef.current,
-        }) as unknown as Plugin,
+        }),
       ],
       clickOpens: !readOnly,
       noCalendar: readOnly,
@@ -733,7 +761,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>((props, ref) => {
       }
     };
 
-    function handleOnChange(event) {
+    const handleOnChange = (event: Event) => {
       const { target } = event;
       if (target === start) {
         lastStartValue.current = start.value;
@@ -746,9 +774,9 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>((props, ref) => {
       if (calendar.selectedDates.length === 0) {
         return;
       }
-    }
+    };
 
-    function handleKeyPress(event) {
+    const handleKeyPress = (event: KeyboardEvent) => {
       if (
         match(event, keys.Enter) &&
         closeOnSelect &&
@@ -756,7 +784,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>((props, ref) => {
       ) {
         calendar.calendarContainer.classList.remove('open');
       }
-    }
+    };
 
     if (start) {
       start.addEventListener('keydown', handleInputFieldKeyDown);
