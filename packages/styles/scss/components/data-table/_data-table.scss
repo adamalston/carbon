@@ -185,6 +185,12 @@
     text-align: start;
     vertical-align: middle;
   }
+
+  .#{$prefix}--data-table td,
+  .#{$prefix}--data-table tbody tr th {
+    padding-block: $spacing-05 $spacing-05;
+  }
+
   .#{$prefix}--data-table.#{$prefix}--data-table--top-aligned-body {
     &.#{$prefix}--data-table--lg
       tr:not([data-child-row])
