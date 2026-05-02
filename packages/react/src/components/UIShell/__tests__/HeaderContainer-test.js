@@ -8,6 +8,7 @@
 import { render } from '@testing-library/react';
 import React from 'react';
 import { act } from 'react';
+import { breakpoints } from '@carbon/layout';
 
 import { HeaderContainer } from '../';
 import userEvent from '@testing-library/user-event';
@@ -87,5 +88,60 @@ describe('HeaderContainer', () => {
       },
       undefined
     );
+  });
+
+  it('should close the side nav when the window is resized to the lg breakpoint', () => {
+    const lgMediaQuery = `(min-width: ${breakpoints.lg.width})`;
+    const previousMatchMedia = window.matchMedia;
+    const matchMediaMock = jest.fn((query) => ({
+      matches: query === lgMediaQuery,
+      media: query,
+      onchange: null,
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+      addListener: jest.fn(),
+      removeListener: jest.fn(),
+      dispatchEvent: jest.fn(),
+    }));
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: matchMediaMock,
+    });
+
+    let onClickSideNavExpand;
+    const renderProp = jest.fn(({ onClickSideNavExpand: onClick }) => {
+      onClickSideNavExpand = onClick;
+      return null;
+    });
+    render(<HeaderContainer render={renderProp} />);
+
+    act(() => {
+      onClickSideNavExpand();
+    });
+
+    expect(renderProp).toHaveBeenLastCalledWith(
+      {
+        isSideNavExpanded: true,
+        onClickSideNavExpand: expect.any(Function),
+      },
+      undefined
+    );
+
+    act(() => {
+      window.dispatchEvent(new Event('resize'));
+    });
+
+    expect(renderProp).toHaveBeenLastCalledWith(
+      {
+        isSideNavExpanded: false,
+        onClickSideNavExpand: expect.any(Function),
+      },
+      undefined
+    );
+
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: previousMatchMedia,
+    });
   });
 });
