@@ -1,14 +1,15 @@
 /**
- * Copyright IBM Corp. 2016, 2023
+ * Copyright IBM Corp. 2016, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
  */
 
 import PropTypes from 'prop-types';
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { keys, match } from '../../internal/keyboard';
 import { useWindowEvent } from '../../internal/useEvent';
+import { useMatchMedia } from '../../internal/useMatchMedia';
 import { breakpoints } from '@carbon/layout';
 
 export interface HeaderContainerRenderProps {
@@ -30,6 +31,7 @@ export default function HeaderContainer<P extends HeaderContainerRenderProps>({
   const [isSideNavExpandedState, setIsSideNavExpandedState] =
     useState(isSideNavExpanded);
   const lgMediaQuery = `(min-width: ${breakpoints.lg.width})`;
+  const isLg = useMatchMedia(lgMediaQuery);
 
   useWindowEvent('keydown', (event) => {
     if (match(event, keys.Escape)) {
@@ -37,15 +39,11 @@ export default function HeaderContainer<P extends HeaderContainerRenderProps>({
     }
   });
 
-  useWindowEvent('resize', () => {
-    if (
-      window.matchMedia &&
-      window.matchMedia(lgMediaQuery).matches &&
-      isSideNavExpandedState
-    ) {
+  useEffect(() => {
+    if (isLg && isSideNavExpandedState) {
       setIsSideNavExpandedState(false);
     }
-  });
+  }, [isLg, isSideNavExpandedState]);
 
   const handleHeaderMenuButtonClick = useCallback(() => {
     setIsSideNavExpandedState(

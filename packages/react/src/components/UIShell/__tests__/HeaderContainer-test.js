@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2016, 2023
+ * Copyright IBM Corp. 2016, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -14,6 +14,22 @@ import { HeaderContainer } from '../';
 import userEvent from '@testing-library/user-event';
 
 describe('HeaderContainer', () => {
+  beforeEach(() => {
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: jest.fn().mockImplementation((query) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        addListener: jest.fn(),
+        removeListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+      })),
+    });
+  });
+
   it('should support rendering through a render prop', () => {
     const renderProp = jest.fn(() => null);
     render(<HeaderContainer render={renderProp} />);
@@ -93,11 +109,19 @@ describe('HeaderContainer', () => {
   it('should close the side nav when the window is resized to the lg breakpoint', () => {
     const lgMediaQuery = `(min-width: ${breakpoints.lg.width})`;
     const previousMatchMedia = window.matchMedia;
+    const listeners = new Set();
+    let matches = false;
     const matchMediaMock = jest.fn((query) => ({
-      matches: query === lgMediaQuery,
+      matches: query === lgMediaQuery ? matches : false,
       media: query,
       onchange: null,
-      addEventListener: jest.fn(),
+      addEventListener: (eventType, listener) => {
+        listeners.add({
+          eventType,
+          listener,
+          query,
+        });
+      },
       removeEventListener: jest.fn(),
       addListener: jest.fn(),
       removeListener: jest.fn(),
@@ -128,7 +152,12 @@ describe('HeaderContainer', () => {
     );
 
     act(() => {
-      window.dispatchEvent(new Event('resize'));
+      matches = true;
+      for (const entry of listeners) {
+        if (entry.eventType === 'change' && entry.query === lgMediaQuery) {
+          entry.listener({ matches: true });
+        }
+      }
     });
 
     expect(renderProp).toHaveBeenLastCalledWith(
