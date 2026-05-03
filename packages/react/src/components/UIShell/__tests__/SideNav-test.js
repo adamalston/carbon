@@ -5,7 +5,14 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
+import { breakpoints } from '@carbon/layout';
 import React from 'react';
 import SideNav from '../SideNav';
 import SideNavLink from '../SideNavLink';
@@ -371,5 +378,53 @@ describe('SideNav', () => {
     await waitFor(() => {
       expect(nav).not.toHaveAttribute('inert');
     });
+  });
+
+  it('should call `onSideNavBlur` when resized to the lg breakpoint while expanded', () => {
+    const lgMediaQuery = `(min-width: ${breakpoints.lg.width})`;
+    const listeners = new Set();
+    let matches = false;
+
+    window.matchMedia.mockImplementation((query) => ({
+      matches: query === lgMediaQuery ? matches : false,
+      media: query,
+      onchange: null,
+      addListener: jest.fn(),
+      removeListener: jest.fn(),
+      addEventListener: (eventType, listener) => {
+        listeners.add({
+          eventType,
+          listener,
+          query,
+        });
+      },
+      removeEventListener: jest.fn(),
+      dispatchEvent: jest.fn(),
+    }));
+
+    const onSideNavBlur = jest.fn();
+
+    render(
+      <SideNav
+        aria-label="test"
+        expanded
+        isPersistent={false}
+        onSideNavBlur={onSideNavBlur}
+      />
+    );
+
+    expect(onSideNavBlur).not.toHaveBeenCalled();
+
+    act(() => {
+      matches = true;
+
+      for (const entry of listeners) {
+        if (entry.eventType === 'change' && entry.query === lgMediaQuery) {
+          entry.listener({ matches: true });
+        }
+      }
+    });
+
+    expect(onSideNavBlur).toHaveBeenCalledTimes(1);
   });
 });

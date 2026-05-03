@@ -6,11 +6,9 @@
  */
 
 import PropTypes from 'prop-types';
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { keys, match } from '../../internal/keyboard';
 import { useWindowEvent } from '../../internal/useEvent';
-import { useMatchMedia } from '../../internal/useMatchMedia';
-import { breakpoints } from '@carbon/layout';
 
 export interface HeaderContainerRenderProps {
   isSideNavExpanded: boolean;
@@ -30,20 +28,12 @@ export default function HeaderContainer<P extends HeaderContainerRenderProps>({
   //state for expandable sidenav
   const [isSideNavExpandedState, setIsSideNavExpandedState] =
     useState(isSideNavExpanded);
-  const lgMediaQuery = `(min-width: ${breakpoints.lg.width})`;
-  const isLg = useMatchMedia(lgMediaQuery);
 
   useWindowEvent('keydown', (event) => {
     if (match(event, keys.Escape)) {
       setIsSideNavExpandedState(false);
     }
   });
-
-  useEffect(() => {
-    if (isLg && isSideNavExpandedState) {
-      setIsSideNavExpandedState(false);
-    }
-  }, [isLg, isSideNavExpandedState]);
 
   const handleHeaderMenuButtonClick = useCallback(() => {
     setIsSideNavExpandedState(

@@ -106,37 +106,26 @@ describe('HeaderContainer', () => {
     );
   });
 
-  it('should close the side nav when the window is resized to the lg breakpoint', () => {
-    const lgMediaQuery = `(min-width: ${breakpoints.lg.width})`;
-    const previousMatchMedia = window.matchMedia;
-    const listeners = new Set();
-    let matches = false;
-    const matchMediaMock = jest.fn((query) => ({
-      matches: query === lgMediaQuery ? matches : false,
-      media: query,
-      onchange: null,
-      addEventListener: (eventType, listener) => {
-        listeners.add({
-          eventType,
-          listener,
-          query,
-        });
-      },
-      removeEventListener: jest.fn(),
-      addListener: jest.fn(),
-      removeListener: jest.fn(),
-      dispatchEvent: jest.fn(),
-    }));
-    Object.defineProperty(window, 'matchMedia', {
-      writable: true,
-      value: matchMediaMock,
-    });
-
+  it('should keep non-side-nav panels expanded at the lg breakpoint', () => {
     let onClickSideNavExpand;
     const renderProp = jest.fn(({ onClickSideNavExpand: onClick }) => {
       onClickSideNavExpand = onClick;
       return null;
     });
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: jest.fn().mockImplementation((query) => ({
+        matches: query === `(min-width: ${breakpoints.lg.width})`,
+        media: query,
+        onchange: null,
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        addListener: jest.fn(),
+        removeListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+      })),
+    });
+
     render(<HeaderContainer render={renderProp} />);
 
     act(() => {
@@ -150,27 +139,5 @@ describe('HeaderContainer', () => {
       },
       undefined
     );
-
-    act(() => {
-      matches = true;
-      for (const entry of listeners) {
-        if (entry.eventType === 'change' && entry.query === lgMediaQuery) {
-          entry.listener({ matches: true });
-        }
-      }
-    });
-
-    expect(renderProp).toHaveBeenLastCalledWith(
-      {
-        isSideNavExpanded: false,
-        onClickSideNavExpand: expect.any(Function),
-      },
-      undefined
-    );
-
-    Object.defineProperty(window, 'matchMedia', {
-      writable: true,
-      value: previousMatchMedia,
-    });
   });
 });

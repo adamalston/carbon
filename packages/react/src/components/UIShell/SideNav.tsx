@@ -201,6 +201,23 @@ const SideNav = frFn((props, ref) => {
   const lgMediaQuery = `(min-width: ${breakpoints.lg.width})`;
   const isLg = useMatchMedia(lgMediaQuery);
   const inertEnabled = !isRail ? !(expanded || isLg) : false;
+  const previousIsLg = useRef(isLg);
+
+  useEffect(() => {
+    const resizedToLg = !previousIsLg.current && isLg;
+
+    previousIsLg.current = isLg;
+
+    if (
+      resizedToLg &&
+      expanded &&
+      !isFixedNav &&
+      !isPersistent &&
+      onSideNavBlur
+    ) {
+      onSideNavBlur();
+    }
+  }, [expanded, isFixedNav, isLg, isPersistent, onSideNavBlur]);
 
   useEffect(() => {
     const node = sideNavRef.current;
