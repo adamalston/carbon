@@ -1085,6 +1085,44 @@ describe('MultiSelect', () => {
         'true'
       );
     });
+
+    it('should call onChange once per selection in StrictMode', async () => {
+      const items = generateItems(4, generateGenericItem);
+      const onChange = jest.fn();
+
+      const ControlledMultiselectInStrictMode = () => {
+        const [selectedItems, setSelectedItems] = useState([]);
+
+        return (
+          <React.StrictMode>
+            <MultiSelect
+              id="strict-mode-test"
+              titleText="Multiselect title"
+              label="test-label"
+              items={items}
+              selectedItems={selectedItems}
+              onChange={(data) => {
+                onChange(data);
+                setSelectedItems(data.selectedItems);
+              }}
+            />
+          </React.StrictMode>
+        );
+      };
+
+      render(<ControlledMultiselectInStrictMode />);
+      await waitForPosition();
+
+      await userEvent.click(screen.getByRole('combobox'));
+      await userEvent.click(screen.getByRole('option', { name: 'Item 0' }));
+
+      await waitFor(() => {
+        expect(onChange).toHaveBeenCalledTimes(1);
+      });
+      expect(onChange).toHaveBeenLastCalledWith({
+        selectedItems: [items[0]],
+      });
+    });
   });
 
   it('should prevent default behavior for ArrowDown, ArrowUp, Space, and Enter keys', async () => {

@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2016, 2025
+ * Copyright IBM Corp. 2016, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -10,25 +10,18 @@ import isEqual from 'react-fast-compare';
 
 const callOnChangeHandler = <ItemType,>({
   isControlled,
-  isMounted,
   onChangeHandlerControlled,
   onChangeHandlerUncontrolled,
   selectedItems,
 }: {
   isControlled: boolean;
-  isMounted: boolean;
-  onChangeHandlerControlled?: (data: { selectedItems: ItemType[] }) => void;
+  onChangeHandlerControlled?: (selectedItems: ItemType[]) => void;
   onChangeHandlerUncontrolled: (selectedItems: ItemType[]) => void;
   selectedItems: ItemType[];
 }) => {
   if (isControlled) {
-    if (isMounted && onChangeHandlerControlled) {
-      // Use setTimeout to defer the controlled onChange call,
-      // avoiding React’s warning: "Cannot update a component while rendering a different component".
-      // This ensures the parent state updates after rendering completes.
-      setTimeout(() => {
-        onChangeHandlerControlled({ selectedItems });
-      }, 0);
+    if (onChangeHandlerControlled) {
+      onChangeHandlerControlled(selectedItems);
     }
   } else {
     onChangeHandlerUncontrolled(selectedItems);
@@ -54,11 +47,37 @@ export const useSelection = <ItemType,>({
 }: UseSelectionProps<ItemType>) => {
   const isMounted = useRef(false);
   const savedOnChange = useRef(onChange);
+  const controlledOnChangeTimeout = useRef<number>(null);
+  const latestControlledSelectedItems = useRef<ItemType[]>(null);
   const [uncontrolledItems, setUncontrolledItems] =
     useState(initialSelectedItems);
   const isControlled = !!controlledItems;
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452
   const selectedItems = isControlled ? controlledItems! : uncontrolledItems;
+  const scheduleControlledOnChange = useCallback(
+    (selectedItems: ItemType[]) => {
+      if (!isMounted.current || !savedOnChange.current) return;
+
+      latestControlledSelectedItems.current = selectedItems;
+
+      if (controlledOnChangeTimeout.current !== null) {
+        window.clearTimeout(controlledOnChangeTimeout.current);
+      }
+
+      // Defer controlled updates until after the current render cycle.
+      controlledOnChangeTimeout.current = window.setTimeout(() => {
+        controlledOnChangeTimeout.current = null;
+
+        if (!isMounted.current || !savedOnChange.current) return;
+
+        const pendingSelectedItems = latestControlledSelectedItems.current;
+        if (!pendingSelectedItems) return;
+
+        savedOnChange.current({ selectedItems: pendingSelectedItems });
+      }, 0);
+    },
+    []
+  );
   const onItemChange = useCallback(
     (item: ItemType) => {
       if (disabled) return;
@@ -111,13 +130,19 @@ export const useSelection = <ItemType,>({
 
       callOnChangeHandler<ItemType>({
         isControlled,
-        isMounted: isMounted.current,
-        onChangeHandlerControlled: savedOnChange.current,
+        onChangeHandlerControlled: scheduleControlledOnChange,
         onChangeHandlerUncontrolled: setUncontrolledItems,
         selectedItems: newSelectedItems,
       });
     },
-    [disabled, selectedItems, filteredItems, selectAll, isControlled]
+    [
+      disabled,
+      selectedItems,
+      filteredItems,
+      selectAll,
+      isControlled,
+      scheduleControlledOnChange,
+    ]
   );
 
   const clearSelection = useCallback(() => {
@@ -125,24 +150,22 @@ export const useSelection = <ItemType,>({
 
     callOnChangeHandler<ItemType>({
       isControlled,
-      isMounted: isMounted.current,
-      onChangeHandlerControlled: savedOnChange.current,
+      onChangeHandlerControlled: scheduleControlledOnChange,
       onChangeHandlerUncontrolled: setUncontrolledItems,
       selectedItems: [],
     });
-  }, [disabled, isControlled]);
+  }, [disabled, isControlled, scheduleControlledOnChange]);
 
   const toggleAll = useCallback(
     (items: ItemType[]) => {
       callOnChangeHandler<ItemType>({
         isControlled,
-        isMounted: isMounted.current,
-        onChangeHandlerControlled: savedOnChange.current,
+        onChangeHandlerControlled: scheduleControlledOnChange,
         onChangeHandlerUncontrolled: setUncontrolledItems,
         selectedItems: items,
       });
     },
-    [isControlled]
+    [isControlled, scheduleControlledOnChange]
   );
 
   useEffect(() => {
@@ -158,6 +181,9 @@ export const useSelection = <ItemType,>({
   useEffect(() => {
     isMounted.current = true;
     return () => {
+      if (controlledOnChangeTimeout.current !== null) {
+        window.clearTimeout(controlledOnChangeTimeout.current);
+      }
       isMounted.current = false;
     };
   }, []);
