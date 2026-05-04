@@ -46,4 +46,20 @@ describe('SideNavMenuItem', () => {
     );
     expect(ref).toHaveBeenCalledWith(screen.getByRole('link'));
   });
+
+  it('should support rendering a button through the `as` prop', () => {
+    const onClick = jest.fn();
+    render(
+      <SideNavMenuItem as="button" type="button" onClick={onClick}>
+        test
+      </SideNavMenuItem>
+    );
+
+    screen.getByRole('button').click();
+
+    expect(screen.getByRole('button')).toHaveClass('cds--side-nav__link', {
+      exact: true,
+    });
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
 });

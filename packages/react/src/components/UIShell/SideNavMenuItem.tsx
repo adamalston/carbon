@@ -6,18 +6,13 @@
  */
 
 import cx from 'classnames';
-import PropTypes from 'prop-types';
-import React, {
-  forwardRef,
-  type ComponentProps,
-  type ElementType,
-  type Ref,
-} from 'react';
+import PropTypes, { type WeakValidationMap } from 'prop-types';
+import React, { forwardRef, type ElementType, type JSX, type Ref } from 'react';
 import SideNavLinkText from './SideNavLinkText';
-import Link from './Link';
+import Link, { type LinkProps } from './Link';
 import { usePrefix } from '../../internal/usePrefix';
 
-export type SideNavMenuItemProps = ComponentProps<typeof Link> & {
+export type SideNavMenuItemProps<E extends ElementType = 'a'> = LinkProps<E> & {
   /**
    * Specify the children to be rendered inside of the `SideNavMenuItem`
    */
@@ -36,7 +31,7 @@ export type SideNavMenuItemProps = ComponentProps<typeof Link> & {
   isActive?: boolean;
 
   /**
-   * Optionally provide an href for the underlying li`
+   * Optionally provide an href for the underlying link.
    */
   href?: string;
 
@@ -46,34 +41,48 @@ export type SideNavMenuItemProps = ComponentProps<typeof Link> & {
   as?: ElementType;
 };
 
-const SideNavMenuItem = forwardRef<HTMLElement, SideNavMenuItemProps>(
-  (props, ref) => {
-    const prefix = usePrefix();
-    const {
-      children,
-      className: customClassName,
-      as: Component = Link,
-      isActive,
-      ...rest
-    } = props;
-    const className = cx(`${prefix}--side-nav__menu-item`, customClassName);
-    const linkClassName = cx({
-      [`${prefix}--side-nav__link`]: true,
-      [`${prefix}--side-nav__link--current`]: isActive,
-    });
+export interface SideNavMenuItemComponent {
+  <E extends ElementType = 'a'>(
+    props: SideNavMenuItemProps<E>
+  ): JSX.Element | null;
+  displayName?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
+  propTypes?: WeakValidationMap<SideNavMenuItemProps<any>>;
+}
 
-    return (
-      <li className={className}>
-        <Component
-          {...rest}
-          className={linkClassName}
-          ref={ref as Ref<ElementType>}>
-          <SideNavLinkText>{children}</SideNavLinkText>
-        </Component>
-      </li>
-    );
-  }
-);
+type SideNavMenuItemPropsWithoutRef = Omit<SideNavMenuItemProps<'a'>, 'ref'>;
+
+const frFn = forwardRef<HTMLElement, SideNavMenuItemPropsWithoutRef>;
+
+const SideNavMenuItem = frFn((props, ref) => {
+  const prefix = usePrefix();
+  const {
+    children,
+    className: customClassName,
+    as: Component = Link,
+    isActive,
+    ...rest
+  } = props;
+  // `as` may point to intrinsic elements or custom components.
+  // Cast here so `ref` can flow through the polymorphic surface.
+  const ComponentAsElementType = Component as ElementType;
+  const className = cx(`${prefix}--side-nav__menu-item`, customClassName);
+  const linkClassName = cx({
+    [`${prefix}--side-nav__link`]: true,
+    [`${prefix}--side-nav__link--current`]: isActive,
+  });
+
+  return (
+    <li className={className}>
+      <ComponentAsElementType
+        {...rest}
+        className={linkClassName}
+        ref={ref as Ref<ElementType>}>
+        <SideNavLinkText>{children}</SideNavLinkText>
+      </ComponentAsElementType>
+    </li>
+  );
+}) as SideNavMenuItemComponent;
 
 SideNavMenuItem.displayName = 'SideNavMenuItem';
 SideNavMenuItem.propTypes = {
@@ -93,7 +102,7 @@ SideNavMenuItem.propTypes = {
   className: PropTypes.string,
 
   /**
-   * Optionally provide an href for the underlying li`
+   * Optionally provide an href for the underlying link.
    */
   href: PropTypes.string,
 
