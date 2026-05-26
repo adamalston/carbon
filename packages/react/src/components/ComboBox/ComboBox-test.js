@@ -164,6 +164,39 @@ describe('ComboBox', () => {
     );
   });
 
+  it('should use `translateWithId` for the fallback aria-label', () => {
+    render(
+      <ComboBox
+        {...mockProps}
+        translateWithId={(id) =>
+          id === 'choose.an.item' ? 'Translated choose item' : id
+        }
+      />
+    );
+
+    expect(screen.getByRole('combobox')).toHaveAttribute(
+      'aria-label',
+      'Translated choose item'
+    );
+  });
+
+  it('should prefer an explicit aria-label over `translateWithId` fallback', () => {
+    render(
+      <ComboBox
+        {...mockProps}
+        aria-label="custom aria-label"
+        translateWithId={(id) =>
+          id === 'choose.an.item' ? 'Translated choose item' : id
+        }
+      />
+    );
+
+    expect(screen.getByRole('combobox')).toHaveAttribute(
+      'aria-label',
+      'custom aria-label'
+    );
+  });
+
   it('should select the correct item from the filtered list after text input on click', async () => {
     const user = userEvent.setup();
 

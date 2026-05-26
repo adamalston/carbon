@@ -156,10 +156,22 @@ export interface OnChangeData<ItemType> {
 
 export type ItemToStringHandler<ItemType> = (item: ItemType | null) => string;
 
+const translationIds = {
+  'choose.an.item': 'choose.an.item',
+} as const;
+
+type ComboBoxTranslationKey = keyof typeof translationIds;
+
+const defaultTranslations: Record<ComboBoxTranslationKey, string> = {
+  [translationIds['choose.an.item']]: 'Choose an item',
+};
+
 export interface ComboBoxProps<ItemType>
   extends Omit<InputHTMLAttributes<HTMLInputElement>, ExcludedAttributes>,
     TranslateWithId<
-      ListBoxMenuIconTranslationKey | ListBoxSelectionTranslationKey
+      | ListBoxMenuIconTranslationKey
+      | ListBoxSelectionTranslationKey
+      | ComboBoxTranslationKey
     > {
   /**
    * Specify whether or not the ComboBox should allow a value that is
@@ -383,7 +395,7 @@ const ComboBox = forwardRef(
     const inputRef = useRef<HTMLInputElement>(null);
 
     const {
-      ['aria-label']: ariaLabel = 'Choose an item',
+      ['aria-label']: ariaLabel,
       ariaLabel: deprecatedAriaLabel,
       autoAlign = false,
       className: containerClassName,
@@ -419,6 +431,10 @@ const ComboBox = forwardRef(
       inputProps,
       ...rest
     } = props;
+
+    const translatedAriaLabel =
+      translateWithId?.('choose.an.item') ??
+      defaultTranslations['choose.an.item'];
 
     const enableFloatingStyles =
       useFeatureFlag('enable-v12-dynamic-floating-styles') || autoAlign;
@@ -1081,7 +1097,7 @@ const ComboBox = forwardRef(
               {...getInputProps({
                 'aria-label': titleText
                   ? undefined
-                  : deprecatedAriaLabel || ariaLabel,
+                  : deprecatedAriaLabel || ariaLabel || translatedAriaLabel,
                 'aria-controls': menuProps.id,
                 placeholder,
                 value: inputValue,
