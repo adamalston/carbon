@@ -6,19 +6,15 @@
  */
 
 import PropTypes from 'prop-types';
-import React, {
-  type ComponentProps,
-  type ForwardedRef,
-  type ReactNode,
-} from 'react';
+import React, { type ForwardedRef, type ReactNode } from 'react';
 import classnames from 'classnames';
 import { usePrefix } from '../../internal/usePrefix';
 import { FormContext } from '../FluidForm/FormContext';
 import type { UseComboboxProps, UseMultipleSelectionProps } from 'downshift';
+import { deprecate } from '../../prop-types/deprecate';
 import {
   FilterableMultiSelect,
   type FilterableMultiSelectProps,
-  type MultiSelect,
 } from '../MultiSelect';
 
 interface OnChangeData<ItemType> {
@@ -26,18 +22,21 @@ interface OnChangeData<ItemType> {
 }
 
 export interface FluidFilterableMultiSelectProps<ItemType>
-  extends FilterableMultiSelectProps<ItemType>,
-    Pick<ComponentProps<typeof MultiSelect>, 'translateWithId'> {
+  extends FilterableMultiSelectProps<ItemType> {
   /**
    * Specify an optional className to be applied to the outer FluidForm wrapper
    */
   className?: string;
   /**
    * Specify the text that should be read for screen readers that describes total items selected
+   *
+   * @deprecated Use `translateWithId` instead.
    */
   clearSelectionDescription?: string;
   /**
    * Specify the text that should be read for screen readers to clear selection.
+   *
+   * @deprecated Use `translateWithId` instead.
    */
   clearSelectionText?: string;
   /**
@@ -186,13 +185,23 @@ FluidMultiSelect.propTypes = {
 
   /**
    * Specify the text that should be read for screen readers that describes total items selected
+   *
+   * @deprecated Use `translateWithId` instead.
    */
-  clearSelectionDescription: PropTypes.string,
+  clearSelectionDescription: deprecate(
+    PropTypes.string,
+    'The `clearSelectionDescription` prop has been deprecated. Use `translateWithId` instead.'
+  ),
 
   /**
    * Specify the text that should be read for screen readers to clear selection.
+   *
+   * @deprecated Use `translateWithId` instead.
    */
-  clearSelectionText: PropTypes.string,
+  clearSelectionText: deprecate(
+    PropTypes.string,
+    'The `clearSelectionText` prop has been deprecated. Use `translateWithId` instead.'
+  ),
 
   /**
    * Provide a compare function that is used to determine the ordering of

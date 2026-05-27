@@ -124,9 +124,7 @@ const sharedArgs = {
   warnText: 'Warning message goes here',
   invalidText: 'Error message goes here',
   label: 'Multiselect Label',
-  clearSelectionDescription: 'Total items selected: ',
   useTitleInItem: false,
-  clearSelectionText: 'To clear selection, press Delete or Backspace,',
 };
 export const FloatingStyles = (args) => (
   <MultiSelect

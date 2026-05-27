@@ -636,6 +636,31 @@ describe('MultiSelect', () => {
       expect(translateWithId).toHaveBeenCalled();
     });
 
+    it('should use `translateWithId` for default screen reader selection text', async () => {
+      const items = generateItems(4, generateGenericItem);
+
+      render(
+        <MultiSelect
+          id="custom-id"
+          initialSelectedItems={[items[0]]}
+          items={items}
+          titleText="Multiselect title"
+          translateWithId={(id, args) => {
+            if (id === 'carbon.multi-select.selection.summary') {
+              return `Translated summary ${args?.count} :: ${args?.itemsSelectedText}`;
+            }
+
+            return String(id);
+          }}
+        />
+      );
+      await waitForPosition();
+
+      expect(
+        screen.getByText('Translated summary 1 :: Item 0')
+      ).toBeInTheDocument();
+    });
+
     it('should call onChange when the selection changes from user selection', async () => {
       const testFunction = jest.fn();
       const items = generateItems(4, generateGenericItem);

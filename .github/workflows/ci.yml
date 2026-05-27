@@ -2,7 +2,7 @@ name: ci
 on:
   push:
     branches:
-      - main
+      - "**"
   pull_request:
     types: [opened, reopened, synchronize, ready_for_review]
     branches:
@@ -321,7 +321,6 @@ jobs:
           URL: 'http://localhost:3000'
         timeout-minutes: 3
       - name: Run AVT
-        if: github.repository == 'carbon-design-system/carbon'
         run: |
           yarn playwright test --project chromium --grep @avt --shard="${{ matrix.shardIndex }}/${{ matrix.shardTotal }}"
       - name: Stop storybook

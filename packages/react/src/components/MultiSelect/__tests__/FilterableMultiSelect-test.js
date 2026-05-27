@@ -692,6 +692,26 @@ describe('FilterableMultiSelect', () => {
     expect(screen.getByTitle('Custom close.menu')).toBeInTheDocument();
   });
 
+  it('should use `translateWithId` for default screen reader selection text', async () => {
+    render(
+      <FilterableMultiSelect
+        {...mockProps}
+        initialSelectedItems={[mockProps.items[0]]}
+        titleText="Filterable multiselect title"
+        translateWithId={(id, args) => {
+          if (id === 'carbon.multi-select.selection.summary') {
+            return `Translated summary ${args?.count}`;
+          }
+
+          return String(id);
+        }}
+      />
+    );
+    await waitForPosition();
+
+    expect(screen.getByText('Translated summary 1')).toBeInTheDocument();
+  });
+
   it('should handle keyboard navigation', async () => {
     render(<FilterableMultiSelect {...mockProps} />);
     await waitForPosition();

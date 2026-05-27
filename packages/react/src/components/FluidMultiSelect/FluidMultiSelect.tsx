@@ -6,7 +6,7 @@
  */
 
 import PropTypes from 'prop-types';
-import React, { ForwardedRef, RefObject, type ComponentProps } from 'react';
+import React, { ForwardedRef, RefObject } from 'react';
 import classnames from 'classnames';
 import {
   FilterableMultiSelect,
@@ -16,24 +16,28 @@ import {
 import { usePrefix } from '../../internal/usePrefix';
 import { FormContext } from '../FluidForm/FormContext';
 import { UseComboboxProps, UseSelectProps } from 'downshift';
+import { deprecate } from '../../prop-types/deprecate';
 
 interface OnChangeData<ItemType> {
   selectedItems: ItemType[] | null;
 }
 
 export interface FluidMultiSelectProps<ItemType>
-  extends MultiSelectProps<ItemType>,
-    Pick<ComponentProps<typeof MultiSelect>, 'translateWithId'> {
+  extends MultiSelectProps<ItemType> {
   /**
    * Specify an optional className to be applied to the outer FluidForm wrapper
    */
   className?: string;
   /**
    * Specify the text that should be read for screen readers that describes total items selected
+   *
+   * @deprecated Use `translateWithId` instead.
    */
   clearSelectionDescription?: string;
   /**
    * Specify the text that should be read for screen readers to clear selection.
+   *
+   * @deprecated Use `translateWithId` instead.
    */
   clearSelectionText?: string;
   /**
@@ -192,13 +196,23 @@ FluidMultiSelect.propTypes = {
 
   /**
    * Specify the text that should be read for screen readers that describes total items selected
+   *
+   * @deprecated Use `translateWithId` instead.
    */
-  clearSelectionDescription: PropTypes.string,
+  clearSelectionDescription: deprecate(
+    PropTypes.string,
+    'The `clearSelectionDescription` prop has been deprecated. Use `translateWithId` instead.'
+  ),
 
   /**
    * Specify the text that should be read for screen readers to clear selection.
+   *
+   * @deprecated Use `translateWithId` instead.
    */
-  clearSelectionText: PropTypes.string,
+  clearSelectionText: deprecate(
+    PropTypes.string,
+    'The `clearSelectionText` prop has been deprecated. Use `translateWithId` instead.'
+  ),
 
   /**
    * Provide a compare function that is used to determine the ordering of

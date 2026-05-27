@@ -3861,12 +3861,8 @@ Map {
       "autoAlign": {
         "type": "bool",
       },
-      "clearSelectionDescription": {
-        "type": "string",
-      },
-      "clearSelectionText": {
-        "type": "string",
-      },
+      "clearSelectionDescription": [Function],
+      "clearSelectionText": [Function],
       "compareItems": {
         "type": "func",
       },
@@ -4506,12 +4502,8 @@ Map {
       "className": {
         "type": "string",
       },
-      "clearSelectionDescription": {
-        "type": "string",
-      },
-      "clearSelectionText": {
-        "type": "string",
-      },
+      "clearSelectionDescription": [Function],
+      "clearSelectionText": [Function],
       "compareItems": {
         "type": "func",
       },
@@ -6960,12 +6952,8 @@ Map {
       "className": {
         "type": "string",
       },
-      "clearSelectionDescription": {
-        "type": "string",
-      },
-      "clearSelectionText": {
-        "type": "string",
-      },
+      "clearSelectionDescription": [Function],
+      "clearSelectionText": [Function],
       "compareItems": {
         "type": "func",
       },
@@ -12659,12 +12647,8 @@ Map {
       "className": {
         "type": "string",
       },
-      "clearSelectionDescription": {
-        "type": "string",
-      },
-      "clearSelectionText": {
-        "type": "string",
-      },
+      "clearSelectionDescription": [Function],
+      "clearSelectionText": [Function],
       "compareItems": {
         "type": "func",
       },
@@ -14642,12 +14626,8 @@ Map {
       "className": {
         "type": "string",
       },
-      "clearSelectionDescription": {
-        "type": "string",
-      },
-      "clearSelectionText": {
-        "type": "string",
-      },
+      "clearSelectionDescription": [Function],
+      "clearSelectionText": [Function],
       "compareItems": {
         "type": "func",
       },

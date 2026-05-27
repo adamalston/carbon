@@ -99,19 +99,9 @@ export default {
         type: 'text',
       },
     },
-    clearSelectionDescription: {
-      control: {
-        type: 'text',
-      },
-    },
     useTitleInItem: {
       control: {
         type: 'boolean',
-      },
-    },
-    clearSelectionText: {
-      control: {
-        type: 'text',
       },
     },
     readOnly: {
@@ -185,9 +175,7 @@ const sharedArgs = {
   warnText: 'Warning message goes here',
   invalidText: 'Error message goes here',
   label: 'This is a label',
-  clearSelectionDescription: 'Total items selected: ',
   useTitleInItem: false,
-  clearSelectionText: 'To clear selection, press Delete or Backspace,',
 };
 
 const filterableArgTypes = {

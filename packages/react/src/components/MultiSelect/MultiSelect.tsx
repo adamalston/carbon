@@ -83,18 +83,55 @@ const {
   ToggleButtonClick: UseSelectStateChangeTypes.ToggleButtonClick;
 };
 
-interface selectedItemType {
-  text: string;
-}
-
 interface OnChangeData<ItemType> {
   selectedItems: ItemType[] | null;
 }
 
+const translationIds = {
+  'carbon.multi-select.clear.announcement':
+    'carbon.multi-select.clear.announcement',
+  'carbon.multi-select.selection.summary':
+    'carbon.multi-select.selection.summary',
+} as const;
+
+type MultiSelectTranslationKey = keyof typeof translationIds;
+
+const defaultTranslations: Record<MultiSelectTranslationKey, string> = {
+  [translationIds['carbon.multi-select.clear.announcement']]:
+    'all items have been cleared',
+  [translationIds['carbon.multi-select.selection.summary']]:
+    'Total items selected: {count} {itemsSelectedText}. To clear selection, press Delete or Backspace.',
+};
+
+type MultiSelectTranslationArgs = {
+  count?: number;
+  itemsSelectedText?: string;
+};
+
+const legacySelectionDescription = 'Total items selected:';
+
+const defaultTranslateWithId = (
+  messageId: MultiSelectTranslationKey,
+  args?: MultiSelectTranslationArgs
+) => {
+  const template = defaultTranslations[messageId];
+
+  if (messageId === 'carbon.multi-select.selection.summary') {
+    return template
+      .replace('{count}', String(args?.count ?? ''))
+      .replace('{itemsSelectedText}', args?.itemsSelectedText ?? '');
+  }
+
+  return template;
+};
+
 export interface MultiSelectProps<ItemType>
   extends MultiSelectSortingProps<ItemType>,
     TranslateWithId<
-      ListBoxMenuIconTranslationKey | ListBoxSelectionTranslationKey
+      | ListBoxMenuIconTranslationKey
+      | ListBoxSelectionTranslationKey
+      | MultiSelectTranslationKey,
+      MultiSelectTranslationArgs
     > {
   /**
    * **Experimental**: Will attempt to automatically align the floating
@@ -113,11 +150,15 @@ export interface MultiSelectProps<ItemType>
 
   /**
    * Specify the text that should be read for screen readers that describes total items selected
+   *
+   * @deprecated Use `translateWithId` instead.
    */
   clearSelectionDescription?: string;
 
   /**
    * Specify the text that should be read for screen readers to clear selection.
+   *
+   * @deprecated Use `translateWithId` instead.
    */
   clearSelectionText?: string;
 
@@ -309,9 +350,9 @@ export const MultiSelect = React.forwardRef(
       initialSelectedItems = [],
       sortItems = defaultSortItems,
       compareItems = defaultCompareItems,
-      clearSelectionText = 'To clear selection, press Delete or Backspace',
-      clearAnnouncement = 'all items have been cleared',
-      clearSelectionDescription = 'Total items selected: ',
+      clearSelectionText,
+      clearAnnouncement,
+      clearSelectionDescription,
       light,
       invalid = false,
       invalidText,
@@ -332,6 +373,11 @@ export const MultiSelect = React.forwardRef(
     }: MultiSelectProps<ItemType>,
     ref: ForwardedRef<HTMLButtonElement>
   ) => {
+    const translatedClearAnnouncement =
+      clearAnnouncement ??
+      translateWithId?.('carbon.multi-select.clear.announcement') ??
+      defaultTranslateWithId('carbon.multi-select.clear.announcement');
+
     const filteredItems = useMemo(() => {
       return items.filter((item) => {
         if (typeof item === 'object' && item !== null) {
@@ -698,8 +744,26 @@ export const MultiSelect = React.forwardRef(
       : candidate;
 
     const itemsSelectedText =
-      selectedItems.length > 0 &&
-      selectedItems.map((item) => (item as selectedItemType)?.text);
+      selectedItems.length > 0
+        ? selectedItems.map((item) => itemToString(item)).join(', ')
+        : undefined;
+
+    const selectionSummary =
+      clearSelectionDescription || clearSelectionText
+        ? [
+            `${clearSelectionDescription ?? legacySelectionDescription} ${selectedItems.length}${itemsSelectedText ? ` ${itemsSelectedText}` : ''}.`,
+            clearSelectionText,
+          ]
+            .filter(Boolean)
+            .join(' ')
+        : (translateWithId?.('carbon.multi-select.selection.summary', {
+            count: selectedItems.length,
+            itemsSelectedText,
+          }) ??
+          defaultTranslateWithId('carbon.multi-select.selection.summary', {
+            count: selectedItems.length,
+            itemsSelectedText,
+          }));
 
     const selectedItemsLength = selectAll
       ? selectedItems.filter((item) => !isSelectAllItem(item)).length
@@ -759,8 +823,7 @@ export const MultiSelect = React.forwardRef(
           {titleText && titleText}
           {selectedItems.length > 0 && (
             <span className={`${prefix}--visually-hidden`}>
-              {clearSelectionDescription} {selectedItems.length}{' '}
-              {itemsSelectedText},{clearSelectionText}
+              {selectionSummary}
             </span>
           )}
         </label>
@@ -881,7 +944,10 @@ export const MultiSelect = React.forwardRef(
               })}
           </ListBox.Menu>
           {itemsCleared && (
-            <span aria-live="assertive" aria-label={clearAnnouncement} />
+            <span
+              aria-live="assertive"
+              aria-label={translatedClearAnnouncement}
+            />
           )}
         </ListBox>
         {!inline && showHelperText && (
@@ -928,13 +994,23 @@ MultiSelect.propTypes = {
 
   /**
    * Specify the text that should be read for screen readers that describes total items selected
+   *
+   * @deprecated Use `translateWithId` instead.
    */
-  clearSelectionDescription: PropTypes.string,
+  clearSelectionDescription: deprecate(
+    PropTypes.string,
+    'The `clearSelectionDescription` prop has been deprecated. Use `translateWithId` instead.'
+  ),
 
   /**
    * Specify the text that should be read for screen readers to clear selection.
+   *
+   * @deprecated Use `translateWithId` instead.
    */
-  clearSelectionText: PropTypes.string,
+  clearSelectionText: deprecate(
+    PropTypes.string,
+    'The `clearSelectionText` prop has been deprecated. Use `translateWithId` instead.'
+  ),
 
   /**
    * Provide a compare function that is used to determine the ordering of

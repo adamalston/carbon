@@ -97,11 +97,50 @@ const {
 } =
   useMultipleSelection.stateChangeTypes as UseMultipleSelectionInterface['stateChangeTypes'];
 
+const translationIds = {
+  'carbon.multi-select.selection.summary':
+    'carbon.multi-select.selection.summary',
+  'carbon.multi-select.selection.summary.empty':
+    'carbon.multi-select.selection.summary.empty',
+} as const;
+
+type FilterableMultiSelectTranslationKey = keyof typeof translationIds;
+
+const defaultTranslations: Record<FilterableMultiSelectTranslationKey, string> =
+  {
+    [translationIds['carbon.multi-select.selection.summary']]:
+      'Total items selected: {count}. To clear selection, press Delete or Backspace.',
+    [translationIds['carbon.multi-select.selection.summary.empty']]:
+      'Total items selected: 0.',
+  };
+
+type FilterableMultiSelectTranslationArgs = {
+  count?: number;
+};
+
+const legacySelectionDescription = 'Total items selected:';
+
+const defaultTranslateWithId = (
+  messageId: FilterableMultiSelectTranslationKey,
+  args?: FilterableMultiSelectTranslationArgs
+) => {
+  const template = defaultTranslations[messageId];
+
+  if (messageId === 'carbon.multi-select.selection.summary') {
+    return template.replace('{count}', String(args?.count ?? ''));
+  }
+
+  return template;
+};
+
 export interface FilterableMultiSelectProps<ItemType>
   extends MultiSelectSortingProps<ItemType>,
     React.RefAttributes<HTMLDivElement>,
     TranslateWithId<
-      ListBoxSelectionTranslationKey | ListBoxMenuIconTranslationKey
+      | ListBoxSelectionTranslationKey
+      | ListBoxMenuIconTranslationKey
+      | FilterableMultiSelectTranslationKey,
+      FilterableMultiSelectTranslationArgs
     > {
   /**
    * Specify a label to be read by screen readers on the container node
@@ -123,11 +162,15 @@ export interface FilterableMultiSelectProps<ItemType>
 
   /**
    * Specify the text that should be read for screen readers that describes total items selected
+   *
+   * @deprecated Use `translateWithId` instead.
    */
   clearSelectionDescription?: string;
 
   /**
    * Specify the text that should be read for screen readers to clear selection.
+   *
+   * @deprecated Use `translateWithId` instead.
    */
   clearSelectionText?: string;
 
@@ -331,8 +374,8 @@ export const FilterableMultiSelect = forwardRef(function FilterableMultiSelect<
   {
     autoAlign = false,
     className: containerClassName,
-    clearSelectionDescription = 'Total items selected: ',
-    clearSelectionText = 'To clear selection, press Delete or Backspace',
+    clearSelectionDescription,
+    clearSelectionText,
     compareItems = defaultCompareItems,
     decorator,
     direction = 'bottom',
@@ -981,9 +1024,26 @@ export const FilterableMultiSelect = forwardRef(function FilterableMultiSelect<
     : {};
 
   const clearSelectionContent =
-    controlledSelectedItems.length > 0
-      ? `${clearSelectionDescription} ${controlledSelectedItems.length}. ${clearSelectionText}.`
-      : `${clearSelectionDescription} 0.`;
+    clearSelectionDescription || clearSelectionText
+      ? controlledSelectedItems.length > 0
+        ? [
+            `${clearSelectionDescription ?? legacySelectionDescription} ${controlledSelectedItems.length}.`,
+            clearSelectionText,
+          ]
+            .filter(Boolean)
+            .join(' ')
+        : `${clearSelectionDescription ?? legacySelectionDescription} 0.`
+      : controlledSelectedItems.length > 0
+        ? (translateWithId?.('carbon.multi-select.selection.summary', {
+            count: controlledSelectedItems.length,
+          }) ??
+          defaultTranslateWithId('carbon.multi-select.selection.summary', {
+            count: controlledSelectedItems.length,
+          }))
+        : (translateWithId?.('carbon.multi-select.selection.summary.empty') ??
+          defaultTranslateWithId(
+            'carbon.multi-select.selection.summary.empty'
+          ));
 
   return (
     <div className={wrapperClasses}>
@@ -1183,13 +1243,23 @@ FilterableMultiSelect.propTypes = {
 
   /**
    * Specify the text that should be read for screen readers that describes total items selected
+   *
+   * @deprecated Use `translateWithId` instead.
    */
-  clearSelectionDescription: PropTypes.string,
+  clearSelectionDescription: deprecate(
+    PropTypes.string,
+    'The `clearSelectionDescription` prop has been deprecated. Use `translateWithId` instead.'
+  ),
 
   /**
    * Specify the text that should be read for screen readers to clear selection.
+   *
+   * @deprecated Use `translateWithId` instead.
    */
-  clearSelectionText: PropTypes.string,
+  clearSelectionText: deprecate(
+    PropTypes.string,
+    'The `clearSelectionText` prop has been deprecated. Use `translateWithId` instead.'
+  ),
 
   /**
    * **Experimental**: Provide a decorator component to be rendered inside the `FilterableMultiSelect` component
