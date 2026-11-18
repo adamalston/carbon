@@ -1,6 +1,10 @@
 {
   "extends": "typescript-config-carbon/tsconfig.base.json",
   "compilerOptions": {
+    // TODO: Switch Babel and TypeScript to the automatic JSX runtime when React
+    // 16 support is dropped.
+    // https://github.com/carbon-design-system/carbon/discussions/22396
+    "jsx": "react",
     // TODO: Turn back on once stricter typings for internal utitlies are complete
     "noImplicitAny": false
   },

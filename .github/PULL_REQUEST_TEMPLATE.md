@@ -1,24 +1,23 @@
-Closes #
+Partially addresses https://github.com/carbon-design-system/carbon/issues/19011
 
-{{short description}}
+Aligned the React package's TypeScript JSX mode with Babel's classic runtime to avoid unused `React` warnings during the TypeScript migration.
 
 ### Changelog
 
 **New**
 
-- {{new thing}}
+- Added a `typecheck` script to `@carbon/react`.
 
 **Changed**
 
-- {{changed thing}}
-
-**Removed**
-
-- {{removed thing}}
+- Set the React package's TypeScript JSX mode to `react` to match Babel's classic runtime.
 
 #### Testing / Reviewing
 
-{{ Add steps or a checklist for how reviewers can verify this PR works or not }}
+```sh
+yarn workspace @carbon/react typecheck
+yarn test packages/react
+```
 
 ## PR Checklist
 
@@ -31,14 +30,14 @@ Closes #
 As the author of this PR, before marking ready for review, confirm you:
 
 - [ ] Reviewed every line of the diff
-- [ ] Updated documentation and storybook examples
-- [ ] Followed the
+- [ ] ~~Updated documentation and storybook examples~~
+- [ ] ~~Followed the
       [required v12 migration documentation](https://github.com/carbon-design-system/carbon/blob/main/docs/working-with-v12.md#required-v12-migration-documentation)
       for any code change that affects v12, or struck through this item because
-      the PR does not affect v12
+      the PR does not affect v12~~
 - [ ] Wrote passing tests that cover this change
-- [ ] Addressed any impact on accessibility (a11y)
-- [ ] Tested for cross-browser consistency
+- [ ] ~~Addressed any impact on accessibility (a11y)~~
+- [ ] ~~Tested for cross-browser consistency~~
 - [ ] Validated that this code is ready for review and status checks should pass
 
 More details can be found in the [pull request guide](https://github.com/carbon-design-system/carbon/blob/main/docs/guides/reviewing-pull-requests.md).
