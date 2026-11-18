@@ -6,7 +6,6 @@
  */
 
 import { describe, expect, it, jest } from '@jest/globals';
-import '@testing-library/jest-dom/jest-globals';
 import React from 'react';
 import type { AccordionToggleProps } from '../AccordionItem';
 import AccordionItem from '../AccordionItem';

@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2016, 2023
+ * Copyright IBM Corp. 2016, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -7,9 +7,9 @@
 
 import chalk from 'chalk';
 import util from 'util';
+import { afterEach, beforeEach, expect } from '@jest/globals';
+import '@testing-library/jest-dom/jest-globals';
 import toHaveNoAxeViolations from '../matchers/toHaveNoAxeViolations.js';
-
-import '@testing-library/jest-dom';
 
 // We can extend `expect` using custom matchers as defined by:
 // https://jest-bot.github.io/jest/docs/expect.html#expectextendmatchers
@@ -37,9 +37,11 @@ expect.extend({
 //
 // Inspired by the following setup from facebook/react
 // https://github.com/facebook/react/blob/6250462bed19c9f18a8cf3c2b5fcaf9aba1df72b/scripts/jest/setupTests.js#L69
-const consoleMethods = ['error', 'warn', process.env.CI && 'log'].filter(
-  Boolean
-);
+const consoleMethods: Array<'error' | 'warn' | 'log'> = [
+  'error',
+  'warn',
+  ...(process.env.CI ? ['log'] : []),
+];
 
 for (const methodName of consoleMethods) {
   const unexpectedConsoleCallStacks = [];
@@ -54,14 +56,14 @@ for (const methodName of consoleMethods) {
   // eslint-disable-next-line no-console
   console[methodName] = patchedConsoleMethod;
 
-  global.beforeEach(() => {
+  beforeEach(() => {
     if (unexpectedConsoleCallStacks.length > 0) {
       formatConsoleCallStack(unexpectedConsoleCallStacks, methodName);
     }
     unexpectedConsoleCallStacks.length = 0;
   });
 
-  global.afterEach(() => {
+  afterEach(() => {
     // eslint-disable-next-line no-console
     if (console[methodName] !== patchedConsoleMethod) {
       throw new Error(`Test did not restore a mock for console.${methodName}`);

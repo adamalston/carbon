@@ -7,7 +7,6 @@
 
 import { Search, Add } from '@carbon/icons-react';
 import { describe, expect, it, jest, test } from '@jest/globals';
-import '@testing-library/jest-dom/jest-globals';
 import { render, screen } from '@testing-library/react';
 import React, { type ComponentProps } from 'react';
 import Button from '../../Button';

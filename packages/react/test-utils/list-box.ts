@@ -6,7 +6,6 @@
  */
 
 import userEvent from '@testing-library/user-event';
-import '@testing-library/jest-dom/jest-globals';
 import { expect } from '@jest/globals';
 import { act } from 'react';
 

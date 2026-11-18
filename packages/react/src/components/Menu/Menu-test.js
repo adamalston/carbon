@@ -17,7 +17,7 @@ import {
   waitFor,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { waitForPosition } from '../ListBox/test-helpers';
+import { waitForPosition } from '../../../test-utils/list-box';
 
 function DynamicMenu() {
   const [items, setItems] = useState([1, 2, 3, 4, 5]);

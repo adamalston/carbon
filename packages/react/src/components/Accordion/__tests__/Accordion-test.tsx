@@ -6,7 +6,6 @@
  */
 
 import { describe, expect, it } from '@jest/globals';
-import '@testing-library/jest-dom/jest-globals';
 import Button from '../../Button';
 import React from 'react';
 import { Accordion, AccordionItem } from '../';

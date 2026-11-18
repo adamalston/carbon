@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2018, 2023
+ * Copyright IBM Corp. 2018, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -20,7 +20,7 @@ export default {
   modulePathIgnorePatterns: ['/build/', '/es/', '/lib/', '/umd/', '/examples/'],
   reporters: ['default'],
   setupFiles: [resolve(__dirname, './setup/setup.js')],
-  setupFilesAfterEnv: [resolve(__dirname, './setup/setupAfterEnv.js')],
+  setupFilesAfterEnv: [resolve(__dirname, './setup/setupAfterEnv.ts')],
   testMatch: [
     '<rootDir>/**/__tests__/**/*.js?(x)',
     '<rootDir>/**/*.(spec|test).js?(x)',

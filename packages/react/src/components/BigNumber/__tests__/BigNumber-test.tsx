@@ -6,7 +6,6 @@
  */
 
 import { describe, expect, it } from '@jest/globals';
-import '@testing-library/jest-dom/jest-globals';
 import React, { createRef, type Ref } from 'react';
 import { render, screen } from '@testing-library/react';
 import { Button } from '../../Button';

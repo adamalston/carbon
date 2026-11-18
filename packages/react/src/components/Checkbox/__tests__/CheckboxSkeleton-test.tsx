@@ -8,7 +8,6 @@
 import { render } from '@testing-library/react';
 import React from 'react';
 import { describe, it, expect } from '@jest/globals';
-import '@testing-library/jest-dom/jest-globals';
 import CheckboxSkeleton from '../Checkbox.Skeleton';
 
 describe('CheckboxSkeleton', () => {

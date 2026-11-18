@@ -10,7 +10,7 @@ import React, { forwardRef } from 'react';
 import { Popover, PopoverContent } from '../../Popover';
 import { ClassPrefix } from '../../ClassPrefix';
 import userEvent from '@testing-library/user-event';
-import { waitForPosition } from '../../ListBox/test-helpers';
+import { waitForPosition } from '../../../../test-utils/list-box';
 import RadioButton from '../../RadioButton';
 import RadioButtonGroup from '../../RadioButtonGroup';
 import { default as Checkbox } from '../../Checkbox';

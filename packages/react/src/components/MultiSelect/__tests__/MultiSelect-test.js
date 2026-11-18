@@ -13,7 +13,10 @@ import {
   screen,
   waitFor,
 } from '@testing-library/react';
-import { generateGenericItem, generateItems } from '../../ListBox/test-helpers';
+import {
+  generateGenericItem,
+  generateItems,
+} from '../../../../test-utils/list-box';
 import { getByText, isElementVisible } from '@carbon/test-utils/dom';
 
 import { AILabel } from '../../AILabel';

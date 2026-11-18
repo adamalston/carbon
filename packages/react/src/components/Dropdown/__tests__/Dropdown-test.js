@@ -15,7 +15,7 @@ import {
   generateItems,
   generateGenericItem,
   waitForPosition,
-} from '../../ListBox/test-helpers';
+} from '../../../../test-utils/list-box';
 import Dropdown from '..';
 import DropdownSkeleton from '../Dropdown.Skeleton';
 import { AILabel } from '../../AILabel';

@@ -1,16 +1,18 @@
 Partially addresses https://github.com/carbon-design-system/carbon/issues/19011
 
-Aligned the React package's TypeScript JSX mode with Babel's classic runtime to avoid unused `React` warnings during the TypeScript migration.
+Aligned React's TypeScript JSX mode with Babel's classic runtime to avoid unused `React` warnings during the TypeScript migration, and centralized `@testing-library/jest-dom` matcher setup for the tests.
 
 ### Changelog
 
 **New**
 
 - Added a `typecheck` script to `@carbon/react`.
+- Moved shared React test helpers into `packages/react/test-utils`.
 
 **Changed**
 
 - Set the React package's TypeScript JSX mode to `react` to match Babel's classic runtime.
+- Registered `@testing-library/jest-dom` matchers in the shared TypeScript Jest setup and removed the repeated imports from test files.
 
 #### Testing / Reviewing
 

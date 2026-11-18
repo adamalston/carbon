@@ -7,7 +7,10 @@
 
 import React from 'react';
 import { render } from '@testing-library/react';
-import { generateItems, generateGenericItem } from '../../ListBox/test-helpers';
+import {
+  generateItems,
+  generateGenericItem,
+} from '../../../../test-utils/list-box';
 import FluidFilterableMultiSelect from '../FluidFilterableMultiSelect';
 
 describe('FluidFilterableMultiSelect', () => {

@@ -19,7 +19,7 @@ import {
   cognateItems,
   waitForPosition,
   findMenuItemNode,
-} from '../ListBox/test-helpers';
+} from '../../../test-utils/list-box';
 import ComboBox from '../ComboBox';
 import { AILabel } from '../AILabel';
 

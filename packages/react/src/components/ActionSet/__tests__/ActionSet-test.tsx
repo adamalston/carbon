@@ -17,7 +17,6 @@ import {
   beforeEach,
   afterEach,
 } from '@jest/globals';
-import '@testing-library/jest-dom/jest-globals';
 
 import { ActionSet } from '..';
 import { validateActionSetProps } from '../ActionSet';

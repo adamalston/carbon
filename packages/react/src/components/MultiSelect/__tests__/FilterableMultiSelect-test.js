@@ -17,7 +17,7 @@ import {
   findMenuIconNode,
   generateItems,
   generateGenericItem,
-} from '../../ListBox/test-helpers';
+} from '../../../../test-utils/list-box';
 import { AILabel } from '../../AILabel';
 
 const prefix = 'cds';

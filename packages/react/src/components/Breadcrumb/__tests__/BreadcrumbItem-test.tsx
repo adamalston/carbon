@@ -6,7 +6,6 @@
  */
 
 import { describe, expect, it, jest } from '@jest/globals';
-import '@testing-library/jest-dom/jest-globals';
 import { render, screen } from '@testing-library/react';
 import React, { type RefCallback } from 'react';
 import { BreadcrumbItem } from '../../Breadcrumb';

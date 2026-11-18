@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2016, 2023
+ * Copyright IBM Corp. 2016, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -15,7 +15,7 @@ import {
   generateItems,
   generateGenericItem,
   waitForPosition,
-} from '../../ListBox/test-helpers';
+} from '../../../../test-utils/list-box';
 import FluidDropdown from '../FluidDropdown';
 
 const prefix = 'cds';

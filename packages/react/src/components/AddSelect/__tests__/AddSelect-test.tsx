@@ -8,7 +8,6 @@
 import React, { createRef, useState } from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, jest } from '@jest/globals';
-import '@testing-library/jest-dom/jest-globals';
 import { AddSelect } from '../AddSelect';
 
 const prefix = 'cds';

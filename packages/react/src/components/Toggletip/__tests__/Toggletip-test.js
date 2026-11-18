@@ -17,7 +17,7 @@ import {
 import { Information } from '@carbon/react/icons';
 import userEvent from '@testing-library/user-event';
 import { FeatureFlags } from '../../FeatureFlags';
-import { waitForPosition } from '../../ListBox/test-helpers';
+import { waitForPosition } from '../../../../test-utils/list-box';
 
 describe('Toggletip', () => {
   describe('accessibility', () => {

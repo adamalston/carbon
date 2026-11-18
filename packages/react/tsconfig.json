@@ -8,6 +8,11 @@
     // TODO: Turn back on once stricter typings for internal utitlies are complete
     "noImplicitAny": false
   },
-  "include": ["src/**/*", "icons/src/index.ts"],
+  "include": [
+    "src/**/*",
+    "icons/src/index.ts",
+    "test-utils/**/*",
+    "../../config/jest-config-carbon/setup/setupAfterEnv.ts"
+  ],
   "exclude": ["**/*.figma.tsx", "src/examples/**/example/**"]
 }

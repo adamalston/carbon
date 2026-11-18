@@ -7,7 +7,6 @@
 import { render, screen, act } from '@testing-library/react';
 import React, { type RefCallback } from 'react';
 import { describe, it, expect, jest } from '@jest/globals';
-import '@testing-library/jest-dom/jest-globals';
 import ButtonSet from '../ButtonSet';
 import Button from '../Button';
 

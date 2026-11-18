@@ -6,7 +6,6 @@
  */
 
 import { describe, expect, it } from '@jest/globals';
-import '@testing-library/jest-dom/jest-globals';
 import { render, screen } from '@testing-library/react';
 import React, { type ComponentProps } from 'react';
 import AspectRatio from '../AspectRatio';

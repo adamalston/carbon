@@ -7,7 +7,6 @@
 
 import React from 'react';
 import { describe, it, expect, jest } from '@jest/globals';
-import '@testing-library/jest-dom/jest-globals';
 import CheckboxGroup from '../CheckboxGroup';
 import Checkbox from '../Checkbox/Checkbox';
 import { render, screen } from '@testing-library/react';
