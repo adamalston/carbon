@@ -5,11 +5,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+import { afterEach, beforeEach, expect } from '@jest/globals';
 import chalk from 'chalk';
 import util from 'util';
-import { afterEach, beforeEach, expect } from '@jest/globals';
 import '@testing-library/jest-dom/jest-globals';
-import toHaveNoAxeViolations from '../matchers/toHaveNoAxeViolations.js';
+import toHaveNoAxeViolations from '../matchers/toHaveNoAxeViolations.ts';
 
 // We can extend `expect` using custom matchers as defined by:
 // https://jest-bot.github.io/jest/docs/expect.html#expectextendmatchers
@@ -37,16 +37,19 @@ expect.extend({
 //
 // Inspired by the following setup from facebook/react
 // https://github.com/facebook/react/blob/6250462bed19c9f18a8cf3c2b5fcaf9aba1df72b/scripts/jest/setupTests.js#L69
-const consoleMethods: Array<'error' | 'warn' | 'log'> = [
+const consoleMethods = [
   'error',
   'warn',
-  ...(process.env.CI ? ['log'] : []),
-];
+  ...(process.env.CI ? (['log'] as const) : []),
+] as const;
+
+type ConsoleMethodName = (typeof consoleMethods)[number];
+type UnexpectedConsoleCall = [stack: string, message: string];
 
 for (const methodName of consoleMethods) {
-  const unexpectedConsoleCallStacks = [];
-  const patchedConsoleMethod = function (format, ...args) {
-    const stack = new Error().stack;
+  const unexpectedConsoleCallStacks: UnexpectedConsoleCall[] = [];
+  const patchedConsoleMethod = function (format: unknown, ...args: unknown[]) {
+    const stack = new Error().stack ?? '';
     unexpectedConsoleCallStacks.push([
       stack.substr(stack.indexOf('\n') + 1),
       util.format(format, ...args),
@@ -75,7 +78,10 @@ for (const methodName of consoleMethods) {
   });
 }
 
-function formatConsoleCallStack(unexpectedConsoleCallStacks, methodName) {
+function formatConsoleCallStack(
+  unexpectedConsoleCallStacks: UnexpectedConsoleCall[],
+  methodName: ConsoleMethodName
+) {
   const messages = unexpectedConsoleCallStacks.map(
     ([stack, message]) =>
       `${message}\n` +
